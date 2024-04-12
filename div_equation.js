@@ -1,12 +1,40 @@
 const Data  = require("./const_data.js")
 
+//////////////////////////////////////////////
+///////////////* GLOBAL VAR */////////////////
 const functions = {
     getfracEndIndex: getFracEndIndex,
     getsqrtEndIndex: getSqrtEndIndex,
     getleftEndIndex: getLeftEndIndex,
+
+    readfrac: readFrac,
+    readsqrt: readSqrt,
 }
 
 var stack = []
+var command = {}
+
+//let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
+
+//var equation = "1\\times x+22"
+// ["1", "\\times", "x", "+", "22"]
+// var equation = "\\frac{1\\times 2}{1+x}\\times2+y"
+// ["\frac{1}{1+x}", "\times", "2", "+", "y"]
+// var equation = "1\\div x+22"
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
+ var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}";
+// [2, "\times", 2, +, \sqrt{x+2}, +, 2, \div, (1/4), +, ac]
+
+// var equation = "\\left ( x+1 \\right )-y"
+// var equation = "\\left( x+1 \\right)-y"
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
+
+// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
+//////////////////////////////////////////////
+//////////////////////////////////////////////
+
+
 
 // 현재 위치가 어떤 연산자인지 반환해주는 함수
 // 딕셔너리에 있는 모든 연산자에 대해 확인하고, op와 idx를 반환
@@ -160,7 +188,7 @@ function getLeftEndIndex(expression, idx) {
                     else if (expression[idx + 7] === endExp) {
                         endIdx = idx + 7
                     }
-                    break
+                    break;
                 }
             }
 
@@ -200,17 +228,19 @@ function splitExpression(expression) {
                 temp = "";
                 // splitExp.append(temp);
                 splitExp.push(result.opName);
-                idx += result.opLength;
+                idx += result.opLength; 
             }
             else {
                 console.log("asdfasdf: ", result.opName)
                 let funcName = "get" + (result.opName).slice(1) + "EndIndex";
+                command[splitExp.length] = result.opName;
 
                 if (functions[funcName]) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     console.log("함수 동적 호출", funcName);
                     console.log(result);        // 전체 수식에서의 인덱스임
                     splitExp.push(expression.slice(idx, result + 1));
+                    
                     idx = result + 1;
                 }
                 else {
@@ -234,30 +264,67 @@ function splitExpression(expression) {
 }
 
 
-//var equation = "1\\times x+22"
-// ["1", "\\times", "x", "+", "22"]
-// var equation = "\\frac{1\\times 2}{1+x}\\times2+y"
-// ["\frac{1}{1+x}", "\times", "2", "+", "y"]
-// var equation = "1\\div x+22"
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
-//var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}";
-// [2, "\times", 2, +, \sqrt{x+2}, +, 2, \div, (1/4), +, ac]
 
-// var equation = "\\left ( x+1 \\right )-y"
-// var equation = "\\left( x+1 \\right)-y"
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
+/* 분해 가능 유무  */
+function isAtom(char){
+    if(char in Data.operator || char in Data.number || char in Data.word){
+        return true;
+    }
+    return false;
+}
 
- let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
+/* 텍스트 매치 함수 */
+function matchText(char){
+    if(char in Data.operator) return Data.operator[char];
+    if(char in Data.word) return Data.word[char];
+    if(char in Data.number) return Data.number[char];
+}
 
-// 괄호 전처리
-let newEquation = equation.replace("(", "\\left(");
-newEquation = newEquation.replace(")", "\\right)");
+/* 명령어 텍스트 변환 함수 */
+function readFrac(formula){
+    console.log("read ", formula);
+    return "readFor";
+}
 
-const test  = splitExpression(newEquation);
-console.log(equation);
-console.log(newEquation);
-console.log("분해: ", test);
+function readSqrt(formula){
+    console.log("read ", formula);
+    return "readFor";
+}
+
+/* 텍스트 변환 함수 */
+function convert2Text(expression){
+    let res = [];
+
+    // 괄호 전처리
+    let newEquation = equation.replace("(", "\\left(");
+    newEquation = newEquation.replace(")", "\\right)");
+
+    // 처음 분해
+    const initExp = splitExpression(newEquation);
+    console.log(equation);
+    console.log(newEquation);
+    console.log("분해: ", initExp);
+    console.log("구별: ", command);
+
+    // 텍스트로 변환    
+    for(let idx = 0; idx < initExp.length; idx++){
+        var atom = initExp[idx];
+
+        if(isAtom(atom)) res.push(matchText(atom));
+        else{
+            var funcName = "read" + command[idx].slice(1);
+            if(funcName in functions){
+                let result = functions[funcName](atom);
+                res.push(result);
+            }
+            else {
+                res.push("UNDEFINED");
+                console.error(funcName + ' No Function.');
+            }
+        }
+    }
+    console.log(res);
+}
 
 
-
+convert2Text(equation);
