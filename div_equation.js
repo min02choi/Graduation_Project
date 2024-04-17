@@ -1,5 +1,13 @@
-const Data  = require("./const_data.js")
+//#region 에러사항
+// ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
+// ! 제곱 처리 고려필요
+//#endregion
 
+//#region IMPORT
+const Data  = require("./const_data.js")
+//#endregion
+
+//#region VARS & PROPERTIES
 //////////////////////////////////////////////
 ///////////////* GLOBAL VAR */////////////////
 const functions = {
@@ -29,9 +37,9 @@ const functions = {
 var equation = " x = \\frac{\\frac{1\\times 2}{1+x}}{4ac + \\sqrt{x+2}}\\pm-b"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
+//#endregion
 
-
-
+//#region SUB_FUNC
 // 현재 위치가 어떤 연산자인지 반환해주는 함수
 // 딕셔너리에 있는 모든 연산자에 대해 확인하고, op와 idx를 반환
 // opName, isOp, opLength
@@ -194,8 +202,127 @@ function getLeftEndIndex(expression, idx) {
 
     }
     return endIdx;
+} 
+
+
+/* 순수 문자열 분해 함수 */
+// ex) 2ac, xy
+function splitString(str){
+    var strArr = [];
+
+    Array.from(str).forEach(function(char) {
+        if(char in Data.word || char in Data.number){
+            strArr.push(char);
+        }
+    });
+    
+    return strArr;
 }
 
+/* 분해 가능 유무  */
+function isAtom(char){
+    if(char in Data.operator || char in Data.number || char in Data.word){
+        return true;
+    }
+    return false;
+}
+
+/* 텍스트 매치 함수 */
+function matchText(char){
+    if(char in Data.operator) return Data.operator[char];
+    if(char in Data.word) return Data.word[char];
+    if(char in Data.number) return Data.number[char];
+} 
+//#endregion
+
+// #region 명령어 텍스트 변환 함수 
+/** 분수 **/
+function readFrac(formula){
+    var command = [];
+    console.log(formula);
+
+    // 분모, 분자 찾기
+    let stack = []; 
+    let denominator, numerator;
+    for(var i=5; i < formula.length; i++){ 
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                numerator = formula.slice(6, i);          //분자
+                denominator = formula.slice(i+1, -1);     //분모
+                break;
+            }
+        }
+    } 
+ 
+    let text = "분수시작 ";
+
+    let splitExp = splitExpression(denominator, command);
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+
+    text += " 분의 ";
+    splitExp = splitExpression(numerator, command);
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+
+    text += " 분수끝";
+
+    return text;
+
+    // 정규 표현식을 사용하여 분자와 분모를 추출 
+    // var str = "\\frac{-b {\\pm + -() }\\sqrt{b^2 -4ac}}{2a}"
+    // const regex = /{[^<>]+}/g;
+    // const result = Array.from(str.matchAll('\\{(.*?)\\}'), match => `${match[0]}`);
+    // console.log("결과", result);
+
+}
+
+/** 루트 **/
+function readSqrt(formula){    
+    var command = [];
+    var insideofSqrt = formula.slice(6, -1);
+    var splitExp = splitExpression(insideofSqrt, command);
+    var text = "루트시작 ";
+   
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += " 루트끝";
+
+    return text;
+}
+// #endregion
+ 
+//#region MAIN_FUNC
+/* 텍스트 변환 함수 */
+function convert2Text(expression){
+    let res = [];
+    var commandArr = [];
+
+    // 괄호, 공백 전처리
+    //let newEquation = expression.replace("(", "\\left(");
+    // newEquation = newEquation.replace(")", "\\right)");
+    let newEquation = expression.replace(" ", "");
+
+    // 처음 분해
+    const initExp = splitExpression(newEquation, commandArr);
+    console.log("수식: ", expression);
+    console.log("수식 전처리: ", newEquation);
+    console.log("분해: ", initExp);
+    console.log("명령어 구별: ", commandArr);
+
+    // 텍스트로 변환
+    initExp.forEach(function(element){
+        res.push(convertElement(element, commandArr));
+    })
+
+    console.log("수식: ", expression);
+    console.log(res);
+}
 
 // 괄호를 고려해서 하나씩 진행 하다가
 function splitExpression(expression, command) {
@@ -261,98 +388,6 @@ function splitExpression(expression, command) {
     return splitExp;
 }
 
-/* 순수 문자열 분해 함수 */
-// ex) 2ac, xy
-function splitString(str){
-    var strArr = [];
-
-    Array.from(str).forEach(function(char) {
-        if(char in Data.word || char in Data.number){
-            strArr.push(char);
-        }
-    });
-    
-    return strArr;
-}
-
-/* 분해 가능 유무  */
-function isAtom(char){
-    if(char in Data.operator || char in Data.number || char in Data.word){
-        return true;
-    }
-    return false;
-}
-
-/* 텍스트 매치 함수 */
-function matchText(char){
-    if(char in Data.operator) return Data.operator[char];
-    if(char in Data.word) return Data.word[char];
-    if(char in Data.number) return Data.number[char];
-}
-
-
-// #region 명령어 텍스트 변환 함수 
-/** 분수 **/
-function readFrac(formula){
-    var command = [];
-    console.log(formula);
-
-    // 분모, 분자 찾기
-    let stack = []; 
-    let denominator, numerator;
-    for(var i=5; i < formula.length; i++){ 
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
-            stack.pop();
-            if(stack.length == 0) {
-                numerator = formula.slice(6, i);          //분자
-                denominator = formula.slice(i+1, -1);     //분모
-                break;
-            }
-        }
-    } 
- 
-    let text = "분수시작 ";
-
-    let splitExp = splitExpression(denominator, command);
-    splitExp.forEach(function(element){
-        text += convertElement(element, command);
-    })
-
-    text += " 분의 ";
-    splitExp = splitExpression(numerator, command);
-    splitExp.forEach(function(element){
-        text += convertElement(element, command);
-    })
-
-    text += " 분수끝";
-
-    return text;
-
-    // 정규 표현식을 사용하여 분자와 분모를 추출 
-    // var str = "\\frac{-b {\\pm + -() }\\sqrt{b^2 -4ac}}{2a}"
-    // const regex = /{[^<>]+}/g;
-    // const result = Array.from(str.matchAll('\\{(.*?)\\}'), match => `${match[0]}`);
-    // console.log("결과", result);
-
-}
-
-/** 루트 **/
-function readSqrt(formula){    
-    var command = [];
-    var insideofSqrt = formula.slice(6, -1);
-    var splitExp = splitExpression(insideofSqrt, command);
-    var text = "루트시작 ";
-   
-    splitExp.forEach(function(element){
-        text += convertElement(element, command);
-    })
-    text += " 루트끝";
-
-    return text;
-}
-// #endregion
- 
 /* Element 텍스트 변환 함수 */
 function convertElement(element, command){
 
@@ -388,31 +423,8 @@ function convertElement(element, command){
 
 }
 
-/* 텍스트 변환 함수 */
-function convert2Text(expression){
-    let res = [];
-    var commandArr = [];
+//#endregion
 
-    // 괄호, 공백 전처리
-    //let newEquation = expression.replace("(", "\\left(");
-    // newEquation = newEquation.replace(")", "\\right)");
-    let newEquation = expression.replace(" ", "");
-
-    // 처음 분해
-    const initExp = splitExpression(newEquation, commandArr);
-    console.log("수식: ", expression);
-    console.log("수식 전처리: ", newEquation);
-    console.log("분해: ", initExp);
-    console.log("명령어 구별: ", commandArr);
-
-    // 텍스트로 변환
-    initExp.forEach(function(element){
-        res.push(convertElement(element, commandArr));
-    })
-
-    console.log("수식: ", expression);
-    console.log(res);
-}
-
-
+//#region TEST
 convert2Text(equation);
+//#endregion
