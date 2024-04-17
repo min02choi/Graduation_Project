@@ -10,27 +10,23 @@ const functions = {
     readfrac: readFrac,
     readsqrt: readSqrt,
 }
-
-var stack = []
-var command = {}
-
-//let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
-
-//var equation = "1\\times x+22"
-// ["1", "\\times", "x", "+", "22"]
-// var equation = "\\frac{1\\times 2}{1+x}\\times2+y"
-// ["\frac{1}{1+x}", "\times", "2", "+", "y"]
-// var equation = "1\\div x+22"
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
- var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}";
-// [2, "\times", 2, +, \sqrt{x+2}, +, 2, \div, (1/4), +, ac]
-
-// var equation = "\\left ( x+1 \\right )-y"
-// var equation = "\\left( x+1 \\right)-y"
-// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
-
+ 
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
+//var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
+// var equation = "1\\times x+22"
+// var equation = "\\frac{1\\times 2}{1+x}\\times2+y" 
+// var equation = "1\\div x+22"
+//  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
+//var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
+
+// var equation = "\\left ( x+1 \\right )-y" 
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
+// var equation = '\\sinx^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
+// var equation = 'x^2+2x + 1'
+// var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
+// var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
+var equation = " x = \\frac{\\frac{1\\times 2}{1+x}}{4ac + \\sqrt{x+2}}\\pm-b"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 
@@ -45,11 +41,11 @@ function checkOperation(expression, idx) {
     // 정해진 연산자에 대해서 돌리기
     // const opDictLen = Object.keys(operator).length; 
     for (let key in Data.operator) {
-        console.log("key: ", key);
+        //console.log("key: ", key);
         const endIdx = idx + key.length;
         const subExpr = expression.substring(idx, endIdx);
-        console.log(subExpr);
-        console.log(key);
+        // console.log(subExpr);
+        // console.log(key);
         if (subExpr == key) {
             resultDict['opName'] = key;
             resultDict['isOp'] = 1;
@@ -61,11 +57,11 @@ function checkOperation(expression, idx) {
     }
 
     for (let key in Data.math_expression) {
-        console.log(key);
+        //console.log(key);
         const endIdx = idx + key.length;
         const subExpr = expression.substring(idx, endIdx);
-        console.log(subExpr);
-        console.log(key);
+        // console.log(subExpr);
+        // console.log(key);
         if (subExpr == key) {
             resultDict['opName'] = key;
             resultDict['isOp'] = 0;
@@ -93,7 +89,7 @@ function getFracEndIndex(expression, idx) {
     var endIdx = 0;
 
     while (idx < expression.length) {
-        console.log(idx, "번째", expression[idx]);
+        //console.log(idx, "번째", expression[idx]);
         if (expression[idx] === "{") {
             if (stack.length === 0 && braceCnt < 2) {
                 // braceCnt += 1;
@@ -154,8 +150,8 @@ function getLeftEndIndex(expression, idx) {
     var exp = ""
 
     // 어떤 연산자인지 알아내기
-    console.log(expression.slice(idx, idx + 5));
-    console.log("\\left")
+    //console.log(expression.slice(idx, idx + 5));
+    //console.log("\\left")
     if (expression.slice(idx, idx + 5) === "\\left") {
         for (let i = idx; i < expression.length; i++) {
             if (expression[i] in Data.math_expression_pair) {
@@ -166,7 +162,7 @@ function getLeftEndIndex(expression, idx) {
     }
 
     let endExp = Data.math_expression_pair[exp][1];
-    console.log(endExp);
+   // console.log(endExp);
 
     // 알아낸 연산자로 끝나는 지점 알아내기
     while (idx < expression.length) {
@@ -175,8 +171,8 @@ function getLeftEndIndex(expression, idx) {
         }
 
         // 공백도 일단...
-        console.log(expression.slice(idx, idx + 8));
-        console.log("\\right " + endExp);
+        //console.log(expression.slice(idx, idx + 8));
+        //console.log("\\right " + endExp);
         if (expression.slice(idx, idx + 8) === ("\\right " + endExp) || expression.slice(idx, idx + 7) === ("\\right" + endExp)) {
             stack.pop();
             if (stack.length === 0) {
@@ -192,7 +188,7 @@ function getLeftEndIndex(expression, idx) {
                 }
             }
 
-            console.log("들어옴");
+            //console.log("들어옴");
         }
         idx += 1;
 
@@ -202,23 +198,23 @@ function getLeftEndIndex(expression, idx) {
 
 
 // 괄호를 고려해서 하나씩 진행 하다가
-function splitExpression(expression) {
+function splitExpression(expression, command) {
     var idx = 0
     var splitExp = [];
     var temp = "";
 
-    console.log(idx)
+    //console.log(idx)
     while (idx < expression.length) {
         // 연산자가 수 있는 것 추정
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자
-        console.log(idx, "번째: ", expression[idx]);
+        //console.log(idx, "번째: ", expression[idx]);
         
         if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=") {
             // 명령어인 경우, 이것이 op인지 일반 수식 요소인지 확인
             // 수식 요소인 경우 어디부터 어디까지 수식인지 판단하기
 
             let result = checkOperation(expression, idx);
-            console.log(result);
+            //console.log(result);
 
             // 연산자인 경우 앞의 항까지를 하나의 항으로 보기
             if (result.isOp) {
@@ -231,14 +227,15 @@ function splitExpression(expression) {
                 idx += result.opLength; 
             }
             else {
-                console.log("asdfasdf: ", result.opName)
+                //console.log("asdfasdf: ", result.opName)
                 let funcName = "get" + (result.opName).slice(1) + "EndIndex";
-                command[splitExp.length] = result.opName;
+                //command[splitExp.length] = result.opName;
+                command.push(result.opName);
 
                 if (functions[funcName]) {
                     let result = functions[funcName](expression, idx); // 함수 호출
-                    console.log("함수 동적 호출", funcName);
-                    console.log(result);        // 전체 수식에서의 인덱스임
+                    // console.log("함수 동적 호출", funcName);
+                    // console.log(result);        // 전체 수식에서의 인덱스임
                     splitExp.push(expression.slice(idx, result + 1));
                     
                     idx = result + 1;
@@ -260,10 +257,23 @@ function splitExpression(expression) {
         splitExp.push(temp);
     }
 
+    console.log(splitExp);
     return splitExp;
 }
 
+/* 순수 문자열 분해 함수 */
+// ex) 2ac, xy
+function splitString(str){
+    var strArr = [];
 
+    Array.from(str).forEach(function(char) {
+        if(char in Data.word || char in Data.number){
+            strArr.push(char);
+        }
+    });
+    
+    return strArr;
+}
 
 /* 분해 가능 유무  */
 function isAtom(char){
@@ -280,49 +290,127 @@ function matchText(char){
     if(char in Data.number) return Data.number[char];
 }
 
-/* 명령어 텍스트 변환 함수 */
+
+// #region 명령어 텍스트 변환 함수 
+/** 분수 **/
 function readFrac(formula){
-    console.log("read ", formula);
-    return "readFor";
+    var command = [];
+    console.log(formula);
+
+    // 분모, 분자 찾기
+    let stack = []; 
+    let denominator, numerator;
+    for(var i=5; i < formula.length; i++){ 
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                numerator = formula.slice(6, i);          //분자
+                denominator = formula.slice(i+1, -1);     //분모
+                break;
+            }
+        }
+    } 
+ 
+    let text = "분수시작 ";
+
+    let splitExp = splitExpression(denominator, command);
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+
+    text += " 분의 ";
+    splitExp = splitExpression(numerator, command);
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+
+    text += " 분수끝";
+
+    return text;
+
+    // 정규 표현식을 사용하여 분자와 분모를 추출 
+    // var str = "\\frac{-b {\\pm + -() }\\sqrt{b^2 -4ac}}{2a}"
+    // const regex = /{[^<>]+}/g;
+    // const result = Array.from(str.matchAll('\\{(.*?)\\}'), match => `${match[0]}`);
+    // console.log("결과", result);
+
 }
 
-function readSqrt(formula){
-    console.log("read ", formula);
-    return "readFor";
+/** 루트 **/
+function readSqrt(formula){    
+    var command = [];
+    var insideofSqrt = formula.slice(6, -1);
+    var splitExp = splitExpression(insideofSqrt, command);
+    var text = "루트시작 ";
+   
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += " 루트끝";
+
+    return text;
+}
+// #endregion
+ 
+/* Element 텍스트 변환 함수 */
+function convertElement(element, command){
+
+    // 더이상 분해 안되는 원소인 경우
+    if(isAtom(element)) return matchText(element);
+    
+    // 명령어인 경우
+    else if(element.startsWith(command[0])){
+        var funcName = "read" + command[0].slice(1);
+       
+        if(funcName in functions){ 
+            command.shift();
+            return functions[funcName](element);
+        }
+        else return "No Function Exists.";
+    }
+
+    // 명령어 아닌 문자열인 경우 ex) 2ac, xy 등
+    else{ 
+        var str = splitString(element); //배열 반환
+        var res = "";
+        
+        if("^" in str){
+            // !! NEED TO CONSIDER ^ !!
+        }
+
+        str.forEach(function(char){
+            res += convertElement(char);
+        })
+
+        return res;
+    }
+
 }
 
 /* 텍스트 변환 함수 */
 function convert2Text(expression){
     let res = [];
+    var commandArr = [];
 
-    // 괄호 전처리
-    let newEquation = equation.replace("(", "\\left(");
-    newEquation = newEquation.replace(")", "\\right)");
+    // 괄호, 공백 전처리
+    //let newEquation = expression.replace("(", "\\left(");
+    // newEquation = newEquation.replace(")", "\\right)");
+    let newEquation = expression.replace(" ", "");
 
     // 처음 분해
-    const initExp = splitExpression(newEquation);
-    console.log(equation);
-    console.log(newEquation);
+    const initExp = splitExpression(newEquation, commandArr);
+    console.log("수식: ", expression);
+    console.log("수식 전처리: ", newEquation);
     console.log("분해: ", initExp);
-    console.log("구별: ", command);
+    console.log("명령어 구별: ", commandArr);
 
-    // 텍스트로 변환    
-    for(let idx = 0; idx < initExp.length; idx++){
-        var atom = initExp[idx];
+    // 텍스트로 변환
+    initExp.forEach(function(element){
+        res.push(convertElement(element, commandArr));
+    })
 
-        if(isAtom(atom)) res.push(matchText(atom));
-        else{
-            var funcName = "read" + command[idx].slice(1);
-            if(funcName in functions){
-                let result = functions[funcName](atom);
-                res.push(result);
-            }
-            else {
-                res.push("UNDEFINED");
-                console.error(funcName + ' No Function.');
-            }
-        }
-    }
+    console.log("수식: ", expression);
     console.log(res);
 }
 
