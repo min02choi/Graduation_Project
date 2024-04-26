@@ -1,0 +1,50 @@
+
+.cateContainer {
+  width: 90%;
+}
+.cateName {
+  padding: 0.5rem 5rem;
+  margin-right: 0.1rem;
+  background-color: aquamarine;
+  border-bottom: none;
+
+}
+.ButtonsContainer {
+  padding: 0.5rem 1rem;
+  background-color: aquamarine;
+}
+.FormulaButton {
+  padding: 0.5rem 0.5rem;
+  margin-right: 1rem;
+  color: #111111;
+  background-color: aquamarine;
+  border-radius: 1rem;
+  border: none;
+}
+.inputContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+.button {
+  padding: 50px;
+  margin-left: 0.5rem;
+  background-color: aquamarine;
+  border-radius: 1rem;
+  border: none;
+}
+#latexInput {
+  width: 90%;
+  height: 100px;
+}
+#latexOutput {
+  margin-top: 10px;
+}
+.convertedKorContainer {
+  width: 97%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: blue; */
+}

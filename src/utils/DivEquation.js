@@ -1,10 +1,11 @@
+import { Data } from "./Data";
 //#region 에러사항
 // ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
 // ! 제곱 처리 고려필요
 //#endregion
 
 //#region IMPORT
-const Data  = require("./const_data.js")
+// const Data = require("../utils/ConstData.js")
 //#endregion
 
 //#region VARS & PROPERTIES
@@ -20,7 +21,7 @@ const functions = {
     readsqrt: readSqrt,
     readlim: readLim,
 }
- 
+
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
 //var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "1\\times x+22"
@@ -54,7 +55,7 @@ function checkOperation(expression, idx) {
     // 정해진 연산자에 대해서 돌리기
     // const opDictLen = Object.keys(operator).length; 
     for (let key in Data.operator) {
-        //console.log("key: ", key);
+        // console.log("key: ", key);
         const endIdx = idx + key.length;
         const subExpr = expression.substring(idx, endIdx);
         // console.log(subExpr);
@@ -92,7 +93,7 @@ function checkOperation(expression, idx) {
         resultDict['isOp'] = 0;
         resultDict['opLength'] = "\\left".length;
     }
-
+    console.log("checkOperation: ", resultDict);
     return resultDict;
 }
 
@@ -204,7 +205,7 @@ function getLeftEndIndex(expression, idx) {
     }
 
     let endExp = Data.math_expression_pair[exp][1];
-   // console.log(endExp);
+// console.log(endExp);
 
     // 알아낸 연산자로 끝나는 지점 알아내기
     while (idx < expression.length) {
@@ -289,7 +290,7 @@ function readFrac(formula){
             }
         }
     } 
- 
+
     let text = "분수시작 ";
 
     let splitExp = splitExpression(denominator, command);
@@ -321,7 +322,7 @@ function readSqrt(formula){
     var insideofSqrt = formula.slice(6, -1);
     var splitExp = splitExpression(insideofSqrt, command);
     var text = "루트시작 ";
-   
+
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
@@ -356,10 +357,10 @@ function readLim(formula){
     return text;
 }
 // #endregion
- 
+
 //#region MAIN_FUNC
 /* 텍스트 변환 함수 */
-function convert2Text(expression){
+export function convert2Text(expression){
     let res = [];
     var commandArr = [];
 
@@ -370,6 +371,7 @@ function convert2Text(expression){
 
     // 처음 분해
     const initExp = splitExpression(newEquation, commandArr);
+    console.log("DivEquation initExp: ", initExp);
     console.log("수식: ", expression);
     console.log("수식 전처리: ", newEquation);
     console.log("분해: ", initExp);
@@ -390,6 +392,7 @@ function convert2Text(expression){
         convertedTEXT += element;
     })
     console.log("결과: ", convertedTEXT);
+    return convertedTEXT;
 }
 
 // 괄호를 고려해서 하나씩 진행 하다가
@@ -397,9 +400,11 @@ function splitExpression(expression, command) {
     var idx = 0
     var splitExp = [];
     var temp = "";
-
+    
     //console.log(idx)
     while (idx < expression.length) {
+        console.log("splitExp", splitExp);
+        console.log("command", command);
         // 연산자가 수 있는 것 추정
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자
         //console.log(idx, "번째: ", expression[idx]);
@@ -407,10 +412,11 @@ function splitExpression(expression, command) {
         if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=") {
             // 명령어인 경우, 이것이 op인지 일반 수식 요소인지 확인
             // 수식 요소인 경우 어디부터 어디까지 수식인지 판단하기
-
+            
             let result = checkOperation(expression, idx);
+            console.log("DivEquation splitExpression: while문", result);
             //console.log(result);
-
+            
             // 연산자인 경우 앞의 항까지를 하나의 항으로 보기
             if (result.isOp) {
                 if (temp !== "") {
@@ -419,6 +425,7 @@ function splitExpression(expression, command) {
                 temp = "";
                 // splitExp.append(temp);
                 splitExp.push(result.opName);
+                console.log("DivEquation splitExpression: while문 마지막", splitExp, result.opName);
                 idx += result.opLength; 
             }
             else {
@@ -426,7 +433,7 @@ function splitExpression(expression, command) {
                 let funcName = "get" + (result.opName).slice(1) + "EndIndex";
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
-
+                
                 if (functions[funcName]) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
@@ -452,7 +459,6 @@ function splitExpression(expression, command) {
         splitExp.push(temp);
     }
 
-    console.log(splitExp);
     return splitExp;
 }
 
@@ -465,7 +471,7 @@ function convertElement(element, command){
     // 명령어인 경우
     else if(element.startsWith(command[0])){
         var funcName = "read" + command[0].slice(1);
-       
+    
         if(funcName in functions){ 
             command.shift();
             return functions[funcName](element);
@@ -494,5 +500,20 @@ function convertElement(element, command){
 //#endregion
 
 //#region TEST
-convert2Text(equation);
+// convert2Text(equation);
 //#endregion
+// function DivEquation(input) {
+//     const handleConvert = () => {
+//         const expression = input; // 변환할 수식을 여기에 입력하세요
+//         const convertedText = convert2Text(expression);
+//         console.log("변환된 텍스트:", convertedText);
+//         // 여기서 convertedText를 원하는 방식으로 처리합니다.
+//     };
+//     return (
+//         <div>
+//             {/* convert 버튼 */}
+//             <button onClick={handleConvert}>Convert</button>
+//         </div>
+//     );
+// }
+// export default DivEquation;
