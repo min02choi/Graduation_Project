@@ -502,18 +502,3 @@ function convertElement(element, command){
 //#region TEST
 // convert2Text(equation);
 //#endregion
-// function DivEquation(input) {
-//     const handleConvert = () => {
-//         const expression = input; // 변환할 수식을 여기에 입력하세요
-//         const convertedText = convert2Text(expression);
-//         console.log("변환된 텍스트:", convertedText);
-//         // 여기서 convertedText를 원하는 방식으로 처리합니다.
-//     };
-//     return (
-//         <div>
-//             {/* convert 버튼 */}
-//             <button onClick={handleConvert}>Convert</button>
-//         </div>
-//     );
-// }
-// export default DivEquation;
