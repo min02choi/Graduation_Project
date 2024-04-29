@@ -1,6 +1,6 @@
 // mathExpressions.js 파일
 
-export const Data = {
+const Data = {
     operator: {
         "+": "플러스 ",
         "-": "마이너스 ",
@@ -33,6 +33,7 @@ export const Data = {
         "e": "이 ",
         "x": "엑스 ",
         "y": "와이 ",
+        "z": "제트 ",
         "A": "대문자 에이 ",
         "B": "대문자 비 ",
         "C": "대문자 씨 ",
@@ -51,3 +52,4 @@ export const Data = {
         "{": ["중괄호 ", "}"],
     }
 };
+module.exports = Data;

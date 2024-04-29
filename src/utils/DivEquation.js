@@ -1,11 +1,14 @@
-import { Data } from "./Data";
+// import { Data } from "./Data";
+// import { numToKorean, FormatOptions} from 'num-to-korean';
+
 //#region 에러사항
 // ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
 // ! 제곱 처리 고려필요
 //#endregion
 
 //#region IMPORT
-// const Data = require("../utils/ConstData.js")
+const Data = require("./Data.js")
+const { numToKorean, FormatOptions } = require('num-to-korean');
 //#endregion
 
 //#region VARS & PROPERTIES
@@ -22,25 +25,26 @@ const functions = {
     readlim: readLim,
 }
 
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -4ac}}{2a}"
+//let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
 //var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
-// var equation = "1\\times x+22"
+var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y" 
 // var equation = "1\\div x+22"
 //  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
 //var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 
-// var equation = "\\left ( x+1 \\right )-y" 
+// var equation = "\\left ( x+1 \\right )-y"
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
 // var equation = '\\sinx^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
 // var equation = 'x^2+2x + 1'
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
-// var equation = "\\frac{ 1 }{ \\sqrt { 2 }+\\frac{ 1 }{ \\sqrt { 2 } +\\frac { 1 }{ \\sqrt { 2 } + 1}}} "
+// var equation = "\\frac{ 12 }{ \\sqrt { 22 }+\\frac{ 1 }{ \\sqrt { 2 } +\\frac { 1 }{ \\sqrt { 2 } + 1}}} "
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
-// var equation = "3a +  \\lim_{x\\to0} \\frac{2x}{3a}"
+// var equation = "31a +  \\lim_{x\\to0} \\frac{2x}{3a}"
+// var equation = "\\frac{11}{12a}"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -65,8 +69,6 @@ function checkOperation(expression, idx) {
             resultDict['isOp'] = 1;
             resultDict['opLength'] = key.length;
             break;
-
-            // return resultDict;
         }
     }
 
@@ -81,8 +83,6 @@ function checkOperation(expression, idx) {
             resultDict['isOp'] = 0;
             resultDict['opLength'] = key.length;
             break;
-
-            // return resultDict;
         }
     }
 
@@ -181,7 +181,6 @@ function getLimEndIndex(expression, idx){
         idx += 1;
     }
     return endIdx;
-
 }
 
 // 특수경우: 우측에 쌍이 있음. 시작은 \\left
@@ -205,7 +204,6 @@ function getLeftEndIndex(expression, idx) {
     }
 
     let endExp = Data.math_expression_pair[exp][1];
-// console.log(endExp);
 
     // 알아낸 연산자로 끝나는 지점 알아내기
     while (idx < expression.length) {
@@ -230,47 +228,68 @@ function getLeftEndIndex(expression, idx) {
                     break;
                 }
             }
-
-            //console.log("들어옴");
         }
         idx += 1;
-
     }
     return endIdx;
-} 
-
+}
 
 /* 순수 문자열 분해 함수 */
+// 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
 // ex) 2ac, xy
 function splitString(str){
     var strArr = [];
+    var num = "";
 
     Array.from(str).forEach(function(char) {
-        if(char in Data.word || char in Data.number){
+        if (char in Data.number){
+            num += char
+        }
+        else if (char in Data.word) {
+            strArr.push(num);
             strArr.push(char);
+            num = "";
         }
     });
+
+    if (num !== "") {
+        strArr.push(num);
+    }
     
     return strArr;
 }
 
 /* 분해 가능 유무  */
+// 두자리 이상의 수는 Atom 취급
 function isAtom(char){
-    if(char in Data.operator || char in Data.number || char in Data.word){
+    if(char in Data.operator || char in Data.number || char in Data.word || isNumber(char)){
         return true;
     }
     return false;
+}
+
+/* 숫자로만 이루어져있는지 판단 */
+function isNumber(char) {
+    for (var i = 0; i < char.length; i++) {
+        if (char[i] < '0' || char[i] > '9') return 0
+    }
+    return 1
 }
 
 /* 텍스트 매치 함수 */
 function matchText(char){
     if(char in Data.operator) return Data.operator[char];
     if(char in Data.word) return Data.word[char];
-    if(char in Data.number) return Data.number[char];
-} 
+    // if(char in Data.number) return Data.number[char];
+    const num = numToKorean(parseInt(char), FormatOptions.LINGUAL);
+    console.log("- 숫자로의 변환: ", num);
+    if (isNumber(char)) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
+}
+
 //#endregion
 
-//#region 명령어 텍스트 변환 함수 
+//#region 명령어 텍스트 변환 함수
+
 /** 분수 **/
 function readFrac(formula){
     var command = [];
@@ -279,7 +298,7 @@ function readFrac(formula){
     // 분모, 분자 찾기
     let stack = []; 
     let denominator, numerator;
-    for(var i=5; i < formula.length; i++){ 
+    for (var i=5; i < formula.length; i++) {
         if(formula[i] == "{") stack.push("{");
         else if(formula[i] == "}") {
             stack.pop();
@@ -298,13 +317,13 @@ function readFrac(formula){
         text += convertElement(element, command);
     })
 
-    text += " 분의 ";
+    text += "분의 ";
     splitExp = splitExpression(numerator, command);
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
 
-    text += " 분수끝";
+    text += "분수끝 ";
 
     return text;
 
@@ -360,7 +379,7 @@ function readLim(formula){
 
 //#region MAIN_FUNC
 /* 텍스트 변환 함수 */
-export function convert2Text(expression){
+function convert2Text(expression){
     let res = [];
     var commandArr = [];
 
@@ -392,6 +411,7 @@ export function convert2Text(expression){
         convertedTEXT += element;
     })
     console.log("결과: ", convertedTEXT);
+
     return convertedTEXT;
 }
 
@@ -463,16 +483,16 @@ function splitExpression(expression, command) {
 }
 
 /* Element 텍스트 변환 함수 */
+// 이쪽은 숫자가 붙어서 들어와야 함
 function convertElement(element, command){
-
     // 더이상 분해 안되는 원소인 경우
     if(isAtom(element)) return matchText(element);
     
     // 명령어인 경우
-    else if(element.startsWith(command[0])){
+    else if(element.startsWith(command[0])) {
         var funcName = "read" + command[0].slice(1);
     
-        if(funcName in functions){ 
+        if(funcName in functions) {
             command.shift();
             return functions[funcName](element);
         }
@@ -480,11 +500,11 @@ function convertElement(element, command){
     }
 
     // 명령어 아닌 문자열인 경우 ex) 2ac, xy 등
-    else{ 
+    else {
         var str = splitString(element); //배열 반환
         var res = "";
         
-        if("^" in str){
+        if("^" in str) {
             // !! NEED TO CONSIDER ^ !!
         }
 
@@ -494,11 +514,14 @@ function convertElement(element, command){
 
         return res;
     }
-
 }
 
 //#endregion
 
 //#region TEST
-// convert2Text(equation);
+convert2Text(equation);
+
+// const number = numToKorean(11111);
+// const number2 = numToKorean(11111, FormatOptions.LINGUAL);
+
 //#endregion
