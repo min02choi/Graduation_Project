@@ -5,19 +5,19 @@
 .cateName {
   padding: 0.5rem 5rem;
   margin-right: 0.1rem;
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   border-bottom: none;
 
 }
 .ButtonsContainer {
   padding: 0.5rem 1rem;
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
 }
-.FormulaButton {
+#FormulaButton {
   padding: 0.5rem 0.5rem;
   margin-right: 1rem;
   color: #111111;
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   border-radius: 1rem;
   border: none;
 }
@@ -27,10 +27,10 @@
   align-items: center;
   
 }
-.button {
+.convertedButton {
   padding: 50px;
   margin-left: 0.5rem;
-  background-color: aquamarine;
+  /* background-color: aquamarine; */
   border-radius: 1rem;
   border: none;
 }
@@ -47,4 +47,13 @@
   justify-content: center;
   align-items: center;
   /* background-color: blue; */
+}
+.speakButtonContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.speakButton {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
 }

@@ -34,7 +34,7 @@ const imgUrlList = {
     ]
 }
 
-function ButtonsContainer({input, setInput, opCategory}) {
+function ButtonsContainer({input, handleInputUpdate, opCategory}) {
     const opList = inputOpList[`${opCategory}InputOpList`];
     const urlList = imgUrlList[`${opCategory}ImgUrlList`];
     // console.log("ButtonsContainer: ", input);
@@ -45,7 +45,7 @@ function ButtonsContainer({input, setInput, opCategory}) {
                 <FormulaButton 
                     key={index} 
                     input={input} 
-                    setInput={setInput} 
+                    handleInputUpdate={handleInputUpdate} 
                     inputOp={operator} 
                     imgUrl={urlList[index]}
                 />
