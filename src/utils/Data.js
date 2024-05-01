@@ -11,6 +11,8 @@ const Data = {
         "\\mp": "마플 ",
         "=": "는(은) ",
         "^": "제곱 ",
+        // "\\left (": "괄호 열고",
+        // "\\right )": "괄호 닫고",
     },
 
     number: {
@@ -49,7 +51,7 @@ const Data = {
 
     math_expression_pair: {
         "(": ["괄호 ", ")"],
-        "{": ["중괄호 ", "}"],
+        "\\{": ["중괄호 ", "\\}"],
     }
 };
 module.exports = Data;

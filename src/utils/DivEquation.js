@@ -23,11 +23,14 @@ const functions = {
     readfrac: readFrac,
     readsqrt: readSqrt,
     readlim: readLim,
+
+    // readleft: readLeft,
+    // readright: readRight,
 }
 
 //let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
 //var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
-var equation = "3110000123123\\times x+22000001yz"
+// var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y" 
 // var equation = "1\\div x+22"
 //  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
@@ -45,6 +48,8 @@ var equation = "3110000123123\\times x+22000001yz"
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
 // var equation = "31a +  \\lim_{x\\to0} \\frac{2x}{3a}"
 // var equation = "\\frac{11}{12a}"
+// var equation = "\\left ( x+12 \\right ) + 120202"
+var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
