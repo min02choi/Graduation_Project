@@ -3,15 +3,33 @@
   width: 90%;
 }
 .cateName {
-  padding: 0.5rem 5rem;
+  padding: 0.5rem 3rem;
   margin-right: 0.1rem;
   /* background-color: aquamarine; */
   border-bottom: none;
 
 }
+.cateName:hover {
+  background-color: lightblue;
+}
 .ButtonsContainer {
+  display: flex;
+}
+.FormulaButtonsContainer {
   padding: 0.5rem 1rem;
-  /* background-color: aquamarine; */
+  width: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열로 배치 */
+  /* grid-template-rows: repeat(3, auto); 3행으로 배치 */
+  gap: 10px; /* 버튼 간격 설정 */
+}
+.FormulaButtonsContainer-OneCol {
+  padding: 0.5rem 1rem;
+  width: 100px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* 2열로 배치 */
+  /* grid-template-rows: repeat(3, auto); 3행으로 배치 */
+  gap: 10px; /* 버튼 간격 설정 */
 }
 #FormulaButton {
   padding: 0.5rem 0.5rem;
@@ -20,6 +38,9 @@
   /* background-color: aquamarine; */
   border-radius: 1rem;
   border: none;
+}
+#FormulaButton:hover {
+  background-color: lightblue;
 }
 .inputContainer {
   display: flex;

@@ -23,6 +23,7 @@ const functions = {
     readfrac: readFrac,
     readsqrt: readSqrt,
     readlim: readLim,
+    readInequality: readInequality,
 }
 
 //let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
@@ -55,16 +56,17 @@ var equation = "3110000123123\\times x+22000001yz"
 // opName, isOp, opLength
 function checkOperation(expression, idx) {
     const resultDict = {}
+    console.log("checkOperation: ", expression);
 
     // 정해진 연산자에 대해서 돌리기
     // const opDictLen = Object.keys(operator).length; 
     for (let key in Data.operator) {
-        // console.log("key: ", key);
+        console.log("key: ", key);
         const endIdx = idx + key.length;
         const subExpr = expression.substring(idx, endIdx);
         // console.log(subExpr);
         // console.log(key);
-        if (subExpr == key) {
+        if (subExpr === key) {
             resultDict['opName'] = key;
             resultDict['isOp'] = 1;
             resultDict['opLength'] = key.length;
@@ -375,6 +377,13 @@ function readLim(formula){
 
     return text;
 }
+
+/** 부등호 **/
+function readInequality(formula) {
+    var command = [];
+    console.log(formula);
+
+}
 // #endregion
 
 //#region MAIN_FUNC
@@ -421,7 +430,7 @@ function splitExpression(expression, command) {
     var splitExp = [];
     var temp = "";
     
-    //console.log(idx)
+    // console.log("expression", expression);
     while (idx < expression.length) {
         console.log("splitExp", splitExp);
         console.log("command", command);
@@ -429,7 +438,7 @@ function splitExpression(expression, command) {
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자
         //console.log(idx, "번째: ", expression[idx]);
         
-        if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=") {
+        if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=" || expression[idx] === "<" || expression[idx] === ">" || expression[idx] === "^" || expression[idx] === "_") {
             // 명령어인 경우, 이것이 op인지 일반 수식 요소인지 확인
             // 수식 요소인 경우 어디부터 어디까지 수식인지 판단하기
             
@@ -450,7 +459,7 @@ function splitExpression(expression, command) {
             }
             else {
                 //console.log("asdfasdf: ", result.opName)
-                let funcName = "get" + (result.opName).slice(1) + "EndIndex";
+                let funcName = `get${(result.opName).slice(1)}EndIndex`;
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
                 

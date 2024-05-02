@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
-import ButtonsContainer from "../components/ButtonsContainer";
 import {convert2Text} from "../utils/DivEquation";
+import Standard from "../components/Standard";
+import Cases from "../components/Cases";
+import SetAndProp from "../components/SetAndProp";
+import Matrix from "../components/Matrix";
 
 
 function LatexEditor() {
     const [input, setInput] = useState('');
-    const [opCategory, setOpCategory] = useState('standard');
+    const [opCategory, setOpCategory] = useState('Standard');
     const [convertedText, setConvertedText] = useState([]);
     // console.log(input);
 
@@ -77,15 +80,29 @@ function LatexEditor() {
             <div className="cateContainer">
                 {/* 카테고리 버튼 */}
                 {/* 카테고리 추가 시 수정 필요 */}
-                <button className="cateName" onClick={()=>setOpCategory('standard')}>{'기본 수식'}</   button> 
-                <button className="cateName" onClick={()=>setOpCategory('cases')}>{'경우의 수'}</button>
-                <button className="cateName" onClick={()=>setOpCategory('setAndProp')}>{'집합과 명제'}</button> 
+                <button className="cateName" onClick={()=>setOpCategory('Standard')}>{'기본 수식'}</button> 
+                <button className="cateName" onClick={()=>setOpCategory('Cases')}>{'경우의 수'}</button>
+                <button className="cateName" onClick={()=>setOpCategory('SetAndProp')}>{'집합과 명제'}</button> 
+                <button className="cateName" onClick={()=>setOpCategory('Matrix')}>{'행렬'}</button> 
                 {/* 카테고리에 따른 연산 버튼 리스트 변수명 전달 */}
-                <ButtonsContainer 
-                    input={input} 
-                    handleInputUpdate={handleInputUpdate} 
-                    opCategory={`${opCategory}`}
-                />
+                <div className="ButtonsContainer">
+                    {opCategory === 'Standard' && <Standard
+                        input={input}
+                        handleInputUpdate={handleInputUpdate} 
+                    />}
+                    {opCategory === 'Cases' && <Cases
+                        input={input}
+                        handleInputUpdate={handleInputUpdate} 
+                    />}
+                    {opCategory === 'SetAndProp' && <SetAndProp
+                        input={input}
+                        handleInputUpdate={handleInputUpdate} 
+                    />}
+                    {opCategory === 'Matrix' && <Matrix
+                        input={input}
+                        handleInputUpdate={handleInputUpdate} 
+                    />}
+                </div>
             </div>
 
             {/* LaTeX 입력란 */}
