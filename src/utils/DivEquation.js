@@ -24,7 +24,7 @@ const functions = {
     readsqrt: readSqrt,
     readlim: readLim,
 
-    // readleft: readLeft,
+    readleft: readLeft,
     // readright: readRight,
 }
 
@@ -48,8 +48,11 @@ const functions = {
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
 // var equation = "31a +  \\lim_{x\\to0} \\frac{2x}{3a}"
 // var equation = "\\frac{11}{12a}"
-// var equation = "\\left ( x+12 \\right ) + 120202"
-var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
+// var equation = "\\left | x+12 \\right | + 120202"
+// var equation = "\\left ( \\left| x + 1\\right|-y \\right )+123"
+// var equation = "\\left ( \\left( x + 1\\right)-y \\right )+123"
+var equation = "34\\times\\left [ \\left ( \\left| x + 1\\right|-y \\right )+123 \\right ]"
+// var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -380,6 +383,41 @@ function readLim(formula){
 
     return text;
 }
+
+// 괄호, 대괄호 처리해야 함
+// 중괄호는 명령어임
+function readLeft(formula){
+    var command = [];
+
+    var pairName = Data.math_expression_pair[formula[5]][0];
+    var pairEnd = Data.math_expression_pair[formula[5]][1];
+    console.log("pairname: ", pairName);
+
+    console.log(formula.slice(-7, -1));
+    console.log("\\right" + pairEnd);
+    if (formula.slice(-1, -7) === "\\right" + pairEnd) {
+        console.log("들어옴");
+    }
+    // getLeftEndIndex() 이거 써도 되지 않냐
+
+    // 여기에서 한번 right가 끝나는 지점을 확인할 것
+    // 이거 만약 중괄호면 인덱스 바꾸어 주어야 함
+    var insideofLeft = formula.slice(6, -7);        // 여기에서
+    var splitExp = splitExpression(insideofLeft, command);
+
+    console.log(formula[5]);
+    var pairName = Data.math_expression_pair[formula[5]][0];
+    console.log(pairName);
+    var text = pairName + "시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += pairName + "끝 ";
+
+    return text;
+}
+
 // #endregion
 
 //#region MAIN_FUNC
@@ -391,7 +429,9 @@ function convert2Text(expression){
     // 괄호, 공백 전처리
     //let newEquation = expression.replace("(", "\\left(");
     // newEquation = newEquation.replace(")", "\\right)");
-    let newEquation = expression.replace(" ", "");
+    let newEquation = expression.replace(/\s/g, "");
+
+    console.log("newEquation: ", newEquation);
 
     // 처음 분해
     const initExp = splitExpression(newEquation, commandArr);
@@ -494,13 +534,18 @@ function convertElement(element, command){
     if(isAtom(element)) return matchText(element);
     
     // 명령어인 경우
-    else if(element.startsWith(command[0])) {
+    // console.log(element);
+    else if (element.startsWith(command[0])) {
         var funcName = "read" + command[0].slice(1);
     
         if(funcName in functions) {
             command.shift();
             return functions[funcName](element);
         }
+        //else if (funcName === "readleft") {
+            //if (funcName === "readleft") return "괄호 열고";
+            //if (funcName === "readright") return "괄호 닫고";
+        //}
         else return "No Function Exists.";
     }
 

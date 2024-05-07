@@ -52,6 +52,8 @@ const Data = {
     math_expression_pair: {
         "(": ["괄호 ", ")"],
         "\\{": ["중괄호 ", "\\}"],
+        "[": ["대괄호 ", "]"],
+        "|": ["절댓값 ", "|"],
     }
 };
 module.exports = Data;
