@@ -2,9 +2,6 @@ import FormulaButton from "../components/FormulaButton";
 import {useState} from "react";
 
 function Standard({input, handleInputUpdate}) {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [rows, setRows] = useState(0);
-    const [columns, setColumns] = useState(0);
 
     return (
         <div className="buttons-container">

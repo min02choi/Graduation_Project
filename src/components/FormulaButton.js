@@ -6,7 +6,7 @@ function FormulaButton({input, handleInputUpdate, inputOp, imgUrl}) {
     return (
         <span className="formula-button-container">
             <button id="formula-button" 
-                onClick={() => handleInputUpdate(input + inputOp)}>
+                onClick={() => handleInputUpdate(inputOp)}>
                 <img alt="a" src={imgSrc} />
             </button>
         </span>

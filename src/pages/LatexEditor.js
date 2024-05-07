@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {convert2Text} from "../utils/DivEquation";
 import Standard from "../components/Standard";
 import Cases from "../components/Cases";
@@ -10,7 +10,9 @@ function LatexEditor() {
     const [input, setInput] = useState('');
     const [opCategory, setOpCategory] = useState('Standard');
     const [convertedText, setConvertedText] = useState([]);
-    // console.log(input);
+    // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
+    const inputRef = useRef(null); // input 요소에 대한 ref
+    
 
     useEffect(() => {
         const handleInputChange = () => {
@@ -55,16 +57,35 @@ function LatexEditor() {
     //     handleConvertBtn();
     // }, [input]);
 
+    // 커서 위치 조정
+    const getCursorPosition = () => {
+        if (!inputRef.current) return 0; // input 요소가 존재하지 않으면 0 반환
+
+        // selectionStart 속성을 사용하여 커서의 위치를 가져옴
+        return inputRef.current.selectionStart;
+    };
+
     // input update
     function handleInputUpdate(value) {
-        setInput(value);
-        console.log("input", input);
-    };
-    function handleConvertedTextUpdate(expression) {
-        setConvertedText([convert2Text(expression)]);
-    }
+        // 텍스트 입력 필드에서 현재 커서 위치를 가져옴
+        let cursorPosition = getCursorPosition();
 
+        // 새로운 텍스트 생성: 커서 위치 앞부분 + 삽입할 버튼 수식 + 커서 위치 뒷부분
+        const newText = input.slice(0, cursorPosition) + value + input.slice(cursorPosition);
+
+        // 입력된 텍스트 업데이트
+        setInput(newText);
+
+        // 입력 필드에 포커스를 맞춤
+        if (inputRef.current) {
+            inputRef.current.focus();
     
+            // 커서 위치를 삽입한 버튼 다음으로 이동
+            const newCurPosition = getCursorPosition();
+            inputRef.current.setSelectionRange(newCurPosition + 5, newCurPosition + 5);
+            console.log(newCurPosition);
+        }
+    };
 
     // TTS API 호출 함수
     const speak = (text) => {
@@ -108,11 +129,12 @@ function LatexEditor() {
             {/* LaTeX 입력란 */}
             <div className="input-container">
                 <textarea
+                    ref={inputRef}
                     id="latex-input"
                     placeholder="Enter LaTeX here..."
                     value={input}
                     onChange={(e) => {
-                        handleInputUpdate(e.target.value)
+                        setInput(e.target.value)
                     }}
                 ></textarea>
                 <button className="converted-button" onClick={handleConvertBtn}>Convert</button>
