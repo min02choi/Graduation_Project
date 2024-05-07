@@ -14,9 +14,9 @@ function LatexEditor() {
 
     useEffect(() => {
         const handleInputChange = () => {
-            const inputValue = document.getElementById('latexInput').value;
+            const inputValue = document.getElementById('latex-input').value;
             console.log("inputValue", inputValue);
-            const output = document.getElementById('latexOutput');
+            const output = document.getElementById('latex-output');
             // MathJax 사용하여 LaTeX 수식 렌더링
             output.innerHTML = '$$' + inputValue + '$$';
             window.MathJax.typesetPromise();
@@ -24,11 +24,11 @@ function LatexEditor() {
         handleInputChange();
 
         // LaTeX 입력란에서 입력이 변경될 때마다 이벤트 핸들러 추가
-        document.getElementById('latexInput').addEventListener('input', handleInputChange);
+        document.getElementById('latex-input').addEventListener('input', handleInputChange);
 
         // 컴포넌트가 언마운트될 때 이벤트 핸들러 제거
         return () => {
-            document.getElementById('latexInput').removeEventListener('input', handleInputChange);
+            document.getElementById('latex-input').removeEventListener('input', handleInputChange);
         };
     }, [input]);
 
@@ -64,6 +64,8 @@ function LatexEditor() {
         setConvertedText([convert2Text(expression)]);
     }
 
+    
+
     // TTS API 호출 함수
     const speak = (text) => {
         console.log("text", text);
@@ -75,57 +77,55 @@ function LatexEditor() {
     };
 
     return (
-        <div className="LatexEditor">
+        <div className="latex-editor">
             <h1>시각장애인을 위한 수식 리더기</h1>
-            <div className="cateContainer">
+            <div className="cate-container">
                 {/* 카테고리 버튼 */}
                 {/* 카테고리 추가 시 수정 필요 */}
-                <button className="cateName" onClick={()=>setOpCategory('Standard')}>{'기본 수식'}</button> 
-                <button className="cateName" onClick={()=>setOpCategory('Cases')}>{'경우의 수'}</button>
-                <button className="cateName" onClick={()=>setOpCategory('SetAndProp')}>{'집합과 명제'}</button> 
-                <button className="cateName" onClick={()=>setOpCategory('Matrix')}>{'행렬'}</button> 
+                <button className="cate-name" onClick={()=>setOpCategory('Standard')}>{'기본 수식'}</button> 
+                <button className="cate-name" onClick={()=>setOpCategory('Cases')}>{'경우의 수'}</button>
+                <button className="cate-name" onClick={()=>setOpCategory('SetAndProp')}>{'집합과 명제'}</button> 
+                <button className="cate-name" onClick={()=>setOpCategory('Matrix')}>{'행렬'}</button> 
                 {/* 카테고리에 따른 연산 버튼 리스트 변수명 전달 */}
-                <div className="ButtonsContainer">
-                    {opCategory === 'Standard' && <Standard
-                        input={input}
-                        handleInputUpdate={handleInputUpdate} 
-                    />}
-                    {opCategory === 'Cases' && <Cases
-                        input={input}
-                        handleInputUpdate={handleInputUpdate} 
-                    />}
-                    {opCategory === 'SetAndProp' && <SetAndProp
-                        input={input}
-                        handleInputUpdate={handleInputUpdate} 
-                    />}
-                    {opCategory === 'Matrix' && <Matrix
-                        input={input}
-                        handleInputUpdate={handleInputUpdate} 
-                    />}
-                </div>
+                {opCategory === 'Standard' && <Standard
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                />}
+                {opCategory === 'Cases' && <Cases
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                />}
+                {opCategory === 'SetAndProp' && <SetAndProp
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                />}
+                {opCategory === 'Matrix' && <Matrix
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                />}
             </div>
 
             {/* LaTeX 입력란 */}
-            <div className="inputContainer">
+            <div className="input-container">
                 <textarea
-                    id="latexInput"
+                    id="latex-input"
                     placeholder="Enter LaTeX here..."
                     value={input}
                     onChange={(e) => {
                         handleInputUpdate(e.target.value)
                     }}
                 ></textarea>
-                <button className="convertedButton" onClick={handleConvertBtn}>Convert</button>
+                <button className="converted-button" onClick={handleConvertBtn}>Convert</button>
             </div>
             {/* LaTeX 수식 렌더링 결과 */}
-            <div id="latexOutput"></div>
+            <div id="latex-output"></div>
             {/* 변환 후 한국말 결과 */}
-            <div className="convertedKorContainer">
-                <ul className="convertedKor">
+            <div className="converted-kor-container">
+                <ul className="converted-kor">
                     {convertedText.map((text, index) => (
-                        <div className="speakButtonContainer">
+                        <div className="speak-button-container">
                             <span key={index}>{text}</span>
-                            <button className="speakButton" onClick={() => speak(text)}>
+                            <button className="speak-button" onClick={() => speak(text)}>
                                 <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
                             </button>
                         </div>

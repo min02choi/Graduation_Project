@@ -1,9 +1,14 @@
 import FormulaButton from "../components/FormulaButton";
+import {useState} from "react";
 
 function Standard({input, handleInputUpdate}) {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [rows, setRows] = useState(0);
+    const [columns, setColumns] = useState(0);
+
     return (
-        <div className="ButtonsContainer">
-            <span className="FormulaButtonsContainer">
+        <div className="buttons-container">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -29,7 +34,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\dot{a}'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -67,7 +72,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\mp'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -93,7 +98,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\left\\{a\\right\\}'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -131,7 +136,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\Box'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -169,7 +174,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'x^\\circ'}
                 />
             </span>
-            <span className="FormulaButtonsContainer-OneCol">
+            <span className="formula-buttons-container-one-col">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 

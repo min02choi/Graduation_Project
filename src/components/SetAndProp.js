@@ -1,9 +1,14 @@
 import FormulaButton from "../components/FormulaButton";
+import {useState} from "react";
 
 function SetAndProp({input, handleInputUpdate}) {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [rows, setRows] = useState(0);
+    const [columns, setColumns] = useState(0);
+    
     return (
-        <div className="ButtonsContainer">
-            <span className="FormulaButtonsContainer">
+        <div className="buttons-container">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -29,7 +34,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\not\\ni'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -55,7 +60,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\supseteq'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -81,7 +86,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\nsupseteq'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -107,7 +112,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\left\\{a\\right\\}'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -145,7 +150,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\nLeftrightarrow'}
                 />
             </span>
-            <span className="FormulaButtonsContainer">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 

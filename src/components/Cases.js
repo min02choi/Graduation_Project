@@ -1,9 +1,10 @@
 import FormulaButton from "../components/FormulaButton";
 
 function Cases({input, handleInputUpdate}) {
+
     return (
-        <div className="ButtonsContainer">
-            <span className="FormulaButtonsContainer">
+        <div className="buttons-container">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 

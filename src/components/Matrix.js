@@ -1,29 +1,40 @@
 import FormulaButton from "../components/FormulaButton";
-import MatrixButton from "./MatrixButton";
-
+import MatrixPopUpButton from "./MatrixPopUpButton";
+import { useState } from "react";
 
 function Matrix({input, handleInputUpdate}) {
+    const [isPopupOpenPMatrix, setIsPopupOpenPMatrix] = useState(false);
+    const [isPopupOpenBMatrix, setIsPopupOpenBMatrix] = useState(false);
+
+    // 팝업을 열거나 닫는 핸들러 함수들
+    const handleTogglePopUpPMatrix = () => {
+        setIsPopupOpenPMatrix(!isPopupOpenPMatrix);
+        setIsPopupOpenBMatrix(false); 
+    };
+
+    const handleTogglePopUpBMatrix = () => {
+        setIsPopupOpenBMatrix(!isPopupOpenBMatrix);
+        setIsPopupOpenPMatrix(false); 
+    };
+    
     return (
-        <div className="ButtonsContainer">
-            <span className="FormulaButtonsContainer">
-                {/* <FormulaButton
+        <div className="buttons-container">
+            <span className="formula-buttons-container">
+                <MatrixPopUpButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\begin{bmatrix}  \\\\ \\\end{bmatrix}'} 
-                    imgUrl={'\\begin{bmatrix}\\cdots \\\\ \\cdots\\\end{bmatrix}'}
-                /> */}
-                <MatrixButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\begin{bmatrix}  \\\\ \\\end{bmatrix}'} 
-                    imgUrl={'\\begin{bmatrix}\\cdots \\\\ \\cdots\\\end{bmatrix}'}
+                    inputOpType={'pmatrix'} 
+                    isPopupOpen={isPopupOpenPMatrix}
+                    setPopupOpen={setIsPopupOpenPMatrix}
+                    onTogglePopUp={handleTogglePopUpPMatrix}
                 />
-                
-                <FormulaButton
+                <MatrixPopUpButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
-                    inputOp={'_{n}\\mathrm{C}_{k}'} 
-                    imgUrl={'_{n}\\mathrm{C}_{k}'}
+                    inputOpType={'bmatrix'}
+                    isPopupOpen={isPopupOpenBMatrix}
+                    setPopupOpen={setIsPopupOpenBMatrix}
+                    onTogglePopUp={handleTogglePopUpBMatrix} 
                 />
             </span>
             
