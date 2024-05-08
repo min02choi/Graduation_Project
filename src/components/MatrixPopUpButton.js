@@ -2,7 +2,7 @@ import { useState } from "react";
 import {FormulaButton} from "./FormulaButton";
 import React from 'react';
 
-function MatrixPopUpButton({input, handleInputUpdate, inputOpType, isPopupOpen, setPopupOpen, onTogglePopUp}) {
+function MatrixPopUpButton({handleInputUpdate, inputOpType, isPopupOpen, setPopupOpen, onTogglePopUp, curPos}) {
     const imgUrl = `\\begin{${inputOpType}}\\cdots \\\\ \\cdots\\\end{${inputOpType}}`
     const imgSrc = `https://latex.codecogs.com/png.latex?${imgUrl}`;
     // const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -27,7 +27,7 @@ function MatrixPopUpButton({input, handleInputUpdate, inputOpType, isPopupOpen, 
         const middleMatrix = oneRow.repeat(rows);
         const endMatrix = `\\end{${inputOpType}}`;
         const finalMatrix = startMatrix.concat(middleMatrix, endMatrix);
-        handleInputUpdate(input + finalMatrix);
+        handleInputUpdate(finalMatrix, curPos);
     };
 
     // matrix popup

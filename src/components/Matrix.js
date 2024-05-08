@@ -27,6 +27,7 @@ function Matrix({input, handleInputUpdate}) {
                     isPopupOpen={isPopupOpenPMatrix}
                     setPopupOpen={setIsPopupOpenPMatrix}
                     onTogglePopUp={handleTogglePopUpPMatrix}
+                    curPos={16}
                 />
                 <MatrixPopUpButton
                     input={input}
@@ -35,6 +36,7 @@ function Matrix({input, handleInputUpdate}) {
                     isPopupOpen={isPopupOpenBMatrix}
                     setPopupOpen={setIsPopupOpenBMatrix}
                     onTogglePopUp={handleTogglePopUpBMatrix} 
+                    curPos={16}
                 />
             </span>
             

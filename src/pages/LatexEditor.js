@@ -12,6 +12,8 @@ function LatexEditor() {
     const [convertedText, setConvertedText] = useState([]);
     // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
     const inputRef = useRef(null); // input 요소에 대한 ref
+    const [cursor, setCursor] = useState(0);
+    console.log("cursor: ", cursor);
     
 
     useEffect(() => {
@@ -33,6 +35,11 @@ function LatexEditor() {
             document.getElementById('latex-input').removeEventListener('input', handleInputChange);
         };
     }, [input]);
+
+    useEffect(() => {
+        inputRef.current.focus();
+        inputRef.current.setSelectionRange(cursor, cursor);
+      }, [cursor]);
 
     // 한국말 변환 convert 버튼 이벤트
     const handleConvertBtn = () => {
@@ -65,8 +72,8 @@ function LatexEditor() {
         return inputRef.current.selectionStart;
     };
 
-    // input update
-    function handleInputUpdate(value) {
+    // input update with cursor
+    function handleInputUpdate(value, curPos) {
         // 텍스트 입력 필드에서 현재 커서 위치를 가져옴
         let cursorPosition = getCursorPosition();
 
@@ -82,8 +89,7 @@ function LatexEditor() {
     
             // 커서 위치를 삽입한 버튼 다음으로 이동
             const newCurPosition = getCursorPosition();
-            inputRef.current.setSelectionRange(newCurPosition + 5, newCurPosition + 5);
-            console.log(newCurPosition);
+            setCursor(newCurPosition + curPos);
         }
     };
 

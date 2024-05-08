@@ -70,6 +70,7 @@
   align-items: center;
   /* background-color: blue; */
 }
+/* TTS 버튼 */
 .speak-button-container {
   display: flex;
   justify-content: center;
@@ -80,7 +81,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 
-/* 행렬 */
+/* 행렬 팝업 */
 .popup {
   position: absolute;
   background-color: white;

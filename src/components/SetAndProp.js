@@ -1,10 +1,6 @@
 import FormulaButton from "../components/FormulaButton";
-import {useState} from "react";
 
 function SetAndProp({input, handleInputUpdate}) {
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [rows, setRows] = useState(0);
-    const [columns, setColumns] = useState(0);
     
     return (
         <div className="buttons-container">
@@ -14,24 +10,28 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\in'} 
                     imgUrl={'\\in'}
+                    curPos={3}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\ni'} 
                     imgUrl={'\\ni'}
+                    curPos={3}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\notin'} 
                     imgUrl={'\\notin'}
+                    curPos={6}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\not\\ni'} 
                     imgUrl={'\\not\\ni'}
+                    curPos={7}
                 />
             </span>
             <span className="formula-buttons-container">
@@ -40,24 +40,28 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\subset'} 
                     imgUrl={'\\subset'}
+                    curPos={7}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\supset'} 
                     imgUrl={'\\supset'}
+                    curPos={7}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\subseteq'} 
                     imgUrl={'\\subseteq'}
+                    curPos={9}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\supseteq'} 
                     imgUrl={'\\supseteq'}
+                    curPos={9}
                 />
             </span>
             <span className="formula-buttons-container">
@@ -66,24 +70,28 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\not\\subset'} 
                     imgUrl={'\\not\\subset'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\not\\supset'} 
                     imgUrl={'\\not\\supset'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nsubseteq'} 
                     imgUrl={'\\nsubseteq'}
+                    curPos={10}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nsupseteq'} 
                     imgUrl={'\\nsupseteq'}
+                    curPos={10}
                 />
             </span>
             <span className="formula-buttons-container">
@@ -92,24 +100,21 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\cap'} 
                     imgUrl={'\\cap'}
+                    curPos={4}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\cup'} 
                     imgUrl={'\\cup'}
+                    curPos={4}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\varnothing'} 
                     imgUrl={'\\varnothing'}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\left\\{ \\right\\}'} 
-                    imgUrl={'\\left\\{a\\right\\}'}
+                    curPos={11}
                 />
             </span>
             <span className="formula-buttons-container">
@@ -118,36 +123,42 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\Rightarrow'} 
                     imgUrl={'\\Rightarrow'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\Leftarrow'} 
                     imgUrl={'\\Leftarrow'}
+                    curPos={10}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nRightarrow'} 
                     imgUrl={'\\nRightarrow'}
+                    curPos={12}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nLeftarrow'} 
                     imgUrl={'\\nLeftarrow'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\Leftrightarrow'} 
                     imgUrl={'\\Leftrightarrow'}
+                    curPos={15}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nLeftrightarrow'} 
                     imgUrl={'\\nLeftrightarrow'}
+                    curPos={16}
                 />
             </span>
             <span className="formula-buttons-container">
@@ -156,36 +167,42 @@ function SetAndProp({input, handleInputUpdate}) {
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\rightarrow'} 
                     imgUrl={'\\rightarrow'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\leftarrow'} 
                     imgUrl={'\\leftarrow'}
+                    curPos={10}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nrightarrow'} 
                     imgUrl={'\\nrightarrow'}
+                    curPos={12}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nleftarrow'} 
                     imgUrl={'\\nleftarrow'}
+                    curPos={11}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\leftrightarrow'} 
                     imgUrl={'\\leftrightarrow'}
+                    curPos={15}
                 />
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\nleftrightarrow'} 
                     imgUrl={'\\nleftrightarrow'}
+                    curPos={16}
                 />
             </span>
         </div>
