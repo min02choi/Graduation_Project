@@ -51,7 +51,9 @@ const functions = {
 // var equation = "\\left | x+12 \\right | + 120202"
 // var equation = "\\left ( \\left| x + 1\\right|-y \\right )+123"
 // var equation = "\\left ( \\left( x + 1\\right)-y \\right )+123"
-var equation = "34\\times\\left [ \\left ( \\left| x + 1\\right|-y \\right )+123 \\right ]"
+// var equation = "34\\times\\left [ \\left ( \\left| x + 1\\right|-y \\right )+123 \\right ]"
+var equation = "f(x) = x+ 1"
+var equation = "f\\left(x \\right) = x+ 1"
 // var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
 //////////////////////////////////////////////
 //////////////////////////////////////////////
@@ -575,3 +577,5 @@ convert2Text(equation);
 // const number2 = numToKorean(11111, FormatOptions.LINGUAL);
 
 //#endregion
+
+// f(x)의 경우 (x)이 먼저 들어가는 현상 확인
