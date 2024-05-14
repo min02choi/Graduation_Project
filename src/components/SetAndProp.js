@@ -161,50 +161,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     curPos={16}
                 />
             </span>
-            <span className="formula-buttons-container">
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\rightarrow'} 
-                    imgUrl={'\\rightarrow'}
-                    curPos={11}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\leftarrow'} 
-                    imgUrl={'\\leftarrow'}
-                    curPos={10}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\nrightarrow'} 
-                    imgUrl={'\\nrightarrow'}
-                    curPos={12}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\nleftarrow'} 
-                    imgUrl={'\\nleftarrow'}
-                    curPos={11}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\leftrightarrow'} 
-                    imgUrl={'\\leftrightarrow'}
-                    curPos={15}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\nleftrightarrow'} 
-                    imgUrl={'\\nleftrightarrow'}
-                    curPos={16}
-                />
-            </span>
+
         </div>
     );
 }
