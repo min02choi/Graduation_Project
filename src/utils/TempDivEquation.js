@@ -17,7 +17,7 @@ const endIdxFuncNames = {
     "\\sin": "sct",
     "\\cos": "sct",
     "\\tan": "sct",
-    "^": "superscript",
+    // "^": "superscript",
 };
 const readFuncNames = {
     "\\frac": "frac",
@@ -31,7 +31,7 @@ const readFuncNames = {
     "\\sin": "sin",
     "\\cos": "cos",
     "\\tan": "tan",
-    "^": "superscript",
+    // "^": "superscript",
     "\\in": "in",
     "\\ni": "ni",
     "\\notin": "notin",
@@ -109,19 +109,19 @@ const Data = {
         "\\cap": " 교집합 ",
         "\\cup": " 합집합 ",
         "\\varnothing": " 공집합 ",
+        "\\sim": " 부정 ", // 부정 뿐만 아니라 비슷하지 않음이라는 뜻도 있음
     },
-
     number: {
-        "0": "영 ",
-        "1": "일 ",
-        "2": "이 ",
-        "3": "삼 ",
-        "4": "사 ",
-        "5": "오 ",
-        "6": "육 ",
-        "7": "칠 ",
-        "8": "팔 ",
-        "9": "구 ",
+        "0": "영",
+        "1": "일",
+        "2": "이",
+        "3": "삼",
+        "4": "사",
+        "5": "오",
+        "6": "육",
+        "7": "칠",
+        "8": "팔",
+        "9": "구",
     },
 
     word: {
@@ -132,13 +132,15 @@ const Data = {
         "f": "에프 ",
         "x": "엑스 ",
         "y": "와이 ",
+        "z": "지 ",
         "A": "대문자 에이 ",
         "B": "대문자 비 ",
         "C": "대문자 씨 ",
+        "F": "대문자 에프 ", 
     },
 
     math_expression: {
-        "^": ["제곱", 2],
+        // "^": ["제곱", 2],
         "\\frac": ["분수 ", 2],
         "\\sqrt": ["루트 ", 1],
         "\\left": ["열림 ", 1],
@@ -168,7 +170,7 @@ const functions = {
     getleftEndIndex: getLeftEndIndex,
     getlimEndIndex: getLimEndIndex,
     getsctEndIndex: getSctEndIndex,
-    getsuperscriptEndIndex: getSuperScriptEndIndex,
+    // getsuperscriptEndIndex: getSuperScriptEndIndex,
 
     readfrac: readFrac,
     readsqrt: readSqrt,
@@ -180,7 +182,7 @@ const functions = {
     readsin: readSin,
     readcos: readCos,
     readtan: readTan,
-    readsuperscript: readSuperScript,
+    // readsuperscript: readSuperScript,
     readin: readIn,
     readni: readNi,
     readnotin: readNotIn,
@@ -210,7 +212,7 @@ const functions = {
 // var equation = "\\left ( x+1 \\right )-y"
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div( 1+y ) +\\frac{a}{b}";
 // var equation = '\\sinx^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
-var equation = 'x^{2}+2x + 1'
+// var equation = 'x^{2}+2x + 1'
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
@@ -220,10 +222,11 @@ var equation = 'x^{2}+2x + 1'
 // var equation = "\\frac{11}{12a}"
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 // var equation = "A\\Longleftrightarrow B"
-// var equation = "\\sqrt{5}+2 \\le a2"
+var equation = "\\sqrt{5}+2 < a2"
 // var equation = "\\sqrt{5}+2=2\\times3"
 // var equation = "\\sqrt{5} + 1 = 12\\infty";
 // var equation = "\\sin(\\sqrt{2} + \\sin(3)) \\div \\tan(3) + \\cos(2)"
+// var equation = "\\sim p";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -452,30 +455,30 @@ function getSctEndIndex(expression, idx) {
     console.log("getSinEndIndex", endIdx);
     return endIdx;
 }
-function getSuperScriptEndIndex(expression, idx) {
-    console.log("getSuperScriptEndIndex", expression, idx);
-    let stack = [];
-    var braceCnt = 0
-    var endIdx = 0;
+// function getSuperScriptEndIndex(expression, idx) {
+//     console.log("getSuperScriptEndIndex", expression, idx);
+//     let stack = [];
+//     var braceCnt = 0
+//     var endIdx = 0;
 
-    while (idx < expression.length) {
-        if (expression[idx] === "{") {
-            stack.push("{");
-        }
-        else if (expression[idx] === "}") {
-            stack.pop();
-            if (stack.length === 0) {
-                braceCnt += 1;
-                if (braceCnt == 1) {
-                    endIdx = idx
-                    break
-                }
-            }
-        }
-        idx += 1;
-    }
-    return endIdx;
-}
+//     while (idx < expression.length) {
+//         if (expression[idx] === "{") {
+//             stack.push("{");
+//         }
+//         else if (expression[idx] === "}") {
+//             stack.pop();
+//             if (stack.length === 0) {
+//                 braceCnt += 1;
+//                 if (braceCnt == 1) {
+//                     endIdx = idx
+//                     break
+//                 }
+//             }
+//         }
+//         idx += 1;
+//     }
+//     return endIdx;
+// }
 
 /* 순수 문자열 분해 함수 */
 // 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
@@ -627,7 +630,7 @@ function readUnder(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "";
+    let text = "부등식 시작 ";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -638,7 +641,7 @@ function readUnder(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += " 가 크다.";
+    text += " 가 크다 부등식 끝";
 
 
     return text;
@@ -1090,9 +1093,11 @@ function convert2Text(expression){
     var singleEndIdx = 0;
     splitSpace.forEach(function(el) {
         var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
-        tempEx.forEach(function(i) {
-            elements.push(i);
-        })
+        if (tempEx !== null) {
+            tempEx.forEach(function(i) {
+                elements.push(i);
+            });
+        }
     });
     
 

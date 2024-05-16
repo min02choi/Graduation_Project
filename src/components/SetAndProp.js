@@ -160,6 +160,13 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\nLeftrightarrow'}
                     curPos={16}
                 />
+                 <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\sim'} 
+                    imgUrl={'\\sim'}
+                    curPos={4}
+                />
             </span>
 
         </div>
