@@ -52,7 +52,7 @@ const functions = {
 // var equation = "\\left ( \\left| x + 1\\right|-y \\right )+123"
 // var equation = "\\left ( \\left( x + 1\\right)-y \\right )+123"
 // var equation = "34\\times\\left [ \\left ( \\left| x + 1\\right|-y \\right )+123 \\right ]"
-var equation = "f(x) = x+ 1"
+// var equation = "f(x) = x+ 1"
 var equation = "f\\left(x \\right) = x+ 1"
 // var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
 //////////////////////////////////////////////
@@ -100,7 +100,7 @@ function checkOperation(expression, idx) {
     console.log(resultDict.opName);
     if (resultDict.opName === "\\left" || resultDict.opName === "\\left") {
         resultDict['opName'] = "\\left";
-        resultDict['isOp'] = 0;
+        resultDict['isOp'] = 0;     // 수정(원래: 0 -> 1)
         resultDict['opLength'] = "\\left".length;
     }
     console.log("checkOperation: ", resultDict);
@@ -485,7 +485,9 @@ function splitExpression(expression, command) {
             //console.log(result);
             
             // 연산자인 경우 앞의 항까지를 하나의 항으로 보기
+            // 괄호의 경우 별도의 처리 필요
             if (result.isOp) {
+                console.log(temp)
                 if (temp !== "") {
                     splitExp.push(temp);
                 }
@@ -505,6 +507,14 @@ function splitExpression(expression, command) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
                     // console.log(result);        // 전체 수식에서의 인덱스임
+
+                    ///
+                    console.log(temp)
+                    if (temp !== "") {
+                        splitExp.push(temp);
+                    }
+                    temp = "";
+                    ///
                     splitExp.push(expression.slice(idx, result + 1));
                     
                     idx = result + 1;
