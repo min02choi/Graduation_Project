@@ -53,8 +53,12 @@ const functions = {
 // var equation = "\\left ( \\left( x + 1\\right)-y \\right )+123"
 // var equation = "34\\times\\left [ \\left ( \\left| x + 1\\right|-y \\right )+123 \\right ]"
 // var equation = "f(x) = x+ 1"
-var equation = "f\\left(x \\right) = x+ 1"
+// var equation = "f\\left(x \\right) = x+ 1"
 // var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
+
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
+var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
+// var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -193,8 +197,8 @@ function getLimEndIndex(expression, idx){
     return endIdx;
 }
 
+// 쌍으로 이루어진 연산자의 끝 인덱스를 알아내는 함수
 // 특수경우: 우측에 쌍이 있음. 시작은 \\left
-// math_expression_pair 에서 어떤것인지 확인하고
 function getLeftEndIndex(expression, idx) {
     let stack = [];
     var braceCnt = 0
@@ -202,13 +206,19 @@ function getLeftEndIndex(expression, idx) {
     var exp = ""
 
     // 어떤 연산자인지 알아내기
-    //console.log(expression.slice(idx, idx + 5));
-    //console.log("\\left")
     if (expression.slice(idx, idx + 5) === "\\left") {
-        for (let i = idx; i < expression.length; i++) {
-            if (expression[i] in Data.math_expression_pair) {
-                exp = expression[i]
-                break
+        for (let i = idx; i < expression.length; i ++) {
+            for (let expLeft in Data.math_expression_pair) {
+                console.log(expression.slice(i, i + expLeft.length));
+                console.log(expLeft);
+                if (expression.slice(i, i + expLeft.length) === expLeft) {
+                    console.log("안으로 들어옴");
+                    exp = expLeft;
+                    break;
+                }
+            }
+            if (exp !== "") {
+                break;
             }
         }
     }
@@ -217,24 +227,21 @@ function getLeftEndIndex(expression, idx) {
 
     // 알아낸 연산자로 끝나는 지점 알아내기
     while (idx < expression.length) {
-        if (expression[idx] === exp) {
+        // console.log(expression.slice(idx, idx + endExp.length));
+        // console.log(exp);
+        if (expression.slice(idx, idx + 5 + exp.length) === ("\\left" + exp)) {
             stack.push(exp);
         }
 
-        // 공백도 일단...
-        //console.log(expression.slice(idx, idx + 8));
-        //console.log("\\right " + endExp);
-        if (expression.slice(idx, idx + 8) === ("\\right " + endExp) || expression.slice(idx, idx + 7) === ("\\right" + endExp)) {
+        // 스택 검사해서 비어있다면 최종 인덱스 반환
+        console.log(expression.slice(idx, idx + 6 + endExp.length));
+        console.log("\\right" + endExp);
+        if (expression.slice(idx, idx + 6 + endExp.length) === ("\\right" + endExp)) {
             stack.pop();
             if (stack.length === 0) {
                 braceCnt += 1;
                 if (braceCnt === 1) {
-                    if (expression[idx + 6] === endExp) {
-                        endIdx = idx + 6
-                    }
-                    else if (expression[idx + 7] === endExp) {
-                        endIdx = idx + 7
-                    }
+                    endIdx = idx + 5 + endExp.length;
                     break;
                 }
             }
@@ -391,25 +398,51 @@ function readLim(formula){
 function readLeft(formula){
     var command = [];
 
-    var pairName = Data.math_expression_pair[formula[5]][0];
-    var pairEnd = Data.math_expression_pair[formula[5]][1];
-    console.log("pairname: ", pairName);
+    console.log(formula);
+    var pairName = "";
+    var pairEnd = "";
+    var expLen = "";
 
-    console.log(formula.slice(-7, -1));
+    // 데이터 프레임에서 돌리기
+    for (let expLeft in Data.math_expression_pair) {
+
+        console.log(expLeft.length)
+        expLen = expLeft.length;
+
+        console.log(expLeft);
+        console.log(formula.slice(5, 5 + expLen));
+        if (formula.slice(5, 5 + expLen) === expLeft) {
+            console.log("일치");
+            pairName = Data.math_expression_pair[expLeft][0];
+            pairEnd = Data.math_expression_pair[expLeft][1];
+            break;
+        }
+    }
+    console.log(pairName);
+    console.log(pairEnd);
+
     console.log("\\right" + pairEnd);
-    if (formula.slice(-1, -7) === "\\right" + pairEnd) {
+    console.log(-(6 + parseInt(expLen)))
+    var tempIdx = -(6 + expLen);
+    ////
+    console.log(formula.slice(tempIdx, 0));
+    console.log(formula.slice(-7));
+
+    console.log("\\right" + pairEnd);
+    if (formula.slice(tempIdx) === "\\right" + pairEnd) {
         console.log("들어옴");
     }
     // getLeftEndIndex() 이거 써도 되지 않냐
 
     // 여기에서 한번 right가 끝나는 지점을 확인할 것
     // 이거 만약 중괄호면 인덱스 바꾸어 주어야 함
-    var insideofLeft = formula.slice(6, -7);        // 여기에서
+    var insideofLeft = formula.slice(6, tempIdx);        // 여기에서
     var splitExp = splitExpression(insideofLeft, command);
 
     console.log(formula[5]);
-    var pairName = Data.math_expression_pair[formula[5]][0];
-    console.log(pairName);
+    // var pairName = Data.math_expression_pair[formula[5]][0];
+    // console.log(pairName);
+
     var text = pairName + "시작 ";
 
     splitExp.forEach(function(element){
