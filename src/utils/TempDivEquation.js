@@ -31,7 +31,6 @@ const readFuncNames = {
     "\\cos": "cos",
     "\\tan": "tan",
     "\\overline": "overline",
-    // "^": "superscript",
     "\\in": "in",
     "\\ni": "ni",
     "\\notin": "notin",
@@ -50,6 +49,9 @@ const readFuncNames = {
     "\\Longleftarrow": "Leftarrow",
     "\\Leftrightarrow": "Leftrightarrow",
     "\\Longleftrightarrow": "Leftrightarrow",
+    "^":  "superscript", 
+    "_":  "subscript" ,
+
 }
 
 const Data = {
@@ -142,22 +144,46 @@ const Data = {
 
     math_expression: {
         // "^": ["제곱", 2],
-        "\\frac": ["분수 ", 2],
-        "\\sqrt": ["루트 ", 1],
-        "\\left": ["열림 ", 1],
-        "\\right": ["닫힘 ", 1],
-        "\\lim":["리미트 ", 2],
-        "\\sin": ["싸인", 2],
-        "\\cos": ["코싸인", 2],
-        "\\tan": ["탄젠트", 2],
+        //"\\frac": ["분수 ", 2],
+        //"\\sqrt": ["루트 ", 1],
+        //"\\left": ["열림 ", 1],
+        //"\\right": ["닫힘 ", 1],
+        //"\\lim":["리미트 ", 2],
+        // "\\sin": ["싸인", 2],
+        // "\\cos": ["코싸인", 2],
+        // "\\tan": ["탄젠트", 2],
         //"\\dot": ["무한소수", 2],
-        "\\overline": ["무한소수", 2],
+        // "\\overline": ["무한소수", 2],
+
+        "\\frac": ["분수 ", "frac", 2],
+        "\\sqrt": ["루트 ", "sqrt", 1],
+        "\\left": ["열림 ", "left", 1],
+        "\\right": ["닫힘 ", "right", 1],
+        "\\lim":["리미트 ", "lim", 2],
+        "^": ["위첨자 ", "superscript", 1],
+        "_": ["아래첨자 ", "subscript", 1],
+
+        "\\sin": ["싸인", "sct", 2],
+        "\\cos": ["코싸인", "sct", 2],
+        "\\tan": ["탄젠트", "sct", 2],
+        //"\\dot": ["무한소수", 2],
+        "\\overline": ["무한소수", "overline", 2],
 
     },
 
     math_expression_pair: {
+        // "(": ["괄호 ", ")"],
+        // "{": ["중괄호 ", "}"],
+        // "[": ["대괄호 ", "]"],
+        // "|": ["절댓값 ", "|"],
+
         "(": ["괄호 ", ")"],
-        "{": ["중괄호 ", "}"],
+        "\\(": ["괄호 ", "\\)"],
+        "\\{": ["중괄호 ", "\\}"],
+        "[": ["대괄호 ", "]"],
+        "\\[": ["대괄호 ", "\\]"],
+        "|": ["절댓값 ", "|"],
+        "\\|": ["절댓값 ", "\\|"],
     }
 };
 
@@ -174,6 +200,8 @@ const functions = {
     getlimEndIndex: getLimEndIndex,
     getsctEndIndex: getSctEndIndex, 
     getoverlineEndIndex: getOverlineEndIndex,
+    getsuperscriptEndIndex: getSuperscriptEndIndex,
+    getsubscriptEndIndex: getSubscriptEndIndex,
 
     readfrac: readFrac,
     readsqrt: readSqrt,
@@ -201,22 +229,24 @@ const functions = {
     readLeftarrow: readLeftArrow,
     readLeftrightarrow: readLeftRightArrow, 
     readoverline: readOverline,
+    readleft: readLeft,
+    readsuperscript: readSuperscript,
+    readsubscript: readSubscript,
 }
 
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
-//var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
+// var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y" 
-// var equation = "1\\div x+22 + \\overline{2.2}"
+// var equation = "1\\div x+22 + \\overline{341}"
 //  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
-//var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
-
-// var equation = "\\left ( x+1 \\right )-y"
-//var equation = "\\overline{2.2}";
-  var equation = "2\\times 2 + 2.\\overline{23415}  + \\sqrt{x+2}";
+// var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
+// var equation = "f\\left(x \\right) = x+ 1"
+// var equation = "x_{12}^{y+1}"; -> 이거 안됨
+// var equation = "\\left ( x+1 \\right )-y"  
 // var equation = '\\sinx^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
-// var equation = 'x^{2}+2x + 1'
+// var equation = 'x^{2}+2x + 1'  
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
@@ -231,6 +261,9 @@ const functions = {
 // var equation = "\\sqrt{5} + 1 = 12\\infty";
 // var equation = "\\sin(\\sqrt{2} + \\sin(3)) \\div \\tan(3) + \\cos(2)"
 // var equation = "\\sim p";
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]"; -> 무한반복
+// var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -252,6 +285,7 @@ function checkOperation(expression, idx) {
         // console.log(key);
         if (subExpr === key) {
             resultDict['opName'] = key;
+            resultDict['opEngName'] = "";
             resultDict['isOp'] = 1;
             resultDict['opLength'] = key.length;
             break;
@@ -264,7 +298,8 @@ function checkOperation(expression, idx) {
         console.log(subExpr);
         console.log(key);
         if (subExpr === key) {
-            resultDict['opName'] = key;
+            resultDict['opName'] = key; 
+            resultDict['opEngName'] = Data.math_expression[key][1];
             resultDict['isOp'] = 0;
             resultDict['opLength'] = key.length;
             break;
@@ -378,6 +413,62 @@ function getLimEndIndex(expression, idx){
     return endIdx;
 }
 
+function getSuperscriptEndIndex(expression, idx) {
+    let stack = [];
+    var braceCnt = 0
+    var endIdx = 0;
+
+    while (idx < expression.length) {
+        if (expression[idx] === "{") {
+            if (stack.length === 0 && braceCnt < 1) {
+                // braceCnt += 1;
+            }
+            stack.push("{");
+        }
+        else if (expression[idx] === "}") {
+            stack.pop();
+            // 분모까지 마무리
+            if (stack.length === 0) {
+                braceCnt += 1;
+                if (braceCnt == 1) {
+                    endIdx = idx
+                    break
+                }
+            }
+        }
+        idx += 1;
+    }
+    return endIdx;
+}
+
+function getSubscriptEndIndex(expression, idx) {
+    let stack = [];
+    var braceCnt = 0
+    var endIdx = 0;
+
+    while (idx < expression.length) {
+        if (expression[idx] === "{") {
+            if (stack.length === 0 && braceCnt < 1) {
+                // braceCnt += 1;
+            }
+            stack.push("{");
+        }
+        else if (expression[idx] === "}") {
+            stack.pop();
+            // 분모까지 마무리
+            if (stack.length === 0) {
+                braceCnt += 1;
+                if (braceCnt == 1) {
+                    endIdx = idx
+                    break
+                }
+            }
+        }
+        idx += 1;
+    }
+    return endIdx;
+}
+
 // 특수경우: 우측에 쌍이 있음. 시작은 \\left
 // math_expression_pair 에서 어떤것인지 확인하고
 function getLeftEndIndex(expression, idx) {
@@ -385,41 +476,44 @@ function getLeftEndIndex(expression, idx) {
     var braceCnt = 0
     var endIdx = 0;
     var exp = ""
-    
+
     // 어떤 연산자인지 알아내기
-    //console.log(expression.slice(idx, idx + 5));
-    //console.log("\\left")
     if (expression.slice(idx, idx + 5) === "\\left") {
-        for (let i = idx; i < expression.length; i++) {
-            if (expression[i] in Data.math_expression_pair) {
-                exp = expression[i]
-                break
+        for (let i = idx; i < expression.length; i ++) {
+            for (let expLeft in Data.math_expression_pair) {
+                console.log(expression.slice(i, i + expLeft.length));
+                console.log(expLeft);
+                if (expression.slice(i, i + expLeft.length) === expLeft) {
+                    console.log("안으로 들어옴");
+                    exp = expLeft;
+                    break;
+                }
+            }
+            if (exp !== "") {
+                break;
             }
         }
     }
-    
+
     let endExp = Data.math_expression_pair[exp][1];
-    
+
     // 알아낸 연산자로 끝나는 지점 알아내기
     while (idx < expression.length) {
-        if (expression[idx] === exp) {
+        // console.log(expression.slice(idx, idx + endExp.length));
+        // console.log(exp);
+        if (expression.slice(idx, idx + 5 + exp.length) === ("\\left" + exp)) {
             stack.push(exp);
         }
-        
-        // 공백도 일단...
-        //console.log(expression.slice(idx, idx + 8));
-        //console.log("\\right " + endExp);
-        if (expression.slice(idx, idx + 8) === ("\\right " + endExp) || expression.slice(idx, idx + 7) === ("\\right" + endExp)) {
+
+        // 스택 검사해서 비어있다면 최종 인덱스 반환
+        console.log(expression.slice(idx, idx + 6 + endExp.length));
+        console.log("\\right" + endExp);
+        if (expression.slice(idx, idx + 6 + endExp.length) === ("\\right" + endExp)) {
             stack.pop();
             if (stack.length === 0) {
                 braceCnt += 1;
                 if (braceCnt === 1) {
-                    if (expression[idx + 6] === endExp) {
-                        endIdx = idx + 6
-                    }
-                    else if (expression[idx + 7] === endExp) {
-                        endIdx = idx + 7
-                    }
+                    endIdx = idx + 5 + endExp.length;
                     break;
                 }
             }
@@ -1122,6 +1216,93 @@ function readOverline(formula){
     return text;
 }
 
+// 괄호, 대괄호 처리해야 함
+// 중괄호는 명령어임
+function readLeft(formula){
+    var command = [];
+
+    console.log(formula);
+    var pairName = "";
+    var pairEnd = "";
+    var expLen = "";
+
+    // 데이터 프레임에서 돌리기
+    for (let expLeft in Data.math_expression_pair) {
+
+        console.log(expLeft.length)
+        expLen = expLeft.length;
+
+        console.log(expLeft);
+        console.log(formula.slice(5, 5 + expLen));
+        if (formula.slice(5, 5 + expLen) === expLeft) {
+            console.log("일치");
+            pairName = Data.math_expression_pair[expLeft][0];
+            pairEnd = Data.math_expression_pair[expLeft][1];
+            break;
+        }
+    }
+    console.log(pairName);
+    console.log(pairEnd);
+
+    console.log("\\right" + pairEnd);
+    console.log(-(6 + parseInt(expLen)))
+    var tempIdx = -(6 + expLen);
+    ////
+    console.log(formula.slice(tempIdx, 0));
+    console.log(formula.slice(-7));
+
+    console.log("\\right" + pairEnd);
+    if (formula.slice(tempIdx) === "\\right" + pairEnd) {
+        console.log("들어옴");
+    }
+    // getLeftEndIndex() 이거 써도 되지 않냐
+
+    // 여기에서 한번 right가 끝나는 지점을 확인할 것
+    // 이거 만약 중괄호면 인덱스 바꾸어 주어야 함
+    var insideofLeft = formula.slice(6, tempIdx);        // 여기에서
+    var splitExp = splitExpression(insideofLeft, command);
+
+    console.log(formula[5]);
+    // var pairName = Data.math_expression_pair[formula[5]][0];
+    // console.log(pairName);
+
+    var text = pairName + "시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += pairName + "끝 ";
+
+    return text;
+}
+
+function readSuperscript(formula) {
+    var command = [];
+    var insideofScript = formula.slice(2, -1);
+    var splitExp = splitExpression(insideofScript, command);
+    var text = "의 제곱 시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += "제곱 끝 ";
+
+    return text;
+}
+
+function readSubscript(formula) {
+    var command = [];
+    var insideofScript = formula.slice(2, -1);
+    var splitExp = splitExpression(insideofScript, command);
+    var text = "의 아래첨자 시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += "아래첨자 끝 ";
+
+    return text;
+}
 // #endregion
 
 //#region MAIN_FUNC
@@ -1237,7 +1418,7 @@ function splitExpression(expression, command) {
             }
             else { 
                 let opName = endIdxFuncNames[result.opName]  
-                let funcName = `get${opName}EndIndex`; // <, > 때문에 수정 
+                let funcName = `get${result.opEngName}EndIndex`; // <, > 때문에 수정 
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
                 
@@ -1245,6 +1426,13 @@ function splitExpression(expression, command) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
                     // console.log(result);        // 전체 수식에서의 인덱스임
+
+                    console.log(temp)
+                    if (temp !== "") {
+                        splitExp.push(temp);
+                    }
+                    temp = "";
+
                     splitExp.push(expression.slice(idx, result + 1));
                     
                     idx = result + 1;
@@ -1293,7 +1481,8 @@ function convertElement(element, command){
         let opName = readFuncNames[command[0]]; 
         console.log("convertElement: opName", opName);
         var funcName = `read${opName}`;
-    
+        // var funcName = "read" + Data.math_expression[command[0]][1];
+
         if(funcName in functions) {
             command.shift();
             return functions[funcName](element);
