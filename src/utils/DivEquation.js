@@ -19,12 +19,16 @@ const functions = {
     getsqrtEndIndex: getSqrtEndIndex,
     getleftEndIndex: getLeftEndIndex,
     getlimEndIndex: getLimEndIndex,
+    getsuperscriptEndIndex: getSuperscriptEndIndex,
+    getsubscriptEndIndex: getSubscriptEndIndex,
 
     readfrac: readFrac,
     readsqrt: readSqrt,
     readlim: readLim,
 
     readleft: readLeft,
+    readsuperscript: readSuperscript,
+    readsubscript: readSubscript,
     // readright: readRight,
 }
 
@@ -57,8 +61,11 @@ const functions = {
 // var equation = "\\left\\{ 12 + \\left ( x-100 \\right )\\right\\} + 102"
 
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
-var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
+// var equation = "x^2";
+// var equation = "x^{xy^{2}}";
+var equation = "x_{12}^{y+1}";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -80,6 +87,7 @@ function checkOperation(expression, idx) {
         // console.log(key);
         if (subExpr == key) {
             resultDict['opName'] = key;
+            resultDict['opEngName'] = "";
             resultDict['isOp'] = 1;
             resultDict['opLength'] = key.length;
             break;
@@ -94,6 +102,7 @@ function checkOperation(expression, idx) {
         // console.log(key);
         if (subExpr == key) {
             resultDict['opName'] = key;
+            resultDict['opEngName'] = Data.math_expression[key][1];
             resultDict['isOp'] = 0;
             resultDict['opLength'] = key.length;
             break;
@@ -243,6 +252,62 @@ function getLeftEndIndex(expression, idx) {
                 if (braceCnt === 1) {
                     endIdx = idx + 5 + endExp.length;
                     break;
+                }
+            }
+        }
+        idx += 1;
+    }
+    return endIdx;
+}
+
+function getSuperscriptEndIndex(expression, idx) {
+    let stack = [];
+    var braceCnt = 0
+    var endIdx = 0;
+
+    while (idx < expression.length) {
+        if (expression[idx] === "{") {
+            if (stack.length === 0 && braceCnt < 1) {
+                // braceCnt += 1;
+            }
+            stack.push("{");
+        }
+        else if (expression[idx] === "}") {
+            stack.pop();
+            // 분모까지 마무리
+            if (stack.length === 0) {
+                braceCnt += 1;
+                if (braceCnt == 1) {
+                    endIdx = idx
+                    break
+                }
+            }
+        }
+        idx += 1;
+    }
+    return endIdx;
+}
+
+function getSubscriptEndIndex(expression, idx) {
+    let stack = [];
+    var braceCnt = 0
+    var endIdx = 0;
+
+    while (idx < expression.length) {
+        if (expression[idx] === "{") {
+            if (stack.length === 0 && braceCnt < 1) {
+                // braceCnt += 1;
+            }
+            stack.push("{");
+        }
+        else if (expression[idx] === "}") {
+            stack.pop();
+            // 분모까지 마무리
+            if (stack.length === 0) {
+                braceCnt += 1;
+                if (braceCnt == 1) {
+                    endIdx = idx
+                    break
                 }
             }
         }
@@ -453,6 +518,34 @@ function readLeft(formula){
     return text;
 }
 
+function readSuperscript(formula) {
+    var command = [];
+    var insideofScript = formula.slice(2, -1);
+    var splitExp = splitExpression(insideofScript, command);
+    var text = "의 제곱 시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += "제곱 끝 ";
+
+    return text;
+}
+
+function readSubscript(formula) {
+    var command = [];
+    var insideofScript = formula.slice(2, -1);
+    var splitExp = splitExpression(insideofScript, command);
+    var text = "의 아래첨자 시작 ";
+
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+    text += "아래첨자 끝 ";
+
+    return text;
+}
+
 // #endregion
 
 //#region MAIN_FUNC
@@ -508,8 +601,9 @@ function splitExpression(expression, command) {
         // 연산자가 수 있는 것 추정
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자
         //console.log(idx, "번째: ", expression[idx]);
-        
-        if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=") {
+
+        if (expression[idx] in Data.operator || expression[idx] in Data.math_expression || expression[idx] === "\\") {
+        // if (expression[idx] === "\\" || expression[idx] === "+" || expression[idx] === "-"  || expression[idx] === "/" || expression[idx] === "=") {
             // 명령어인 경우, 이것이 op인지 일반 수식 요소인지 확인
             // 수식 요소인 경우 어디부터 어디까지 수식인지 판단하기
             
@@ -532,7 +626,8 @@ function splitExpression(expression, command) {
             }
             else {
                 //console.log("asdfasdf: ", result.opName)
-                let funcName = "get" + (result.opName).slice(1) + "EndIndex";
+                // let funcName = "get" + (result.opName).slice(1) + "EndIndex";
+                let funcName = "get" + (result.opEngName) + "EndIndex";
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
                 
@@ -581,7 +676,8 @@ function convertElement(element, command){
     // 명령어인 경우
     // console.log(element);
     else if (element.startsWith(command[0])) {
-        var funcName = "read" + command[0].slice(1);
+        // var funcName = "read" + command[0].slice(1);
+        var funcName = "read" + Data.math_expression[command[0]][1];
     
         if(funcName in functions) {
             command.shift();
