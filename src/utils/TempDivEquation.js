@@ -113,6 +113,10 @@ const Data = {
         "\\cup": " 합집합 ",
         "\\varnothing": " 공집합 ",
         "\\sim": " 부정 ", // 부정 뿐만 아니라 비슷하지 않음이라는 뜻도 있음
+
+        //
+        "_":"아래첨 ",
+        "^":"위첨 ",
     },
     number: {
         "0": "영",
@@ -166,7 +170,6 @@ const Data = {
         "\\sin": ["싸인", "sct", 2],
         "\\cos": ["코싸인", "sct", 2],
         "\\tan": ["탄젠트", "sct", 2],
-        //"\\dot": ["무한소수", 2],
         "\\overline": ["무한소수", "overline", 2],
 
     },
@@ -264,6 +267,7 @@ const functions = {
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]"; -> 무한반복
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
+var equation = "x_{12}^{y+1}";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -1399,8 +1403,6 @@ function splitExpression(expression, command) {
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자 
 
         if (expression[idx] === "\\[a-zA-Z]\\" || expression[idx] === "\\" || isInDic(expression[idx], "firstPriority")) {
-            // 명령어인 경우, 이것이 op인지 일반 수식 요소인지 확인
-            // 수식 요소인 경우 어디부터 어디까지 수식인지 판단하기
             
             let result = checkOperation(expression, idx);
             console.log("DivEquation splitExpression: while문", result);
