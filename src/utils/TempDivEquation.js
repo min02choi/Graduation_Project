@@ -240,8 +240,7 @@ const functions = {
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "3110000123123\\times x+22000001yz"
-// var equation = "\\frac{1\\times 2}{1+x}\\times2+y" 
-// var equation = "1\\div x+22 + \\overline{341}"
+// var equation = "\\frac{1\\times 2}{1+x}\\times2+y"  
 //  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
@@ -258,6 +257,12 @@ const functions = {
 // var equation = "31a +  \\lim_{x\\to0} \\frac{2x}{3a}"
 // var equation = "\\frac{11}{12a}"
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
+
+/////////////////////////
+var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";  //-> 이거 안됨
+
+////05.23 보고용 예시////
+// var equation = "1\\div x+22 + \\overline{341}"
 // var equation = "A\\Longleftrightarrow B"
 //var equation = "\\sqrt{5}+2 < a2"
 // var equation = "\\sqrt{5}+2=2\\times3"
@@ -265,9 +270,8 @@ const functions = {
 // var equation = "\\sin(\\sqrt{2} + \\sin(3)) \\div \\tan(3) + \\cos(2)"
 // var equation = "\\sim p";
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
-// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]"; -> 무한반복
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
-var equation = "x_{12}^{y+1}";
+// var equation = "x_{12}^{y+1}";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -1423,7 +1427,7 @@ function splitExpression(expression, command) {
                 let funcName = `get${result.opEngName}EndIndex`; // <, > 때문에 수정 
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
-                
+                console.log("11", funcName);
                 if (funcName) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
