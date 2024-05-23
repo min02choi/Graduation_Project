@@ -237,7 +237,7 @@ const functions = {
     readsubscript: readSubscript,
 }
 
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
+let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y"  
@@ -259,7 +259,7 @@ const functions = {
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 
 /////////////////////////
-var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";  //-> 이거 안됨
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";  //-> 이거 안됨
 
 ////05.23 보고용 예시////
 // var equation = "1\\div x+22 + \\overline{341}"

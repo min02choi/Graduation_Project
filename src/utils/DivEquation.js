@@ -1,3 +1,6 @@
+import { Data } from "./Data";
+import { numToKorean, FormatOptions} from 'num-to-korean';
+
 //#region ERROR
 // ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
 // ! 제곱 처리 고려필요
@@ -5,7 +8,7 @@
 
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
-const { numToKorean, FormatOptions } = require('num-to-korean');
+// const { numToKorean, FormatOptions } = require('num-to-korean');
 const endIdxFuncNames = {
     "\\frac": "frac",
     "\\sqrt": "sqrt",
@@ -113,7 +116,7 @@ const functions = {
 // var equation = "f\\left(x \\right) = x+ 1"
 // var equation = "x_{12}^{y+1}"; -> 이거 안됨
 // var equation = "\\left ( x+1 \\right )-y"  
-// var equation = '\\sinx^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
+// var equation = '\\sin(x)^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
 // var equation = 'x^{2}+2x + 1'  
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
