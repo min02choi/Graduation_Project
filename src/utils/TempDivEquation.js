@@ -241,7 +241,10 @@ const functions = {
     readsubscript: readSubscript,
 }
 
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"  -> 이거 안됨
+
+// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
+
+
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y"  
@@ -249,9 +252,11 @@ const functions = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
-// var equation = "x_{12}^{y+1}";
-// var equation = "\\left ( x+1 \\right )-y"
-// var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' --> 이거 안됨
+
+// var equation = "x_{12}^{y+1}"; -> 이거 안됨
+// var equation = "\\left ( x+1 \\right )-y"  
+// var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
+
 // var equation = 'x^{2}+2x + 1'  
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
