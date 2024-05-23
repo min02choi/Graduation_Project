@@ -116,7 +116,7 @@ const functions = {
 // var equation = "f\\left(x \\right) = x+ 1"
 // var equation = "x_{12}^{y+1}"; -> 이거 안됨
 // var equation = "\\left ( x+1 \\right )-y"  
-// var equation = '\\sin(x)^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
+// var equation = '\\sin(x)^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' --> 이거 안됨
 // var equation = 'x^{2}+2x + 1'  
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
@@ -1189,7 +1189,7 @@ export function convert2Text(expression){
     var commandArr = [];
 
     // 괄호, 공백 전처리
-    let newEquation = expression.replace(" ", "");
+    let newEquation = expression.replace(/\s/g, "");
     let initExp = [];
 
     // 처음 분해
