@@ -1,6 +1,3 @@
-import { Data } from "./Data";
-import { numToKorean, FormatOptions} from 'num-to-korean';
-
 //#region ERROR
 // ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
 // ! 제곱 처리 고려필요
@@ -8,6 +5,10 @@ import { numToKorean, FormatOptions} from 'num-to-korean';
 
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
+
+// const Data = require("./Data.js")
+const { numToKorean, FormatOptions } = require('num-to-korean');
+
 // const { numToKorean, FormatOptions } = require('num-to-korean');
 const endIdxFuncNames = {
     "\\frac": "frac",
@@ -57,7 +58,144 @@ const readFuncNames = {
 
 }
 
+const Data = {
+    zeroPriority: {
+        "<": "0순위 크다",
+        ">": "0순위 작다",
+        "\\le": "0순위 크거나 같다",
+        "\\ge": "0순위 작거나 같다.",
+        "\\in": "0순위 원소가 포함한다.",
+        "\\ni": "0순위 원소가 포함된다.",
+        "\\notin": "0순위 원소가 포함되지 않는다.",
+        "\\not\\ni": "0순위 원소가 포함되지 않는다.",
+        "\\subset": "0순위 집합을 포함한다.",
+        "\\supset": "0순위 집합을 포함한다.",
+        "\\subseteq": "0순위 집합을 포함하거나 같다.",
+        "\\supseteq": "0순위 집합을 포함하거나 같다.",
+        "\\not\\subset": "0순위 집합을 포함하지 않는다.",
+        "\\not\\supset": "0순위 집합을 포함하지 않는다.",
+        "\\nsubseteq": "0순위 집합을 포함하거나 같다.",
+        "\\nsupseteq": "0순위 집합을 포함하거나 같다.",
+        "\\Rightarrow": "0순위 필요조건",
+        "\\Longrightarrow": "0순위 필요조건",
+        "\\Leftarrow": "0순위 충분조건",
+        "\\Longleftarrow": "0순위 충분조건",
+        "\\Leftrightarrow": "0순위 필요충분조건",
+        "\\Longleftrightarrow": "0순위 필요충분조건",
+    },
+    firstPriority: { // 원자 연산자 -> 우선순위가 필요할 듯,,, 0순위 부등호, 집합기호, 1순위(원자 단위) firstPriority: 일대일 매칭이 가능한 것, 2순위: 괄호 포함
+        "+": "플러스 ",
+        "-": "마이너스 ",
+        "\\div": "나누기 ",
+        "/": "나누기 ",
+        "\\times": "곱하기 ",
+        "\\pm": "플마 ",
+        "\\mp": "마플 ",
+        "=": "는(은) ",
+        "\\infty": " 무한대 ",
+        "\\pi": " 파이 ",
+        "\\triangle": " 삼각형 ",
+        "\\Box": " 사각형 ",
+        "\\angle": " 각 ",
+        "<": " 크다 ",
+        ">": " 작다 ",
+        "\\le": " 크거나 같다 ",
+        "\\ge": " 작거나 같다 ",
+        "\\in": " 가 오른쪽에 포함된다 ",
+        "\\ni": " 가 왼쪽에 포함된다 ",
+        "\\notin": " 가 오른쪽에 포함되지 않는다 ",
+        "\\not\\ni": " 가 왼쪽에 포함되지 않는다 ",
+        "\\subset": " 가 오른쪽에 포함된다 ",
+        "\\supset": " 가 왼쪽에 포함된다 ",
+        "\\subseteq": " 가 오른쪽에 포함되거나 같다 ",
+        "\\supseteq": " 가 왼쪽에 포함되거나 같다 ",
+        "\\not\\subset": " 가 오른쪽에 포함되지 않는다 ",
+        "\\not\\supset": " 가 왼쪽에 포함되지 않는다 ",
+        "\\nsubseteq": " 가 오른쪽에 포함하지 않거나 같은 집합이 아니다 ",
+        "\\nsupseteq": " 가 왼쪽에 포함하지 않거나 같은 집합이 아니다 ",
+        "\\cap": " 교집합 ",
+        "\\cup": " 합집합 ",
+        "\\varnothing": " 공집합 ",
+        "\\sim": " 부정 ", // 부정 뿐만 아니라 비슷하지 않음이라는 뜻도 있음
+
+        //
+        "_":"아래첨 ",
+        "^":"위첨 ",
+    },
+    number: {
+        "0": "영",
+        "1": "일",
+        "2": "이",
+        "3": "삼",
+        "4": "사",
+        "5": "오",
+        "6": "육",
+        "7": "칠",
+        "8": "팔",
+        "9": "구",
+    },
+
+    word: {
+        "a": "에이 ",
+        "b": "비 ",
+        "c": "씨 ",
+        "e": "이 ",
+        "f": "에프 ",
+        "x": "엑스 ",
+        "y": "와이 ",
+        "z": "지 ",
+        "A": "대문자 에이 ",
+        "B": "대문자 비 ",
+        "C": "대문자 씨 ",
+        "F": "대문자 에프 ", 
+    },
+
+    math_expression: {
+        // "^": ["제곱", 2],
+        //"\\frac": ["분수 ", 2],
+        //"\\sqrt": ["루트 ", 1],
+        //"\\left": ["열림 ", 1],
+        //"\\right": ["닫힘 ", 1],
+        //"\\lim":["리미트 ", 2],
+        // "\\sin": ["싸인", 2],
+        // "\\cos": ["코싸인", 2],
+        // "\\tan": ["탄젠트", 2],
+        //"\\dot": ["무한소수", 2],
+        // "\\overline": ["무한소수", 2],
+
+        "\\frac": ["분수 ", "frac", 2],
+        "\\sqrt": ["루트 ", "sqrt", 1],
+        "\\left": ["열림 ", "left", 1],
+        "\\right": ["닫힘 ", "right", 1],
+        "\\lim":["리미트 ", "lim", 2],
+        "^": ["위첨자 ", "superscript", 1],
+        "_": ["아래첨자 ", "subscript", 1],
+
+        "\\sin": ["싸인", "sct", 2],
+        "\\cos": ["코싸인", "sct", 2],
+        "\\tan": ["탄젠트", "sct", 2],
+        "\\overline": ["무한소수", "overline", 2],
+
+    },
+
+    math_expression_pair: {
+        // "(": ["괄호 ", ")"],
+        // "{": ["중괄호 ", "}"],
+        // "[": ["대괄호 ", "]"],
+        // "|": ["절댓값 ", "|"],
+
+        "(": ["괄호 ", ")"],
+        "\\(": ["괄호 ", "\\)"],
+        "\\{": ["중괄호 ", "\\}"],
+        "[": ["대괄호 ", "]"],
+        "\\[": ["대괄호 ", "\\]"],
+        "|": ["절댓값 ", "|"],
+        "\\|": ["절댓값 ", "\\|"],
+    }
+};
+
 //#endregion
+
 
 //#region VARS & PROPERTIES
 //////////////////////////////////////////////
@@ -69,14 +207,12 @@ const functions = {
     getlimEndIndex: getLimEndIndex,
     getsctEndIndex: getSctEndIndex, 
     getoverlineEndIndex: getOverlineEndIndex,
-
     getsuperscriptEndIndex: getSuperscriptEndIndex,
     getsubscriptEndIndex: getSubscriptEndIndex,
 
     readfrac: readFrac,
     readsqrt: readSqrt,
     readlim: readLim,
-
     readunder: readUnder,
     readabove: readAbove,
     readle: readLe,
@@ -105,7 +241,10 @@ const functions = {
     readsubscript: readSubscript,
 }
 
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" --> 이거 안됨
+
+// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
+
+
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
 // var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y"  
@@ -113,11 +252,12 @@ const functions = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
+
 // var equation = "x_{12}^{y+1}"; -> 이거 안됨
 // var equation = "\\left ( x+1 \\right )-y"  
-// var equation = '\\sin(x)^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' --> 이거 안됨
-// var equation = 'x^{2}+2x + 1'  
+// var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}'
 
+// var equation = 'x^{2}+2x + 1'  
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
 // var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
@@ -125,11 +265,10 @@ const functions = {
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
 // var equation = "31a +  \\lim_{x\\to0} \\frac{2x}{3a}"
 // var equation = "\\frac{11}{12a}"
-
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 
 /////////////////////////
-// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";  //-> 이거 안됨
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
 
 ////05.23 보고용 예시////
 // var equation = "1\\div x+22 + \\overline{341}"
@@ -142,7 +281,6 @@ const functions = {
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
-
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -174,11 +312,10 @@ function checkOperation(expression, idx) {
     for (let key in Data.math_expression) {
         const endIdx = idx + key.length;
         const subExpr = expression.substring(idx, endIdx);
-
         console.log(subExpr);
         console.log(key);
         if (subExpr === key) {
-            resultDict['opName'] = key;
+            resultDict['opName'] = key; 
             resultDict['opEngName'] = Data.math_expression[key][1];
             resultDict['isOp'] = 0;
             resultDict['opLength'] = key.length;
@@ -190,7 +327,7 @@ function checkOperation(expression, idx) {
     console.log(resultDict.opName);
     if (resultDict.opName === "\\left" || resultDict.opName === "\\left") {
         resultDict['opName'] = "\\left";
-        resultDict['isOp'] = 0;     // 수정(원래: 0 -> 1)
+        resultDict['isOp'] = 0;
         resultDict['opLength'] = "\\left".length;
     }
     console.log("checkOperation: ", resultDict);
@@ -349,8 +486,8 @@ function getSubscriptEndIndex(expression, idx) {
     return endIdx;
 }
 
-// 쌍으로 이루어진 연산자의 끝 인덱스를 알아내는 함수
 // 특수경우: 우측에 쌍이 있음. 시작은 \\left
+// math_expression_pair 에서 어떤것인지 확인하고
 function getLeftEndIndex(expression, idx) {
     let stack = [];
     var braceCnt = 0
@@ -461,7 +598,6 @@ function getOverlineEndIndex(expression, idx) {
     console.log("getOverlineEndIndex", endIdx);
     return endIdx;
 }
-
 
 // function getSuperScriptEndIndex(expression, idx) {
 //     console.log("getSuperScriptEndIndex", expression, idx);
@@ -1184,7 +1320,6 @@ function readSubscript(formula) {
 
     return text;
 }
-
 // #endregion
 
 //#region MAIN_FUNC
@@ -1281,14 +1416,13 @@ function splitExpression(expression, command) {
         // only 사칙연산자도 되는 것, \\times, \\pm 같은 연산자 
 
         if (expression[idx] === "\\[a-zA-Z]\\" || expression[idx] === "\\" || isInDic(expression[idx], "firstPriority")) {
+            
             let result = checkOperation(expression, idx);
             console.log("DivEquation splitExpression: while문", result);
             //console.log(result);
             
             // 연산자인 경우 앞의 항까지를 하나의 항으로 보기
-            // 괄호의 경우 별도의 처리 필요
             if (result.isOp) {
-                console.log(temp)
                 if (temp !== "") {
                     splitExp.push(temp);
                 }
@@ -1297,10 +1431,9 @@ function splitExpression(expression, command) {
                 console.log("DivEquation splitExpression: while문 마지막", splitExp, result.opName);
                 idx += result.opLength; 
             }
-
             else { 
                 let opName = endIdxFuncNames[result.opName]  
-                let funcName = `get${result.opEngName}EndIndex`; // <, > 때문에 수정
+                let funcName = `get${result.opEngName}EndIndex`; // <, > 때문에 수정 
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
                 console.log("11", funcName);
@@ -1308,11 +1441,13 @@ function splitExpression(expression, command) {
                     let result = functions[funcName](expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
                     // console.log(result);        // 전체 수식에서의 인덱스임
+
                     console.log(temp)
                     if (temp !== "") {
                         splitExp.push(temp);
                     }
                     temp = "";
+
                     splitExp.push(expression.slice(idx, result + 1));
                     
                     idx = result + 1;
@@ -1346,7 +1481,7 @@ function convertElement(element, command){
         let opName = readFuncNames[command[0]];
         var funcName = `read${opName}`;
         console.log("funcName in functions", funcName in functions);
-
+    
         if(funcName in functions) {
             command.shift();
             return functions[funcName](element);
@@ -1367,10 +1502,6 @@ function convertElement(element, command){
             command.shift();
             return functions[funcName](element);
         }
-        //else if (funcName === "readleft") {
-            //if (funcName === "readleft") return "괄호 열고";
-            //if (funcName === "readright") return "괄호 닫고";
-        //}
         else return "No Function Exists.";
     }
 
@@ -1394,11 +1525,9 @@ function convertElement(element, command){
 //#endregion
 
 //#region TEST
-// convert2Text(equation);
+convert2Text(equation);
 
 // const number = numToKorean(11111);
 // const number2 = numToKorean(11111, FormatOptions.LINGUAL);
 
-
 //#endregion
-

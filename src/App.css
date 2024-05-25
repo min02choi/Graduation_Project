@@ -1,50 +1,133 @@
 
-.cateContainer {
+.cate-container {
   width: 90%;
 }
-.cateName {
-  padding: 0.5rem 5rem;
+.cate-name {
+  padding: 0.5rem 3rem;
   margin-right: 0.1rem;
   /* background-color: aquamarine; */
   border-bottom: none;
-
+  cursor: pointer;
 }
-.ButtonsContainer {
+.cate-name:hover {
+  background-color: lightblue;
+}
+.buttons-container {
+  display: flex;
+}
+.formula-buttons-container {
   padding: 0.5rem 1rem;
-  /* background-color: aquamarine; */
+  width: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2열로 배치 */
+  /* grid-template-rows: repeat(3, auto); 3행으로 배치 */
+  gap: 10px; /* 버튼 간격 설정 */
 }
-.FormulaButton {
+.formula-buttons-container-one-col {
+  padding: 0.5rem 1rem;
+  width: 100px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* 2열로 배치 */
+  /* grid-template-rows: repeat(3, auto); 3행으로 배치 */
+  gap: 10px; /* 버튼 간격 설정 */
+}
+#formula-button {
   padding: 0.5rem 0.5rem;
   margin-right: 1rem;
   color: #111111;
   /* background-color: aquamarine; */
   border-radius: 1rem;
   border: none;
+  cursor: pointer;
 }
-.inputContainer {
+#formula-button:hover {
+  background-color: lightblue;
+}
+.input-container {
   display: flex;
   justify-content: center;
   align-items: center;
   
 }
-.button {
+.converted-button {
   padding: 50px;
   margin-left: 0.5rem;
   /* background-color: aquamarine; */
   border-radius: 1rem;
   border: none;
 }
-#latexInput {
+#latex-input {
   width: 90%;
   height: 100px;
 }
-#latexOutput {
+#latex-output {
   margin-top: 10px;
 }
-.convertedKorContainer {
+.converted-kor-container {
   width: 97%;
   display: flex;
   justify-content: center;
   align-items: center;
   /* background-color: blue; */
+}
+/* TTS 버튼 */
+.speak-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.speak-button {
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+/* 행렬 팝업 */
+.popup {
+  position: absolute;
+  background-color: white;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 20px); /* 3개의 열, 각 열의 너비는 100px */
+  grid-auto-rows: 30px; /* 행의 높이는 100px */
+  gap: 5px; /* 그리드 아이템 사이의 간격 */
+  padding: 10px;
+}
+
+.grid-item {
+  background-color: #ddd;
+  cursor: pointer; /* 호버 시 커서를 포인터로 변경 */
+}
+
+.grid-item.hovered {
+  background-color: lightblue;
+}
+
+.popup-output {
+  padding: 5px;
+}
+.popup-output label {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.popup-output-input {
+  width: 50px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.popup-output-input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.insert-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
