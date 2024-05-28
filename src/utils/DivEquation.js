@@ -8,55 +8,11 @@ import { numToKorean, FormatOptions} from 'num-to-korean';
 
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
+
+// const Data = require("./Data.js")
 // const { numToKorean, FormatOptions } = require('num-to-korean');
-const endIdxFuncNames = {
-    "\\frac": "frac",
-    "\\sqrt": "sqrt",
-    "\\left": "left",
-    "\\lim": "lim",
-    "\\sin": "sct",
-    "\\cos": "sct",
-    "\\tan": "sct",
-    "\\overline": "overline",
-    // "^": "superscript",
-};
 
-const readFuncNames = {
-    "\\frac": "frac",
-    "\\sqrt": "sqrt",
-    "\\left": "left",
-    "\\lim": "lim",
-    "<": "under",
-    ">": "above",
-    "\\le": "le",
-    "\\ge": "ge",
-    "\\sin": "sin",
-    "\\cos": "cos",
-    "\\tan": "tan",
-    "\\overline": "overline",
-    "\\in": "in",
-    "\\ni": "ni",
-    "\\notin": "notin",
-    "\\not\\ni": "notni",
-    "\\subset": "subset",
-    "\\supset": "supset",
-    "\\subseteq": "subseteq",
-    "\\supseteq": "supseteq",
-    "\\not\\subset": "notsubset",
-    "\\not\\supset": "notsupset",
-    "\\nsubseteq": "nsubseteq",
-    "\\nsupseteq": "nsupseteq",
-    "\\Rightarrow": "Rightarrow",
-    "\\Longrightarrow": "Rightarrow",
-    "\\Leftarrow": "Leftarrow",
-    "\\Longleftarrow": "Leftarrow",
-    "\\Leftrightarrow": "Leftrightarrow",
-    "\\Longleftrightarrow": "Leftrightarrow",
-    "^":  "superscript", 
-    "_":  "subscript" ,
-
-}
-
+// const { numToKorean, FormatOptions } = require('num-to-korean');
 
 
 //#endregion
@@ -65,61 +21,73 @@ const readFuncNames = {
 //#region VARS & PROPERTIES
 //////////////////////////////////////////////
 ///////////////* GLOBAL VAR */////////////////
-const functions = {
-    getfracEndIndex: getFracEndIndex,
-    getsqrtEndIndex: getSqrtEndIndex,
-    getleftEndIndex: getLeftEndIndex,
-    getlimEndIndex: getLimEndIndex,
-    getsctEndIndex: getSctEndIndex, 
-    getoverlineEndIndex: getOverlineEndIndex,
-    getsuperscriptEndIndex: getSuperscriptEndIndex,
-    getsubscriptEndIndex: getSubscriptEndIndex,
+const endIdxFuncNames = {
+    "\\frac": getFracEndIndex,
+    "\\sqrt": getSqrtEndIndex,
+    "\\left": getLeftEndIndex,
+    "\\lim": getLimEndIndex,
+    "\\sin": getSctEndIndex,
+    "\\cos": getSctEndIndex,
+    "\\tan": getSctEndIndex,
+    "\\overline": getOverlineEndIndex,
+    // "^": "superscript",
+};
 
-    readfrac: readFrac,
-    readsqrt: readSqrt,
-    readlim: readLim,
-    readunder: readUnder,
-    readabove: readAbove,
-    readle: readLe,
-    readge: readGe,
-    readsin: readSin,
-    readcos: readCos,
-    readtan: readTan, 
-    readin: readIn,
-    readni: readNi,
-    readnotin: readNotIn,
-    readnotni: readNotNi,
-    readsubset: readSubset,
-    readsupset: readSupset,
-    readsubseteq: readSubseteq,
-    readsupseteq: readSupseteq,
-    readnotsubset: readNotSubset,
-    readnotsupset: readNotSupset,
-    readnsubseteq: readNSubseteq,
-    readnsupseteq: readNSupseteq,
-    readRightarrow: readRightArrow,
-    readLeftarrow: readLeftArrow,
-    readLeftrightarrow: readLeftRightArrow, 
-    readoverline: readOverline,
-    readleft: readLeft,
-    readsuperscript: readSuperscript,
-    readsubscript: readSubscript,
+const readFuncNames = {
+    "\\frac": readFrac,
+    "\\sqrt": readSqrt,
+    "\\left": readLeft,
+    "\\lim": readLim,
+    "<": readUnder,
+    ">": readAbove,
+    "\\le": readLe,
+    "\\ge": readGe,
+    "\\sin": readSin,
+    "\\cos": readCos,
+    "\\tan": readTan,
+    "\\overline": readOverline,
+    "\\in": readIn,
+    "\\ni": readNi,
+    "\\notin": readNotIn,
+    "\\not\\ni": readNotNi,
+    "\\subset": readSubset,
+    "\\supset": readSupset,
+    "\\subseteq": readSubseteq,
+    "\\supseteq": readSupseteq,
+    "\\not\\subset": readNotSubset,
+    "\\not\\supset": readNotSupset,
+    "\\nsubseteq": readNSubseteq,
+    "\\nsupseteq": readNSupseteq,
+    "\\Rightarrow": readRightArrow,
+    "\\Longrightarrow": readRightArrow,
+    "\\Leftarrow": readLeftArrow,
+    "\\Longleftarrow": readLeftArrow,
+    "\\Leftrightarrow": readLeftRightArrow,
+    "\\Longleftrightarrow": readLeftRightArrow,
+    "^":  readSuperscript, 
+    "_":  readSubscript ,
+
 }
 
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}"
-// var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
+
+// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> 이거 안됨/위첨자 아래첨자 확인 필요
+
+// var equation = "\\frac{b}{a} + \\sqrt{2}";
+// var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}" // -> 이거 안됨/위첨자 아래첨자 확인 필요
 // var equation = "3110000123123\\times x+22000001yz"
 // var equation = "\\frac{1\\times 2}{1+x}\\times2+y"  
 //  var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div(1/4)+ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +ac";
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
-// var equation = "x_{12}^{y+1}"; -> 이거 안됨
+
+// var equation = "x_{12}^{y+1}"; // -> 이거 안됨/위첨자 아래첨자 확인 필요
 // var equation = "\\left ( x+1 \\right )-y"  
-// var equation = '\\sin(x)^2 + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' --> 이거 안됨
-// var equation = 'x^{2}+2x + 1'  
-// var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}"
-// var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}"
+// var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' // -> 이거 안됨/위첨자 아래첨자 확인 필요
+
+// var equation = 'x^{2}+2x + 1'  // -> 이거 안됨/위첨자 아래첨자 확인 필요
+// var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}" // -> 글자체 이슈/이거 다시
+// var equation = "f^{\\prime}(x)=\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}" // -> 이거 안됨/위첨자 아래첨자 확인 필요
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
 // var equation = "\\frac{ 12 }{ \\sqrt { 22 }+\\frac{ 1 }{ \\sqrt { 2 } +\\frac { 1 }{ \\sqrt { 2 } + 1}}} "
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
@@ -128,12 +96,13 @@ const functions = {
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 
 /////////////////////////
-// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";  //-> 이거 안됨
-
+// var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
+// var equation = "A\\Longleftrightarrow B";
+// var equation = "A\\le B";
 ////05.23 보고용 예시////
 // var equation = "1\\div x+22 + \\overline{341}"
-// var equation = "A\\Longleftrightarrow B"
-//var equation = "\\sqrt{5}+2 < a2"
+// var equation = "A\\Longleftrightarrow B";
+// var equation = "\\sqrt{5}+2 < a2"
 // var equation = "\\sqrt{5}+2=2\\times3"
 // var equation = "\\sqrt{5} + 1 = 12\\infty";
 // var equation = "\\sin(\\sqrt{2} + \\sin(3)) \\div \\tan(3) + \\cos(2)"
@@ -200,6 +169,41 @@ function isInDic(expression, keyName) {
     } else {
         return false;
     }
+}
+// 부등호, 집합 기호가 "한 개" 있는지 확인 -> " "기준으로 쪼개서 zeroPriority 찾기
+function isZeroPriorityOnce(expression) {
+    var zeroPriorityCnt = 0;
+    const splitSpace = expression.split(" ")
+    var elements = [];
+    var singleStartIdx = 0;
+    var singleEndIdx = 0;
+    console.log("isZeroPriorityOnce", expression);
+    
+    splitSpace.forEach(function(el) {
+        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        if (tempEx !== null) {
+            tempEx.forEach(function(i) {
+                elements.push(i);
+            });
+        }
+    });
+    
+
+    for (var i = 0; i < elements.length; i++) {
+        if (isInDic(elements[i], "zeroPriority")) {
+            zeroPriorityCnt += 1;
+            singleStartIdx = expression.indexOf(elements[i]);
+            singleEndIdx = singleStartIdx + elements[i].length;
+            console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
+        }
+    }
+    const returnDic = {
+        "zeroPriorityCnt": zeroPriorityCnt,
+        "singleStartIdx": singleStartIdx,
+        "singleEndIdx": singleEndIdx,
+    }
+    console.log(`returnDic :: zeroPri ${returnDic["zeroPriorityCnt"]}, singleStartIdx: ${returnDic["singleStartIdx"]}, singleEndIdx: ${returnDic["singleEndIdx"]}`);
+    return returnDic;
 }
 
 function getFracEndIndex(expression, idx) {
@@ -681,7 +685,7 @@ function readLe(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += " 보다";
+    text += " 보다 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -1191,46 +1195,21 @@ export function convert2Text(expression){
     // 괄호, 공백 전처리
     let newEquation = expression.replace(/\s/g, "");
     let initExp = [];
+    console.log(expression);
 
     // 처음 분해
-    let hasZeroPriorityOnce = 0;
-    // 부등호, 집합 기호가 "한 개" 있는지 확인 -> " "기준으로 쪼개서 zeroPriority 찾기
-    const splitSpace = expression.split(" ")
-    var elements = [];
-    var singleStartIdx = 0;
-    var singleEndIdx = 0;
-    splitSpace.forEach(function(el) {
-        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
-        if (tempEx !== null) {
-            tempEx.forEach(function(i) {
-                elements.push(i);
-            });
-        }
-    });
-    
-
-    for (var i = 0; i < elements.length; i++) {
-        if (isInDic(elements[i], "zeroPriority")) {
-            hasZeroPriorityOnce += 1;
-            singleStartIdx = expression.indexOf(elements[i]);
-            singleEndIdx = singleStartIdx + elements[i].length;
-            console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
-        }
-        else {
-            hasZeroPriorityOnce += 0;
-        }
-    }
-    console.log("hasZeroPriorityOnce: ", hasZeroPriorityOnce);
-    if (hasZeroPriorityOnce === 1) {
+    let returnDic = isZeroPriorityOnce(expression);
+    console.log("returnDic[zeroPriorityCnt]: ", returnDic);
+    if (returnDic["zeroPriorityCnt"] === 1) {
         // 부등호, 집합 기호 등 우선순위 0순위 연산자가 있는 경우
         console.log("0순위 연산기호로 쪼개기")
         
-        var frontZeroPriority = expression.slice(0, singleStartIdx);
-        var backZeroPriority = expression.slice(singleEndIdx);
+        var frontZeroPriority = expression.slice(0, returnDic["singleStartIdx"]);
+        var backZeroPriority = expression.slice(returnDic["singleEndIdx"]);
         console.log("frontZeroPriority: ", frontZeroPriority);
         console.log("backZeroPriority: ", backZeroPriority);
         initExp.push(frontZeroPriority);
-        commandArr.push(expression.slice(singleStartIdx, singleEndIdx));
+        commandArr.push(expression.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
         initExp.push(backZeroPriority);
         res.push(convertElement(initExp, commandArr)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }
@@ -1292,13 +1271,13 @@ function splitExpression(expression, command) {
                 idx += result.opLength; 
             }
             else { 
-                let opName = endIdxFuncNames[result.opName]  
-                let funcName = `get${result.opEngName}EndIndex`; // <, > 때문에 수정 
+                let endIdxFuncName = endIdxFuncNames[result.opName] 
+
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
-                console.log("11", funcName);
-                if (funcName) {
-                    let result = functions[funcName](expression, idx); // 함수 호출
+                console.log("11", endIdxFuncName);
+                if (endIdxFuncName) {
+                    let result = endIdxFuncName(expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
                     // console.log(result);        // 전체 수식에서의 인덱스임
 
@@ -1313,7 +1292,7 @@ function splitExpression(expression, command) {
                     idx = result + 1;
                 }
                 else {
-                    console.error(funcName + ' No Function.');
+                    console.error(' No Function.');
                 }
             }
         }
@@ -1338,13 +1317,13 @@ function convertElement(element, command){
     // 더이상 분해 안되는 원소인 경우
     // 0순위 우선순위 명령어인 경우 -> 이미 쪼개져서 들어옴
     if (typeof command !== 'undefined' && isInDic(command[0], "zeroPriority")) {
-        let opName = readFuncNames[command[0]];
-        var funcName = `read${opName}`;
-        console.log("funcName in functions", funcName in functions);
+        let readFuncName = readFuncNames[command[0]];
+        // var funcName = `${readFuncName}`;
+        // console.log("funcName in functions", funcName in functions);
     
-        if(funcName in functions) {
+        if(command[0] in readFuncNames) {
             command.shift();
-            return functions[funcName](element);
+            return readFuncName(element);
         }
         else return "No Function Exists.";
     }
@@ -1353,14 +1332,14 @@ function convertElement(element, command){
     
     // 1순의 우선순위 명령어인 경우
     else if(element.startsWith(command[0])) {
-        let opName = readFuncNames[command[0]]; 
-        console.log("convertElement: opName", opName);
-        var funcName = `read${opName}`;
+        let readFuncName = readFuncNames[command[0]]; 
+        // console.log("convertElement: opName", opName);
+        // var funcName = `read${opName}`;
         // var funcName = "read" + Data.math_expression[command[0]][1];
 
-        if(funcName in functions) {
+        if(command[0] in readFuncNames) {
             command.shift();
-            return functions[funcName](element);
+            return readFuncName(element);
         }
         else return "No Function Exists.";
     }
