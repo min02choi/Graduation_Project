@@ -164,7 +164,8 @@ const endIdxFuncNames = {
     "\\cos": getSctEndIndex,
     "\\tan": getSctEndIndex,
     "\\overline": getOverlineEndIndex,
-    // "^": "superscript",
+    "^": getSuperscriptEndIndex,
+    "_": getSubscriptEndIndex,
 };
 
 const readFuncNames = {
@@ -215,7 +216,7 @@ const readFuncNames = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
 
-// var equation = "x_{12}^{y+1}"; // -> 이거 안됨/위첨자 아래첨자 확인 필요
+var equation = "x_{12}^{y+1}"; // -> 이거 안됨/위첨자 아래첨자 확인 필요
 // var equation = "\\left ( x+1 \\right )-y"  
 // var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + {2\\div(1/1)}+\\frac{1}{x+1}' // -> 이거 안됨/위첨자 아래첨자 확인 필요
 
@@ -288,7 +289,7 @@ function checkOperation(expression, idx) {
 
     // 쌍은 별도로 처리
     console.log(resultDict.opName);
-    if (resultDict.opName === "\\left" || resultDict.opName === "\\left") {
+    if (resultDict.opName === "\\left") {
         resultDict['opName'] = "\\left";
         resultDict['isOp'] = 0;
         resultDict['opLength'] = "\\left".length;
@@ -1405,7 +1406,7 @@ function splitExpression(expression, command) {
                 idx += result.opLength; 
             }
             else { 
-                let endIdxFuncName = endIdxFuncNames[result.opName] 
+                let endIdxFuncName = endIdxFuncNames[result.opName]
 
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);

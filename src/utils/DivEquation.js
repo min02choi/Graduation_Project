@@ -27,7 +27,8 @@ const endIdxFuncNames = {
     "\\cos": getSctEndIndex,
     "\\tan": getSctEndIndex,
     "\\overline": getOverlineEndIndex,
-    // "^": "superscript",
+    "^": getSuperscriptEndIndex,
+    "_": getSubscriptEndIndex,
 };
 
 const readFuncNames = {
@@ -157,7 +158,7 @@ function checkOperation(expression, idx) {
 
     // 쌍은 별도로 처리
     console.log(resultDict.opName);
-    if (resultDict.opName === "\\left" || resultDict.opName === "\\left") {
+    if (resultDict.opName === "\\left") {
         resultDict['opName'] = "\\left";
         resultDict['isOp'] = 0;     // 수정(원래: 0 -> 1)
         resultDict['opLength'] = "\\left".length;
