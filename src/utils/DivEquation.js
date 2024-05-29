@@ -61,7 +61,7 @@ const readFuncNames = {
     "\\Leftarrow": readLeftArrow,
     "\\Longleftarrow": readLeftArrow,
     "\\Leftrightarrow": readLeftRightArrow,
-    "\\Longleftrightarrow": readLeftRightArrow,
+    "\\Longleftrightarrow": readLeftRightArrow, 
     "^":  readSuperscript, 
     "_":  readSubscript ,
 
@@ -466,6 +466,7 @@ function getOverlineEndIndex(expression, idx) {
     console.log("getOverlineEndIndex", endIdx);
     return endIdx;
 }
+
 
 
 // function getSuperScriptEndIndex(expression, idx) {

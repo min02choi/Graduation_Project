@@ -133,7 +133,9 @@ const Data = {
         "\\sin": ["싸인", "sct", 2],
         "\\cos": ["코싸인", "sct", 2],
         "\\tan": ["탄젠트", "sct", 2],
-        "\\overline": ["무한소수", "overline", 2],
+        "\\overline": ["선분", "overline", 1], 
+        "\\overrightarrow": ["반직선", "overline", 1],
+        "\\overleftrightarrow": ["직선", "overleftrightarrow", 1],
         "\\dot": ["무한소수", "dot", 2],
 
     },
@@ -169,7 +171,9 @@ const endIdxFuncNames = {
     "\\sin": getSctEndIndex,
     "\\cos": getSctEndIndex,
     "\\tan": getSctEndIndex,
-    "\\overline": getOverlineEndIndex,
+    "\\overline": getOverlineEndIndex, 
+    "\\overrightarrow" : getOverlineEndIndex,
+    "\\overleftrightarrow" : getOverlineEndIndex,
     "\\dot" : getDotEndIndex,
     "^": getSuperscriptEndIndex,
     "_": getSubscriptEndIndex,
@@ -206,7 +210,9 @@ const readFuncNames = {
     "\\Leftarrow": readLeftArrow,
     "\\Longleftarrow": readLeftArrow,
     "\\Leftrightarrow": readLeftRightArrow,
-    "\\Longleftrightarrow": readLeftRightArrow,
+    "\\Longleftrightarrow": readLeftRightArrow, 
+    "\\overrightarrow" : readOverRightArrow,
+    "\\overleftrightarrow": overLeftRightArrow,
     "^":  readSuperscript, 
     "_":  readSubscript ,
 
@@ -224,7 +230,7 @@ const readFuncNames = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
 
-var equation = "\\dot{2}\\dot{4}\\dot{3}+ \\sqrt{x+2} + \\overline{AB}";
+var equation = "\\dot{2}\\dot{4}\\dot{3}+ \\sqrt{x+2} + \\overleftrightarrow{AB}";
 // var equation = "\\left ( x+1 \\right )-y"
 // var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + 2\\div(1/1)+\\frac{1}{x+1}' // -> [가능] 이 수식에서 \\sin x^{2} 부분을 \\sin (x^{2})로 변형하면 됨
 // var equation = "\\sin x^{2} + \\sqrt(2){x}"
@@ -1335,6 +1341,68 @@ function readOverline(formula){
     let splitExp = splitExpression(insideofOverline, command);
     splitExp.forEach(function(element){
         text += convertElement(element, command);
+    })
+ 
+
+    return text; 
+}
+
+/** 반직선 **/
+function readOverRightArrow(formula){
+    console.log("read 반직선: ", formula); 
+    var command = []; 
+    let text = "반직선 ";
+    let stack = []; 
+    let inside;
+
+    for (var i=formula.indexOf("{"); i < formula.length; i++) {
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                inside = formula.slice(formula.indexOf("{")+1, i);           
+                break;
+            }
+        }
+    } 
+ 
+    console.log("반직선 안: ", inside);
+
+    let splitExp = splitExpression(inside, command);
+    splitExp.forEach(function(element){ 
+        text += convertElement(element, command);
+        
+    })
+ 
+
+    return text; 
+}
+
+/** 직선 **/
+function overLeftRightArrow(formula){
+    console.log("read 직선: ", formula); 
+    var command = []; 
+    let text = "직선 ";
+    let stack = []; 
+    let inside;
+
+    for (var i=formula.indexOf("{"); i < formula.length; i++) {
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                inside = formula.slice(formula.indexOf("{")+1, i);           
+                break;
+            }
+        }
+    } 
+ 
+    console.log("직선 안: ", inside);
+
+    let splitExp = splitExpression(inside, command);
+    splitExp.forEach(function(element){ 
+        text += convertElement(element, command);
+        
     })
  
 
