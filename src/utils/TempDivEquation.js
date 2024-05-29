@@ -224,7 +224,7 @@ const readFuncNames = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
 
-var equation = "\\dot{2}\\dot{4}\\dot{3}+ 2\\div(1/4)+ac";
+var equation = "\\dot{2}\\dot{4}\\dot{3}+ \\sqrt{x+2} + \\overline{AB}";
 // var equation = "\\left ( x+1 \\right )-y"
 // var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + 2\\div(1/1)+\\frac{1}{x+1}' // -> [가능] 이 수식에서 \\sin x^{2} 부분을 \\sin (x^{2})로 변형하면 됨
 // var equation = "\\sin x^{2} + \\sqrt(2){x}"
@@ -577,33 +577,31 @@ function getSctEndIndex(expression, idx) {
 }
 
 function getOverlineEndIndex(expression, idx) {
-    // console.log("getSqrtEndIndex", expression, idx);
-    // let stack = [];
-    // var braceCnt = 0
-    // var endIdx = 0;
+    let stack = [];
+    var braceCnt = 0
+    var endIdx = 0;
 
-    // while (idx < expression.length) {
-    //     if (expression[idx] === "{") {
-    //         if (stack.length === 0 && braceCnt < 1) {
-    //             // braceCnt += 1;
-    //         }
-    //         stack.push("{");
-    //     }
-    //     else if (expression[idx] === "}") {
-    //         stack.pop();
-    //         // 분모까지 마무리
-    //         if (stack.length === 0) {
-    //             braceCnt += 1;
-    //             if (braceCnt == 1) {
-    //                 endIdx = idx
-    //                 break
-    //             }
-    //         }
-    //     }
-    //     idx += 1;
-    // }
-    // console.log("getOverlineEndIndex", endIdx);
-    // return endIdx;
+    while (idx < expression.length) {
+        if (expression[idx] === "{") {
+            if (stack.length === 0 && braceCnt < 1) {
+                // braceCnt += 1;
+            }
+            stack.push("{");
+        }
+        else if (expression[idx] === "}") {
+            stack.pop();
+            // 분모까지 마무리
+            if (stack.length === 0) {
+                braceCnt += 1;
+                if (braceCnt == 1) {
+                    endIdx = idx
+                    break
+                }
+            }
+        }
+        idx += 1;
+    }
+    return endIdx;
 }
 
 function getDotEndIndex(expression, idx) {
@@ -860,7 +858,7 @@ function readDot(formula){
         } 
     }
     text += "가 반복되는 무한소수";
-    
+
     return text;
 }
 
@@ -1317,19 +1315,30 @@ function readLeftRightArrow(formulaList) {
 /** 선분 **/
 function readOverline(formula){
     console.log("read overline: ", formula); 
-    // var text ="";
-    // var insideofDecimal = formula.slice(10, -1);   
-    // console.log("dpdpdpdpd", insideofDecimal);
+    var command = []; 
+ 
+    let stack = []; 
+    let insideofOverline;
+    for (var i=9; i < formula.length; i++) {
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                insideofOverline = formula.slice(10, i);           
+                break;
+            }
+        }
+    } 
 
-    // // 무한소수인 경우 \overline{}안에 숫자만 들어갈 가능성이 훨씬 높음**
-    // // 숫자만 읽어주도록 하는게 더 나을 듯 함
-    // for(let char of insideofDecimal){
-    //     if(char in Data.number) text += Data.number[char];
-    // }
+    let text = "선분 ";
+    console.log("선분 안: ", insideofOverline);
+    let splitExp = splitExpression(insideofOverline, command);
+    splitExp.forEach(function(element){
+        text += convertElement(element, command);
+    })
+ 
 
-    // text += "의 무한소수 ";
-
-    // return text;
+    return text; 
 }
 
 function readLeft(formula){
