@@ -221,13 +221,13 @@ const readFuncNames = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
 
-// var equation = "x_{12}^{y+1}";
+// var equation = "\\sqrt[2]{4}";
 // var equation = "\\left ( x+1 \\right )-y"
 // var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + 2\\div(1/1)+\\frac{1}{x+1}' // -> [가능] 이 수식에서 \\sin x^{2} 부분을 \\sin (x^{2})로 변형하면 됨
-
+// var equation = "\\sin x^{2} + \\sqrt(2){x}"
 // var equation = 'x^{2}+2x + 1'
 // var equation = "\\frac{n!}{k!(n-k)!} = \\binom{n}{k} = _{n}\\mathrm{C}_{k}" // -> 글자체 이슈/이거 다시
-var equation = "f^{\\prime}(x)=\\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}" // -> [애매한 가능]..은 한데 첨자 읽기 특성상 "에프 의 제곱 시작 프라임 제곱 끝" 이런 독음 문제 있음
+// var equation = "f^{\\prime}(x)=\\lim_{h \\to 0}\\frac{f(x+h)-(x)}{h}" // -> [애매한 가능]..은 한데 첨자 읽기 특성상 "에프 의 제곱 시작 프라임 제곱 끝" 이런 독음 문제 있음
 // var equation = " x = \\frac{\\frac{1\\times 2y}{1+x}}{4ac + \\sqrt{x+2}}\\pm b"
 // var equation = "\\frac{ 12 }{ \\sqrt { 22 }+\\frac{ 1 }{ \\sqrt { 2 } +\\frac { 1 }{ \\sqrt { 2 } + 1}}} "
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b -4ac}}{2a}"
@@ -736,14 +736,50 @@ function readFrac(formula){
 function readSqrt(formula){   
     console.log("readSqrt: ", formula); 
     var command = [];
-    var insideofSqrt = formula.slice(6, -1); // 루트 안의 값
-    var splitExp = splitExpression(insideofSqrt, command);
     var text = "루트시작 ";
+    var stack = [];
+    let exponent = 0;
+    let idx = 0;
 
-    splitExp.forEach(function(element){
-        text += convertElement(element, command);
-    })
-    text += "루트끝 ";
+    if(formula[5] == '['){
+        for(let i =5; i<formula.length; i++){
+            if(formula[i] == "[") stack.push(formula[i]);
+            if(formula[i] == "]") stack.pop();
+            if(stack.length == 0){
+                exponent = formula.slice(6, i); idx = i;
+                break;
+            }
+        } 
+        let inside = formula.slice(idx+2, -1);
+        var splitExp = splitExpression(inside, command);
+        splitExp.forEach(function(element){
+            text += convertElement(element, command);
+        })
+
+        text += "의 ";
+        
+       // console.log("지수", exponent);
+        var splitExp = splitExpression(exponent, command);
+        splitExp.forEach(function(element){
+            text += convertElement(element, command);
+        })
+        
+       // console.log("제곱근 ", inside);
+        text += "제곱근 ";
+        text += "루트끝 ";
+
+    }
+
+    else{
+        var insideofSqrt = formula.slice(6, -1); // 루트 안의 값
+        var splitExp = splitExpression(insideofSqrt, command);
+        var text = "루트시작 ";
+
+        splitExp.forEach(function(element){
+            text += convertElement(element, command);
+        })
+        text += "루트끝 ";
+    } 
 
     return text;
 }
