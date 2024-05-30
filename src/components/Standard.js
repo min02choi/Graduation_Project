@@ -197,13 +197,20 @@ function Standard({input, handleInputUpdate}) {
                     curPos={1}
                 />
             </span>
-            <span className="formula-buttons-container-one-col">
+            <span className="formula-buttons-container">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\overline{}'} 
                     imgUrl={'\\overline{AB}'}
                     curPos={10}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\sin()'} 
+                    imgUrl={'\\sin'}
+                    curPos={5}
                 />
                 <FormulaButton
                     input={input}
@@ -215,12 +222,26 @@ function Standard({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\cos()'} 
+                    imgUrl={'\\cos'}
+                    curPos={5}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\overleftrightarrow{}'} 
                     imgUrl={'\\overleftrightarrow{AB}'}
                     curPos={20}
                 />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\tan()'} 
+                    imgUrl={'\\tan'}
+                    curPos={5}
+                />
             </span>
-            <span className="formula-buttons-container-one-col">
+            {/* <span className="formula-buttons-container-one-col">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
@@ -242,7 +263,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\tan'}
                     curPos={5}
                 />
-            </span>
+            </span> */}
         </div>
     );
 }
