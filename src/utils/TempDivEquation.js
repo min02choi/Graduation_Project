@@ -1,3 +1,6 @@
+// import { Data } from "./Data";
+// import { numToKorean, FormatOptions} from 'num-to-korean';
+
 //#region ERROR
 // ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
 // ! 제곱 처리 고려필요
