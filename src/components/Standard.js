@@ -201,6 +201,29 @@ function Standard({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\overline{}'} 
+                    imgUrl={'\\overline{AB}'}
+                    curPos={10}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\overrightarrow{}'} 
+                    imgUrl={'\\overrightarrow{AB}'}
+                    curPos={16}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\overleftrightarrow{}'} 
+                    imgUrl={'\\overleftrightarrow{AB}'}
+                    curPos={20}
+                />
+            </span>
+            <span className="formula-buttons-container-one-col">
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\sin()'} 
                     imgUrl={'\\sin'}
                     curPos={5}
