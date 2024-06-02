@@ -1,9 +1,4 @@
-// import { Data } from "./Data";
-// import { numToKorean, FormatOptions} from 'num-to-korean';
-
-//#region ERROR
-// ! 괄호 \\right \\left써있는 경우는 두번씩 중복일어남
-// ! 제곱 처리 고려필요
+//#region ERROR 
 //#endregion
 
 //#region IMPORT_DATA
@@ -110,6 +105,7 @@ const Data = {
         "B": "대문자 비 ",
         "C": "대문자 씨 ",
         "F": "대문자 에프 ", 
+        ".": "점 ",
     },
 
     math_expression: {
@@ -161,10 +157,7 @@ const Data = {
 
 //#endregion
 
-
-//#region VARS & PROPERTIES
-//////////////////////////////////////////////
-///////////////* GLOBAL VAR */////////////////
+//#region FUNC_NAMES 
 
 const endIdxFuncNames = {
     "\\frac": getFracEndIndex,
@@ -221,7 +214,9 @@ const readFuncNames = {
 
 }
 
+//#endregion
 
+//#region EQUATIONS
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
 
 // var equation = "\\frac{b}{a} + \\sqrt{2}";
@@ -233,7 +228,8 @@ const readFuncNames = {
 // var equation = "2\\times 2 + \\sqrt{x+2} + 2\\div\\left ( 1+y \\right ) +\\frac{a}{b}"; 
 // var equation = "f\\left(x \\right) = x+ 1"
 
-var equation = "\\dot{2}\\dot{4}\\dot{3}+ \\sqrt{x+2} + \\overleftrightarrow{AB}";
+// var equation = "\\dot{2}\\dot{4}\\dot{3}+ \\sqrt{x+2} + \\overleftrightarrow{AB}";
+var equation = "0.1\\dot{2}\\dot{3}\\dot{4}+ \\sqrt{x+2} + \\overleftrightarrow{AB}";
 // var equation = "\\left ( x+1 \\right )-y"
 // var equation = '\\sin x^{2} + 2\\times 2 + \\sqrt{x+2} + 2\\div(1/1)+\\frac{1}{x+1}' // -> [가능] 이 수식에서 \\sin x^{2} 부분을 \\sin (x^{2})로 변형하면 됨
 // var equation = "\\sin x^{2} + \\sqrt(2){x}"
@@ -358,6 +354,63 @@ function isZeroPriorityOnce(expression) {
     return returnDic;
 }
 
+/* 순수 문자열 분해 함수 */
+// 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
+// ex) 2ac, xy
+function splitString(str){
+    var strArr = [];
+    var num = "";
+
+    Array.from(str).forEach(function(char) {
+        if (char in Data.number){
+            num += char
+        }
+        else if (char in Data.word) {
+            strArr.push(num);
+            strArr.push(char);
+            num = "";
+        }
+    });
+
+    if (num !== "") {
+        strArr.push(num);
+    }
+    
+    return strArr;
+}
+
+/* 분해 가능 유무  */
+// 두자리 이상의 수는 Atom 취급
+function isAtom(char){
+    if(char in Data.firstPriority || char in Data.number || char in Data.word || isNumber(char)){
+        return true;
+    }
+    return false;
+}
+
+/* 숫자로만 이루어져있는지 판단 */
+function isNumber(char) {
+    for (var i = 0; i < char.length; i++) {
+        if (char[i] < '0' || char[i] > '9') return 0
+    }
+    return 1
+}
+
+/* 텍스트 매치 함수 */
+function matchText(char){
+    if(char in Data.firstPriority) return Data.firstPriority[char];
+    if(char in Data.word) return Data.word[char];
+    // if(char in Data.number) return Data.number[char];
+    const num = numToKorean(parseInt(char), FormatOptions.LINGUAL);
+    console.log("- 숫자로의 변환: ", num);
+    // if (isNumber(char)) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
+    // num-to-korean API 0 처리를 못하네...?
+    if (isNumber(char) && parseInt(char) !== 0) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
+    else if (parseInt(char) === 0) return "영 ";
+}
+//#endregion
+
+//#region GET_END_IDX_FUNCS
 function getFracEndIndex(expression, idx) {
     let stack = [];
     var braceCnt = 0
@@ -662,64 +715,9 @@ function getDotEndIndex(expression, idx) {
 //     return endIdx;
 // }
 
-/* 순수 문자열 분해 함수 */
-// 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
-// ex) 2ac, xy
-function splitString(str){
-    var strArr = [];
-    var num = "";
-
-    Array.from(str).forEach(function(char) {
-        if (char in Data.number){
-            num += char
-        }
-        else if (char in Data.word) {
-            strArr.push(num);
-            strArr.push(char);
-            num = "";
-        }
-    });
-
-    if (num !== "") {
-        strArr.push(num);
-    }
-    
-    return strArr;
-}
-
-/* 분해 가능 유무  */
-// 두자리 이상의 수는 Atom 취급
-function isAtom(char){
-    if(char in Data.firstPriority || char in Data.number || char in Data.word || isNumber(char)){
-        return true;
-    }
-    return false;
-}
-
-/* 숫자로만 이루어져있는지 판단 */
-function isNumber(char) {
-    for (var i = 0; i < char.length; i++) {
-        if (char[i] < '0' || char[i] > '9') return 0
-    }
-    return 1
-}
-
-/* 텍스트 매치 함수 */
-function matchText(char){
-    if(char in Data.firstPriority) return Data.firstPriority[char];
-    if(char in Data.word) return Data.word[char];
-    // if(char in Data.number) return Data.number[char];
-    const num = numToKorean(parseInt(char), FormatOptions.LINGUAL);
-    console.log("- 숫자로의 변환: ", num);
-    // if (isNumber(char)) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
-    // num-to-korean API 0 처리를 못하네...?
-    if (isNumber(char) && parseInt(char) !== 0) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
-    else if (parseInt(char) === 0) return "영 ";
-}
-
 //#endregion
 
-//#region 명령어 텍스트 변환 함수
+//#region READ_FUNCS
 
 /** 분수 **/
 function readFrac(formula){
@@ -847,7 +845,7 @@ function readLim(formula){
 /** 무한소수 **/
 function readDot(formula){
     console.log("readDot: ", formula);
-    let text = ""; 
+    let text = "", res=""; 
     let stack = [];  
     var command = []; 
     let startIdx = 4;
@@ -866,9 +864,10 @@ function readDot(formula){
         } 
         } 
     }
-    text += "가 반복되는 무한소수";
+    res = text + ", " + text;
+    res += "(이)가 반복되는 무한소수 ";
 
-    return text;
+    return res;
 }
 
 /** 부등호 **/
@@ -1587,13 +1586,13 @@ function splitExpression(expression, command) {
 
                 //command[splitExp.length] = result.opName;
                 command.push(result.opName);
-                console.log("11", endIdxFuncName);
+                console.log("END_IDX_FUNC_NAME: ", endIdxFuncName);
                 if (endIdxFuncName) {
                     let result = endIdxFuncName(expression, idx); // 함수 호출
                     // console.log("함수 동적 호출", funcName);
                     // console.log(result);        // 전체 수식에서의 인덱스임
 
-                    console.log(temp)
+                    console.log("TEMP: " ,temp);
                     if (temp !== "") {
                         splitExp.push(temp);
                     }
@@ -1675,7 +1674,6 @@ function convertElement(element, command){
 convert2Text(equation);
 
 const number = numToKorean(0);
-console.log(number)
-// const number2 = numToKorean(11111, FormatOptions.LINGUAL);
+console.log(number);
 
 //#endregion
