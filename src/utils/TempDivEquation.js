@@ -1,3 +1,6 @@
+// import { Data } from "./Data";
+// import { numToKorean, FormatOptions} from 'num-to-korean';
+
 //#region ERROR 
 //#endregion
 
@@ -74,6 +77,7 @@ const Data = {
         "^":"위첨 ",
 
         "\\prime": "프라임 ",
+        ":": "대 ",
     },
 
     number: {

@@ -63,6 +63,7 @@ export const Data = {
         "^":"위첨 ",
 
         "\\prime": "프라임 ",
+        ":": "대 ",
     },
 
     number: {
@@ -93,8 +94,8 @@ export const Data = {
         "A": "대문자 에이 ",
         "B": "대문자 비 ",
         "C": "대문자 씨 ",
-        "D": "대문자 디 ",
         "F": "대문자 에프 ", 
+        ".": "점 ",
     },
 
     math_expression: {
