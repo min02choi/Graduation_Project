@@ -1607,7 +1607,7 @@ function splitExpression(expression, command) {
                     idx = result + 1;
                 }
                 else {
-                    console.error(funcName + ' No Function.');
+                    console.error(' No Function.');
                 }
             }
         }
