@@ -1,16 +1,12 @@
-// import { Data } from "./Data";
-// import { numToKorean, FormatOptions} from 'num-to-korean';
-
 //#region ERROR 
 //#endregion
 
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
-
 // const Data = require("./Data.js")
+// import { Data } from "./Data";
+// import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
-
-// const { numToKorean, FormatOptions } = require('num-to-korean');
 
 const Data = {
     zeroPriority: {
@@ -142,6 +138,9 @@ const Data = {
         "\\overleftrightarrow": ["직선", "overleftrightarrow", 1],
         "\\dot": ["무한소수", "dot", 2],
 
+        "\\begin": ["행렬시작", "begin", 2],
+        "\\end": ["행렬시작", "end", 2],
+
     },
 
     math_expression_pair: {
@@ -174,6 +173,7 @@ const endIdxFuncNames = {
     "\\dot" : getDotEndIndex,
     "^": getSuperscriptEndIndex,
     "_": getSubscriptEndIndex,
+    "\\begin": getMatrixEndIndex,
 };
 
 const readFuncNames = {
@@ -213,12 +213,14 @@ const readFuncNames = {
     "^":  readSuperscript, 
     "_":  readSubscript ,
 
+    "\\begin": readMatrix,
+
 }
 
 //#endregion
 
 //#region EQUATIONS
-var equation = "\\left( x > 1 \\right )"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
+// var equation = "\\left(x>1\\right)"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
 
 // var equation = "\\frac{b}{a} + \\sqrt{2}";
@@ -262,6 +264,9 @@ var equation = "\\left( x > 1 \\right )"        // 이거 안됨 -> 부등호의
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
+
+var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
+var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -719,6 +724,22 @@ function getDotEndIndex(expression, idx) {
 //     return endIdx;
 // }
 
+function getMatrixEndIndex(expression){
+    console.log("getMatrixEndIdx: ", expression);
+    let searchTerm = "matrix}";
+    let lastIndex = -1;
+    let currentIndex = expression.indexOf(searchTerm);
+    
+    while (currentIndex !== -1) {
+        lastIndex = currentIndex;
+        currentIndex = expression.indexOf(searchTerm, currentIndex + 1);
+    }
+
+    console.log("Last matrix} index: ", lastIndex);
+    lastIndex += 6;
+
+    return lastIndex;
+}
 //#endregion
 
 //#region READ_FUNCS
@@ -1497,6 +1518,47 @@ function readSubscript(formula) {
         text += convertElement(element, command);
     })
     text += "아래첨자 끝 ";
+
+    return text;
+}
+
+function readMatrix(formula){
+    // console.log("행렬: " ,formula);
+    
+    /* 행렬 추출 */ 
+    let beginIdx = formula.indexOf("matrix}");
+    let endIdx = formula.indexOf("\\end");
+    let insideofScript = formula.slice(beginIdx + 7, endIdx);
+
+    console.log("행렬 정제:" + insideofScript);
+
+    /* & \\ 개수로 행과 열 구하기 */
+    const row = insideofScript.split('\\\\').length -1;
+    const col = ((insideofScript.split('&').length - 1) + row) / row;
+
+    text = row + "행 " + col +"열 행렬 ";
+
+    /* 원소 추출 후 convert */
+    let elements = insideofScript.split(/&|\\\\/);
+    elements.pop();
+    console.log(elements);
+    
+    let cnt = 0;
+    let rowCnt = 1;
+    for(const element of elements){
+        if(cnt++ % col == 0) {
+            text += (rowCnt + "행 시작 ");
+            rowCnt++;
+        }
+
+        var command = [];
+        let splitExp = splitExpression(element, command);
+        splitExp.forEach(function(element){
+            text += convertElement(element, command);
+        })
+    }
+    
+    text += "행렬 끝 ";
 
     return text;
 }
