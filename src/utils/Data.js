@@ -1,4 +1,4 @@
-export const Data = {
+const Data = {
     zeroPriority: {
         "<": "0순위 크다",
         ">": "0순위 작다",
@@ -127,6 +127,9 @@ export const Data = {
         "\\overrightarrow": ["반직선", "overline", 1],
         "\\overleftrightarrow": ["직선", "overleftrightarrow", 1],
         "\\dot": ["무한소수", "dot", 2],
+
+        "\\begin": ["행렬시작", "begin", 2],
+        "\\end": ["행렬시작", "end", 2],
 
     },
 

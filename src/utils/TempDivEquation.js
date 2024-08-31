@@ -265,8 +265,8 @@ const readFuncNames = {
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
 
-var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
-var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}";
+// var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
+var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
