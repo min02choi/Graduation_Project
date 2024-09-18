@@ -121,7 +121,7 @@ const readFuncNames = {
 // var equation = "x_{12}^{y+1}";
 
 // var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
-var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}";
+var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -193,6 +193,7 @@ function isZeroPriorityOnce(expression) {
     
     splitSpace.forEach(function(el) {
         var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        // console.log("isZeroPriority ele: ", el);
         if (tempEx !== null) {
             tempEx.forEach(function(i) {
                 elements.push(i);
@@ -202,6 +203,7 @@ function isZeroPriorityOnce(expression) {
     
 
     for (var i = 0; i < elements.length; i++) {
+        console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
         if (isInDic(elements[i], "zeroPriority")) {
             zeroPriorityCnt += 1;
             singleStartIdx = expression.indexOf(elements[i]);
@@ -1391,7 +1393,7 @@ function readMatrix(formula){
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    text = row + "행 " + col +"열 행렬 ";
+    let text = row + "행 " + col +"열 행렬 ";
 
     /* 원소 추출 후 convert */
     let elements = insideofScript.split(/&|\\\\/);
