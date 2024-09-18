@@ -248,6 +248,7 @@ const readFuncNames = {
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 // var equation = "\\frac{k}{x-2} + 1 \\left( x >2 \\right )"
 // var equation = "\\left( x + 1 \\right )"
+var equation = "\\sqrt{2}";
 
 /////////////////////////
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
@@ -266,7 +267,7 @@ const readFuncNames = {
 // var equation = "x_{12}^{y+1}";
 
 // var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
-var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
+// var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -321,6 +322,7 @@ function checkOperation(expression, idx) {
 }
 
 function isInDic(expression, keyName) {
+    console.log("isInDic: ", expression, keyName);
     if (Data[keyName] && Data[keyName][expression]) {
         return true;
     } else {
@@ -330,7 +332,7 @@ function isInDic(expression, keyName) {
 // 부등호, 집합 기호가 "한 개" 있는지 확인 -> " "기준으로 쪼개서 zeroPriority 찾기
 function isZeroPriorityOnce(expression) {
     var zeroPriorityCnt = 0;
-    const splitSpace = expression.split(" ")
+    const splitSpace = expression.split(" ");
     var elements = [];
     var singleStartIdx = 0;
     var singleEndIdx = 0;
@@ -346,7 +348,7 @@ function isZeroPriorityOnce(expression) {
         }
     });
     
-
+    console.log("isZero{riorityOnce elements: ", elements);
     for (var i = 0; i < elements.length; i++) {
         console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
         if (isInDic(elements[i], "zeroPriority")) {
