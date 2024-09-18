@@ -5,9 +5,8 @@
 // const Data = require("./TempData.js")
 // const Data = require("./Data.js")
 import { Data } from "./Data";
-import { numToKorean, FormatOptions} from 'num-to-korean';
-// const { numToKorean, FormatOptions } = require('num-to-korean');
-
+// import { numToKorean, FormatOptions} from 'num-to-korean';
+const { numToKorean, FormatOptions } = require('num-to-korean');
 
 
 //#endregion
@@ -55,8 +54,6 @@ const readFuncNames = {
     "\\supseteq": readSupseteq,
     "\\not\\subset": readNotSubset,
     "\\not\\supset": readNotSupset,
-    "\\nsubseteq": readNSubseteq,
-    "\\nsupseteq": readNSupseteq,
     "\\Rightarrow": readRightArrow,
     "\\Longrightarrow": readRightArrow,
     "\\Leftarrow": readLeftArrow,
@@ -103,6 +100,7 @@ const readFuncNames = {
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 // var equation = "\\frac{k}{x-2} + 1 \\left( x >2 \\right )"
 // var equation = "\\left( x + 1 \\right )"
+// var equation = "\\sqrt{2}";
 
 /////////////////////////
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
@@ -120,7 +118,9 @@ const readFuncNames = {
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
 
-// var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
+// var equation = "\\begin{matrix}\\n a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
+var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
+// var equation = "\\begin{pmatrix}1 & 2\\\\3 & 4 \\\\\\end{pmatrix}";
 // var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
@@ -177,7 +177,6 @@ function checkOperation(expression, idx) {
 
 function isInDic(expression, keyName) {
     console.log("isInDic: ", expression, keyName);
-    console.log(Data);
     if (Data[keyName] && Data[keyName][expression]) {
         return true;
     } else {
@@ -187,7 +186,7 @@ function isInDic(expression, keyName) {
 // 부등호, 집합 기호가 "한 개" 있는지 확인 -> " "기준으로 쪼개서 zeroPriority 찾기
 function isZeroPriorityOnce(expression) {
     var zeroPriorityCnt = 0;
-    const splitSpace = expression.split(" ")
+    const splitSpace = expression.split(" ");
     var elements = [];
     var singleStartIdx = 0;
     var singleEndIdx = 0;
@@ -205,7 +204,6 @@ function isZeroPriorityOnce(expression) {
     
     console.log("isZero{riorityOnce elements: ", elements);
     for (var i = 0; i < elements.length; i++) {
-        // console.log(elements[i]);
         // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
         if (isInDic(elements[i], "zeroPriority")) {
             zeroPriorityCnt += 1;
@@ -1102,45 +1100,7 @@ function readNotSupset(formulaList) {
     return text;
 }
 
-function readNSubseteq(formulaList) {
-    var frontCommand = []
-    var backCommand = []
-    let text = "집합 ";
-    var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    
-    frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
-    })
-    text += "의 모든 원소가 집합 ";
-    
-    var backSplitExp = splitExpression(formulaList[1], backCommand); 
-    backSplitExp.forEach(function(element) {
-        text += convertElement(element, backCommand);
-    })
-    text += "에 속하지 않거나 같은 집합이 아니다. ";
 
-    return text;
-}
-
-function readNSupseteq(formulaList) {
-    var frontCommand = []
-    var backCommand = []
-    let text = "집합 ";
-    var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    
-    frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
-    })
-    text += "에 집합 ";
-    
-    var backSplitExp = splitExpression(formulaList[1], backCommand); 
-    backSplitExp.forEach(function(element) {
-        text += convertElement(element, backCommand);
-    })
-    text += "의 모든 원소가 속하지 않거나 같은 집합이 아니다. ";
-
-    return text;
-}
 
 /** 필요 조건 **/
 function readRightArrow(formulaList) {
@@ -1388,8 +1348,8 @@ function readMatrix(formula){
     /* 행렬 추출 */ 
     let beginIdx = formula.indexOf("matrix}");
     let endIdx = formula.indexOf("\\end");
+    // let insideofScript = formula.slice(beginIdx + 10, endIdx);
     let insideofScript = formula.slice(beginIdx + 7, endIdx);
-
     console.log("행렬 정제:" + insideofScript);
 
     /* & \\ 개수로 행과 열 구하기 */

@@ -10,6 +10,7 @@ function LatexEditor() {
     const [input, setInput] = useState('');
     const [opCategory, setOpCategory] = useState('Standard');
     const [convertedText, setConvertedText] = useState([]);
+    const [isInputChanged, setIsInputChanged] = useState(false);
     // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
     const inputRef = useRef(null); // input 요소에 대한 ref
     const [cursor, setCursor] = useState(0);
@@ -37,6 +38,13 @@ function LatexEditor() {
     }, [input]);
 
     useEffect(() => {
+        // input이 변경되었을 때만 변환 텍스트 초기화
+        if (isInputChanged) {
+            setConvertedText([]);  // input이 변경되면 변환 텍스트 초기화
+        }
+    }, [isInputChanged]);
+
+    useEffect(() => {
         inputRef.current.focus();
         inputRef.current.setSelectionRange(cursor, cursor);
       }, [cursor]);
@@ -45,24 +53,18 @@ function LatexEditor() {
     const handleConvertBtn = () => {
         const expression = input; // 변환할 수식을 여기에 입력하세요
         console.log('LatexEditor expression', expression);
-        // *** 현재는 문자열 리턴이므로 문자열 -> 리스트로 바꾸었는데
-        // *** 가능성 제안 방식이면 리스트로 출력이 될 예정 -> 이 부분도 바꾸어야됨.
         setConvertedText([convert2Text(expression)]);
+        setIsInputChanged(false);
+
         console.log(convertedText);
     };
 
-    // convert 버튼 없이 변환 가능 -> 단: 하나씩 지우다가 없는 명령어가 나오면 에러가 뜸
-    // useEffect(() => {
-    //     const handleConvertBtn = () => {
-    //         const expression = input; // 변환할 수식을 여기에 입력하세요
-    //         console.log('LatexEditor expression', expression);
-    //         // *** 현재는 문자열 리턴이므로 문자열 -> 리스트로 바꾸었는데
-    //         // *** 가능성 제안 방식이면 리스트로 출력이 될 예정 -> 이 부분도 바꾸어야됨.
-    //         setConvertedText([convert2Text(expression)]);
-
-    //     };
-    //     handleConvertBtn();
-    // }, [input]);
+    // input이 변경되었을 때 호출되는 함수 -> input이 변경되면 한글 변환부분을 없애기 위함
+    const handleInputChange = (e) => {
+        setInput(e.target.value);
+        setIsInputChanged(true);  // input이 변경되었음을 알림
+        console.log("handleInputChange: ", isInputChanged);
+    };
 
     // 커서 위치 조정
     const getCursorPosition = () => {
@@ -139,9 +141,7 @@ function LatexEditor() {
                     id="latex-input"
                     placeholder="Enter LaTeX here..."
                     value={input}
-                    onChange={(e) => {
-                        setInput(e.target.value)
-                    }}
+                    onChange={handleInputChange}
                 ></textarea>
                 <button className="converted-button" onClick={handleConvertBtn}>Convert</button>
             </div>

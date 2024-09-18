@@ -1,4 +1,4 @@
-const Data = {
+export const Data = {
     zeroPriority: {
         "<": "0순위 크다",
         ">": "0순위 작다",
@@ -52,8 +52,6 @@ const Data = {
         "\\supseteq": " 가 왼쪽에 포함되거나 같다 ",
         "\\not\\subset": " 가 오른쪽에 포함되지 않는다 ",
         "\\not\\supset": " 가 왼쪽에 포함되지 않는다 ",
-        "\\nsubseteq": " 가 오른쪽에 포함하지 않거나 같은 집합이 아니다 ",
-        "\\nsupseteq": " 가 왼쪽에 포함하지 않거나 같은 집합이 아니다 ",
         "\\cap": " 교집합 ",
         "\\cup": " 합집합 ",
         "\\varnothing": " 공집합 ",

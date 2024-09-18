@@ -248,7 +248,7 @@ const readFuncNames = {
 // var equation = "\\sqrt{5}+2\\le2\\times3<123"
 // var equation = "\\frac{k}{x-2} + 1 \\left( x >2 \\right )"
 // var equation = "\\left( x + 1 \\right )"
-var equation = "\\sqrt{2}";
+// var equation = "\\sqrt{2}";
 
 /////////////////////////
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
@@ -266,8 +266,10 @@ var equation = "\\sqrt{2}";
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
 
-// var equation = "\\begin{matrix} a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
-// var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
+// var equation = "\\begin{matrix}\\n a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
+// var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
+// var equation = "\\begin{pmatrix}1 & 2\\\\3 & 4 \\\\\\end{pmatrix}";
+var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -1532,15 +1534,15 @@ function readMatrix(formula){
     /* 행렬 추출 */ 
     let beginIdx = formula.indexOf("matrix}");
     let endIdx = formula.indexOf("\\end");
+    // let insideofScript = formula.slice(beginIdx + 10, endIdx);
     let insideofScript = formula.slice(beginIdx + 7, endIdx);
-
     console.log("행렬 정제:" + insideofScript);
 
     /* & \\ 개수로 행과 열 구하기 */
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    text = row + "행 " + col +"열 행렬 ";
+    let text = row + "행 " + col +"열 행렬 ";
 
     /* 원소 추출 후 convert */
     let elements = insideofScript.split(/&|\\\\/);

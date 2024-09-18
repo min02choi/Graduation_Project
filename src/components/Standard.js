@@ -241,29 +241,6 @@ function Standard({input, handleInputUpdate}) {
                     curPos={5}
                 />
             </span>
-            {/* <span className="formula-buttons-container-one-col">
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\sin()'} 
-                    imgUrl={'\\sin'}
-                    curPos={5}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\cos()'} 
-                    imgUrl={'\\cos'}
-                    curPos={5}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\tan()'} 
-                    imgUrl={'\\tan'}
-                    curPos={5}
-                />
-            </span> */}
         </div>
     );
 }
