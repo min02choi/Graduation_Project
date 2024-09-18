@@ -350,7 +350,7 @@ function isZeroPriorityOnce(expression) {
     
     console.log("isZero{riorityOnce elements: ", elements);
     for (var i = 0; i < elements.length; i++) {
-        console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
+        // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
         if (isInDic(elements[i], "zeroPriority")) {
             zeroPriorityCnt += 1;
             singleStartIdx = expression.indexOf(elements[i]);
