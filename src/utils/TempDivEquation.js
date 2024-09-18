@@ -218,7 +218,7 @@ const readFuncNames = {
 //#endregion
 
 //#region EQUATIONS
-var equation = "\\left( x > 1 \\right )"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
+// var equation = "\\left( x > 1 \\right )"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
 
 // var equation = "\\frac{b}{a} + \\sqrt{2}";
@@ -262,6 +262,7 @@ var equation = "\\left( x > 1 \\right )"        // 이거 안됨 -> 부등호의
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\}";
 // var equation = "\\left| x + \\left| y + 1\\right| \\right|";
 // var equation = "x_{12}^{y+1}";
+var equation = "\\sqrt{2}";
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
