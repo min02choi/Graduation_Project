@@ -1430,13 +1430,36 @@ export function convert2Text(expression){
     }
 
     // 합
-    let convertedTEXT = "";
+    let tempConvTEXT = "";
     res.forEach(function(element){
-        convertedTEXT += element;
+        tempConvTEXT += element;
     })
+    const convertedTEXT = replaceAsterisks(tempConvTEXT);
     console.log("결과: ", convertedTEXT);
 
-    return convertedTEXT;
+    return convertedTEXT
+}
+
+/* 조사 위치 찾아 은/는 삽입하는 함수 */
+function hasLastConsonantLetter(text) {
+  const lastChar = text.trim().charAt(text.length - 1);
+  if (/[가-힣]/.test(lastChar)) {
+    return (lastChar.charCodeAt(0) - "가".charCodeAt(0)) % 28 !== 0;
+  }
+  return false;
+}
+
+function replaceAsterisks(sentence) {
+    let modSentence = sentence;
+
+    // '*'를 찾아가며 처리
+    while (modSentence.includes('*')) {
+        const asteriskIdx = modSentence.indexOf('*');
+        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
+        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "은" : "는";
+        modSentence = modSentence.replace('*', particle);
+    }
+    return modSentence;
 }
 
 function splitExpression(expression, command) {

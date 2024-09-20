@@ -221,7 +221,7 @@ const readFuncNames = {
 
 //#region EQUATIONS
 // var equation = "\\left(x>1\\right)"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
-// let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
+let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
 
 // var equation = "\\frac{b}{a} + \\sqrt{2}";
 // var equation = "2\\times2 + 4xy - \\sqrt{4 + \\sqrt{x+2}} + \\frac{-b \\pm \\sqrt{b^{2+a} -4ac}}{2a}"
@@ -269,7 +269,7 @@ const readFuncNames = {
 // var equation = "\\begin{matrix}\\n a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
 // var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 // var equation = "\\begin{pmatrix}1 & 2\\\\3 & 4 \\\\\\end{pmatrix}";
-var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
+// var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -1616,14 +1616,38 @@ function convert2Text(expression){
     }
 
     // 합
-    let convertedTEXT = "";
+    let tempConvTEXT = "";
     res.forEach(function(element){
-        convertedTEXT += element;
+        tempConvTEXT += element;
     })
+    const convertedTEXT = replaceAsterisks(tempConvTEXT);
     console.log("결과: ", convertedTEXT);
 
-    return convertedTEXT;
+    return convertedTEXT
 }
+
+/* 조사 위치 찾아 은/는 삽입하는 함수 */
+function hasLastConsonantLetter(text) {
+  const lastChar = text.trim().charAt(text.length - 1);
+  if (/[가-힣]/.test(lastChar)) {
+    return (lastChar.charCodeAt(0) - "가".charCodeAt(0)) % 28 !== 0;
+  }
+  return false;
+}
+
+function replaceAsterisks(sentence) {
+    let modSentence = sentence;
+
+    // '*'를 찾아가며 처리
+    while (modSentence.includes('*')) {
+        const asteriskIdx = modSentence.indexOf('*');
+        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
+        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "은" : "는";
+        modSentence = modSentence.replace('*', particle);
+    }
+    return modSentence;
+}
+
 
 function splitExpression(expression, command) {
     var idx = 0
