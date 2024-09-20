@@ -1,4 +1,5 @@
 import {MatrixPopUp} from "./MatrixPopUpButton";
+import React from 'react';
 
 function FormulaButton({input, handleInputUpdate, inputOp, imgUrl, curPos}) {
     const imgSrc = `https://latex.codecogs.com/png.latex?${imgUrl}`;

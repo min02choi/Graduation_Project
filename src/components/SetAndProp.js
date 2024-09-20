@@ -1,4 +1,5 @@
 import FormulaButton from "../components/FormulaButton";
+import React from 'react';
 
 function SetAndProp({input, handleInputUpdate}) {
     

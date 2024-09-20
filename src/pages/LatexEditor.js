@@ -4,13 +4,15 @@ import Standard from "../components/Standard";
 import Cases from "../components/Cases";
 import SetAndProp from "../components/SetAndProp";
 import Matrix from "../components/Matrix";
-
+import React from 'react';
+import AWS from 'aws-sdk';
 
 function LatexEditor() {
     const [input, setInput] = useState('');
     const [opCategory, setOpCategory] = useState('Standard');
     const [convertedText, setConvertedText] = useState([]);
     const [isInputChanged, setIsInputChanged] = useState(false);
+    const [speed, setSpeed] = useState(1);
     // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
     const inputRef = useRef(null); // input 요소에 대한 ref
     const [cursor, setCursor] = useState(0);
@@ -96,14 +98,38 @@ function LatexEditor() {
     };
 
     // TTS API 호출 함수
-    const speak = (text) => {
-        console.log("text", text);
-        const lang = "ko-KR";
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang;
-        utterance.rate = 0.5;
-        window.speechSynthesis.speak(utterance);
+    const polly = new AWS.Polly({
+        region: 'us-west-2',
+        accessKeyId: 'AKIA2ZIOMY34JXAFQL5M',
+        secretAccessKey: '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'
+    });
+
+    const speak = (text, rate = 1.0) => {
+        const params = {
+          OutputFormat: 'mp3',
+          Text: text,
+          VoiceId: 'Seoyeon', // 원하는 한국어 음성
+          LanguageCode: 'ko-KR',
+          TextType: 'text',
+        };
+      
+        polly.synthesizeSpeech(params, (err, data) => {
+            if (err) {
+                console.error(err);
+            } else {
+                const audio = new Audio(URL.createObjectURL(new Blob([data.AudioStream])));
+                audio.playbackRate = rate; // playbackRate로 속도 조절
+                audio.play();
+            }
+        });
     };
+
+    // 배속값 업데이트
+    const handleSpeedChange = (event) => {
+        const newSpeed = parseFloat(event.target.value);
+        setSpeed(newSpeed);
+    };
+
 
     return (
         <div className="latex-editor">
@@ -153,9 +179,20 @@ function LatexEditor() {
                     {convertedText.map((text, index) => (
                         <div className="speak-button-container">
                             <span key={index}>{text}</span>
-                            <button className="speak-button" onClick={() => speak(text)}>
+                            <button className="speak-button" onClick={() => speak(text, speed)}>
                                 <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
                             </button>
+                            <label htmlFor="speedSlider">배속: {speed}x</label>
+                            <input
+                                type="range"
+                                id="speedSlider"
+                                min="0.5"
+                                max="2.0"
+                                step="0.1"
+                                value={speed}
+                                onChange={handleSpeedChange}
+                            />
+
                         </div>
                         
                     ))}

@@ -1,5 +1,6 @@
 import FormulaButton from "../components/FormulaButton";
 import {useState} from "react";
+import React from 'react';
 
 function Standard({input, handleInputUpdate}) {
 

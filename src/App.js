@@ -1,6 +1,7 @@
 import './App.css';
 import './pages/LatexEditor';
 import LatexEditor from './pages/LatexEditor';
+import React from 'react';
 
 function App() {
 
