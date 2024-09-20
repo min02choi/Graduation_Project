@@ -325,13 +325,50 @@ export function convert2Text(expression){
     }
 
     // 합
-    let convertedTEXT = "";
+    let tempConvTEXT = "";
     res.forEach(function(element){
-        convertedTEXT += element;
+        tempConvTEXT += element;
     })
-    console.log("결과: ", convertedTEXT);
+    const convertedTEXT = replaceAsterisks(tempConvTEXT);
+    const convertedTEXT2 = replaceAsterisks2(convertedTEXT);
+    console.log("결과: ", convertedTEXT2);
 
-    return convertedTEXT;
+    return convertedTEXT2;
+}
+
+/* 조사 위치 찾아 은/는 삽입하는 함수 */
+function hasLastConsonantLetter(text) {
+    const lastChar = text.trim().charAt(text.length - 1);
+    if (/[가-힣]/.test(lastChar)) {
+      return (lastChar.charCodeAt(0) - "가".charCodeAt(0)) % 28 !== 0;
+    }
+    return false;
+  }
+  
+function replaceAsterisks(sentence) {
+    let modSentence = sentence;
+
+    // '*'를 찾아가며 처리
+    while (modSentence.includes('*')) {
+        const asteriskIdx = modSentence.indexOf('*');
+        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
+        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "은" : "는";
+        modSentence = modSentence.replace('*', particle);
+    }
+    return modSentence;
+}
+
+function replaceAsterisks2(sentence) {
+    let modSentence = sentence;
+
+    // '#'를 찾아가며 처리
+    while (modSentence.includes('#')) {
+        const asteriskIdx = modSentence.indexOf('#');
+        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
+        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "이" : "가";
+        modSentence = modSentence.replace('#', particle);
+    }
+    return modSentence;
 }
 
 export function splitExpression(expression, command) {

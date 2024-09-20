@@ -113,7 +113,7 @@ export function readLim(formula){
         text += convertElement(element, command);
     })
 
-    text += "가 ";
+    text += "# ";
 
     splitExp = splitExpression(end, command);
     splitExp.forEach(function(element){
@@ -148,7 +148,7 @@ export function readDot(formula){
         } 
     }
     res = text + ", " + text;
-    res += "(이)가 반복되는 무한소수 ";
+    res += "# 반복되는 무한소수 ";
 
     return res;
 }
@@ -171,7 +171,7 @@ export function readUnder(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "가 크다 부등식 끝 ";
+    text += "# 크다 부등식 끝 ";
 
     return text;
 }
@@ -191,7 +191,7 @@ export function readAbove(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "가 작다. ";
+    text += "# 작다. ";
 
     return text;
 }
@@ -211,7 +211,7 @@ export function readLe(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "가 크거나 같다. ";
+    text += "# 크거나 같다. ";
 
 
     return text;
@@ -232,7 +232,7 @@ export function readGe(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "가 작거나 같다. ";
+    text += "# 작거나 같다. ";
 
     return text;
 }
@@ -309,7 +309,7 @@ export function readIn(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -334,7 +334,7 @@ export function readNi(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "가 포함된다. ";
+    text += "# 포함된다. ";
 
     return text;
 }
@@ -348,7 +348,7 @@ export function readNotIn(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -368,7 +368,7 @@ export function readNotNi(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 원소 ";
+    text += "# 원소 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -389,7 +389,7 @@ export function readSubset(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -409,7 +409,7 @@ export function readSupset(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -449,7 +449,7 @@ export function readSupseteq(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -489,7 +489,7 @@ export function readNotSupset(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 집합 ";
+    text += "# 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -512,7 +512,7 @@ export function readRightArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -533,7 +533,7 @@ export function readLeftArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -554,7 +554,7 @@ export function readLeftRightArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "가 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
