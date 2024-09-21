@@ -190,13 +190,6 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\angle'}
                     curPos={6}
                 />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'x^\\circ'} 
-                    imgUrl={'x^\\circ'}
-                    curPos={1}
-                />
             </span>
             <span className="formula-buttons-container">
                 <FormulaButton
