@@ -4,10 +4,10 @@
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
 // const Data = require("./Data.js")
-import { Data } from "./Data";
+import { Data } from "./FullData";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
 import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
-import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./Utils";
+import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./FullUtils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
 

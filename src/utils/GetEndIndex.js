@@ -1,4 +1,4 @@
-import { Data } from "./Data";
+import { Data } from "./FullData";
 //#region GET_END_IDX_FUNCS
 export function getFracEndIndex(expression, idx) {
     let stack = [];

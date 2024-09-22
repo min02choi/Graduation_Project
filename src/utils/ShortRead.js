@@ -1,5 +1,5 @@
-import { splitExpression, convertElement } from "./FullDivEquation";
-import { Data } from "./Data";
+import { splitExpression, convertElement } from "./ShortDivEquation";
+import { Data } from "./ShortData";
 
 //#region READ_FUNCS
 /** 분수 **/

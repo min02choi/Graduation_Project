@@ -1,4 +1,4 @@
-import {Data} from "./Data";
+import {Data} from "./ShortData";
 
 const { numToKorean, FormatOptions } = require('num-to-korean');
 //#region SUB_FUNC
