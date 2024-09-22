@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import {convert2Text} from "../utils/DivEquation";
+import {FullDivEquation} from "../utils/FullDivEquation";
+import {ShortDivEquation} from "../utils/ShortDivEquation";
 import Standard from "../components/Standard";
 import Cases from "../components/Cases";
 import SetAndProp from "../components/SetAndProp";
@@ -10,7 +11,8 @@ import AWS from 'aws-sdk';
 function LatexEditor() {
     const [input, setInput] = useState('');
     const [opCategory, setOpCategory] = useState('Standard');
-    const [convertedText, setConvertedText] = useState([]);
+    const [convertedFullText, setConvertedFullText] = useState([]);
+    const [convertedShortText, setConvertedShortText] = useState([]);
     const [isInputChanged, setIsInputChanged] = useState(false);
     const [speed, setSpeed] = useState(1);
     // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
@@ -42,7 +44,8 @@ function LatexEditor() {
     useEffect(() => {
         // input이 변경되었을 때만 변환 텍스트 초기화
         if (isInputChanged) {
-            setConvertedText([]);  // input이 변경되면 변환 텍스트 초기화
+            setConvertedFullText([]);  // input이 변경되면 변환 텍스트 초기화
+            setConvertedShortText([]);
         }
     }, [isInputChanged]);
 
@@ -55,10 +58,11 @@ function LatexEditor() {
     const handleConvertBtn = () => {
         const expression = input; // 변환할 수식을 여기에 입력하세요
         console.log('LatexEditor expression', expression);
-        setConvertedText([convert2Text(expression)]);
+        setConvertedFullText([FullDivEquation(expression)]);
+        setConvertedShortText([ShortDivEquation(expression)]);
         setIsInputChanged(false);
 
-        console.log(convertedText);
+        console.log(convertedFullText);
     };
 
     // input이 변경되었을 때 호출되는 함수 -> input이 변경되면 한글 변환부분을 없애기 위함
@@ -174,9 +178,35 @@ function LatexEditor() {
             {/* LaTeX 수식 렌더링 결과 */}
             <div id="latex-output"></div>
             {/* 변환 후 한국말 결과 */}
+            {/* full 버전 */}
             <div className="converted-kor-container">
                 <ul className="converted-kor">
-                    {convertedText.map((text, index) => (
+                    {convertedFullText.map((text, index) => (
+                        <div className="speak-button-container">
+                            <span key={index}>{text}</span>
+                            <button className="speak-button" onClick={() => speak(text, speed)}>
+                                <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
+                            </button>
+                            <label htmlFor="speedSlider">배속: {speed}x</label>
+                            <input
+                                type="range"
+                                id="speedSlider"
+                                min="0.5"
+                                max="2.0"
+                                step="0.1"
+                                value={speed}
+                                onChange={handleSpeedChange}
+                            />
+
+                        </div>
+                        
+                    ))}
+                </ul>
+            </div>
+            {/* 간략 버전 */}
+            <div className="converted-kor-container">
+                <ul className="converted-kor">
+                    {convertedShortText.map((text, index) => (
                         <div className="speak-button-container">
                             <span key={index}>{text}</span>
                             <button className="speak-button" onClick={() => speak(text, speed)}>

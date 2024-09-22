@@ -62,6 +62,7 @@ export const Data = {
 
         "\\prime": "프라임 ",
         ":": "대 ",
+        ",": "콤마 ",
     },
 
     number: {

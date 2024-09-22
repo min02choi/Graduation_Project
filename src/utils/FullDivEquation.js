@@ -6,7 +6,8 @@
 // const Data = require("./Data.js")
 import { Data } from "./Data";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
-import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./Read";
+import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
+import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./Utils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
 
@@ -128,160 +129,11 @@ var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 //////////////////////////////////////////////
 //#endregion
 
-//#region SUB_FUNC
-// 현재 위치가 어떤 연산자인지 반환해주는 함수
-// 딕셔너리에 있는 모든 연산자에 대해 확인하고, op와 idx를 반환
-// opName, isOp, opLength
-function checkOperation(expression, idx) {
-    const resultDict = {}
-    console.log("checkOperation: ", expression);
 
-    // 정해진 연산자에 대해서 돌리기
-    for (let key in Data.firstPriority) {
-        console.log("key: ", key);
-        const endIdx = idx + key.length;
-        const subExpr = expression.substring(idx, endIdx);
-        // console.log(subExpr);
-        // console.log(key);
-        if (subExpr === key) {
-            resultDict['opName'] = key;
-            resultDict['opEngName'] = "";
-            resultDict['isOp'] = 1;
-            resultDict['opLength'] = key.length;
-            break;
-        }
-    }
-
-    for (let key in Data.math_expression) {
-        const endIdx = idx + key.length;
-        const subExpr = expression.substring(idx, endIdx);
-        console.log(subExpr);
-        console.log(key);
-        if (subExpr === key) {
-            resultDict['opName'] = key; 
-            resultDict['opEngName'] = Data.math_expression[key][1];
-            resultDict['isOp'] = 0;
-            resultDict['opLength'] = key.length;
-            break;
-        }
-    }
-
-    // 쌍은 별도로 처리
-    console.log(resultDict.opName);
-    if (resultDict.opName === "\\left") {
-        resultDict['opName'] = "\\left";
-        resultDict['isOp'] = 0;
-        resultDict['opLength'] = "\\left".length;
-    }
-    console.log("checkOperation: ", resultDict);
-    return resultDict;
-}
-
-function isInDic(expression, keyName) {
-    console.log("isInDic: ", expression, keyName);
-    if (Data[keyName] && Data[keyName][expression]) {
-        return true;
-    } else {
-        return false;
-    }
-}
-// 부등호, 집합 기호가 "한 개" 있는지 확인 -> " "기준으로 쪼개서 zeroPriority 찾기
-function isZeroPriorityOnce(expression) {
-    var zeroPriorityCnt = 0;
-    const splitSpace = expression.split(" ");
-    var elements = [];
-    var singleStartIdx = 0;
-    var singleEndIdx = 0;
-    console.log("isZeroPriorityOnce", expression);
-    
-    splitSpace.forEach(function(el) {
-        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
-        // console.log("isZeroPriority ele: ", el);
-        if (tempEx !== null) {
-            tempEx.forEach(function(i) {
-                elements.push(i);
-            });
-        }
-    });
-    
-    console.log("isZero{riorityOnce elements: ", elements);
-    for (var i = 0; i < elements.length; i++) {
-        // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
-        if (isInDic(elements[i], "zeroPriority")) {
-            zeroPriorityCnt += 1;
-            singleStartIdx = expression.indexOf(elements[i]);
-            singleEndIdx = singleStartIdx + elements[i].length;
-            console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
-        }
-    }
-    const returnDic = {
-        "zeroPriorityCnt": zeroPriorityCnt,
-        "singleStartIdx": singleStartIdx,
-        "singleEndIdx": singleEndIdx,
-    }
-    console.log(`returnDic :: zeroPri ${returnDic["zeroPriorityCnt"]}, singleStartIdx: ${returnDic["singleStartIdx"]}, singleEndIdx: ${returnDic["singleEndIdx"]}`);
-    return returnDic;
-}
-
-/* 순수 문자열 분해 함수 */
-// 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
-// ex) 2ac, xy
-function splitString(str){
-    var strArr = [];
-    var num = "";
-
-    Array.from(str).forEach(function(char) {
-        if (char in Data.number){
-            num += char
-        }
-        else if (char in Data.word) {
-            strArr.push(num);
-            strArr.push(char);
-            num = "";
-        }
-    });
-
-    if (num !== "") {
-        strArr.push(num);
-    }
-    
-    return strArr;
-}
-
-/* 분해 가능 유무  */
-// 두자리 이상의 수는 Atom 취급
-function isAtom(char){
-    if(char in Data.firstPriority || char in Data.number || char in Data.word || isNumber(char)){
-        return true;
-    }
-    return false;
-}
-
-/* 숫자로만 이루어져있는지 판단 */
-function isNumber(char) {
-    for (var i = 0; i < char.length; i++) {
-        if (char[i] < '0' || char[i] > '9') return 0
-    }
-    return 1
-}
-
-/* 텍스트 매치 함수 */
-function matchText(char){
-    if(char in Data.firstPriority) return Data.firstPriority[char];
-    if(char in Data.word) return Data.word[char];
-    // if(char in Data.number) return Data.number[char];
-    const num = numToKorean(parseInt(char), FormatOptions.LINGUAL);
-    console.log("- 숫자로의 변환: ", num);
-    // if (isNumber(char)) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
-    // num-to-korean API 0 처리를 못하네...?
-    if (isNumber(char) && parseInt(char) !== 0) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
-    else if (parseInt(char) === 0) return "영 ";
-}
-//#endregion
 
 //#region MAIN_FUNC
 /* 텍스트 변환 함수 */
-export function convert2Text(expression){
+export function FullDivEquation(expression){
     let res = [];
     var commandArr = [];
 
@@ -336,40 +188,7 @@ export function convert2Text(expression){
     return convertedTEXT2;
 }
 
-/* 조사 위치 찾아 은/는 삽입하는 함수 */
-function hasLastConsonantLetter(text) {
-    const lastChar = text.trim().charAt(text.length - 1);
-    if (/[가-힣]/.test(lastChar)) {
-      return (lastChar.charCodeAt(0) - "가".charCodeAt(0)) % 28 !== 0;
-    }
-    return false;
-  }
-  
-function replaceAsterisks(sentence) {
-    let modSentence = sentence;
 
-    // '*'를 찾아가며 처리
-    while (modSentence.includes('*')) {
-        const asteriskIdx = modSentence.indexOf('*');
-        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
-        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "은" : "는";
-        modSentence = modSentence.replace('*', particle);
-    }
-    return modSentence;
-}
-
-function replaceAsterisks2(sentence) {
-    let modSentence = sentence;
-
-    // '#'를 찾아가며 처리
-    while (modSentence.includes('#')) {
-        const asteriskIdx = modSentence.indexOf('#');
-        const textBeforeAsterisk = modSentence.slice(0, asteriskIdx).trim();
-        const particle = hasLastConsonantLetter(textBeforeAsterisk) ? "이" : "가";
-        modSentence = modSentence.replace('#', particle);
-    }
-    return modSentence;
-}
 
 export function splitExpression(expression, command) {
     var idx = 0
@@ -489,7 +308,7 @@ export function convertElement(element, command){
 //#endregion
 
 //#region TEST
-// convert2Text(equation);
+// FullDivEquation(equation);
 
 // const number = numToKorean(0);
 // console.log(number);

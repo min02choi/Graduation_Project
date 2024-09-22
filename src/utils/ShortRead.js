@@ -1,4 +1,4 @@
-import { splitExpression, convertElement } from "./DivEquation";
+import { splitExpression, convertElement } from "./FullDivEquation";
 import { Data } from "./Data";
 
 //#region READ_FUNCS
@@ -51,7 +51,7 @@ export function readFrac(formula){
 export function readSqrt(formula){   
     console.log("readSqrt: ", formula); 
     var command = [];
-    var text = "루트시작 ";
+    var text = "루트 ";
     var stack = [];
     let exponent = 0;
     let idx = 0;
@@ -81,19 +81,18 @@ export function readSqrt(formula){
         
        // console.log("제곱근 ", inside);
         text += "제곱근 ";
-        text += "루트끝 ";
 
     }
 
     else{
         var insideofSqrt = formula.slice(6, -1); // 루트 안의 값
         var splitExp = splitExpression(insideofSqrt, command);
-        var text = "루트시작 ";
+        var text = "루트 ";
 
         splitExp.forEach(function(element){
             text += convertElement(element, command);
         })
-        text += "루트끝 ";
+        // text += "루트끝 ";
     } 
 
     return text;
@@ -171,7 +170,7 @@ export function readUnder(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "# 크다 부등식 끝 ";
+    text += "# 크다 ";
 
     return text;
 }
@@ -243,12 +242,11 @@ export function readSin(formula){
     var command = [];
     var insideofSqrt = formula.slice(5, -1);  
     var splitExp = splitExpression(insideofSqrt, command);
-    var text = "싸인시작 ";
+    var text = "싸인 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "싸인끝 ";
 
     return text;
 }
@@ -258,12 +256,11 @@ export function readCos(formula){
     var command = [];
     var insideofSqrt = formula.slice(5, -1);  
     var splitExp = splitExpression(insideofSqrt, command);
-    var text = "코싸인시작 ";
+    var text = "코싸인 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "코싸인끝 ";
 
     return text;
 }
@@ -273,12 +270,11 @@ export function readTan(formula){
     var command = [];
     var insideofSqrt = formula.slice(5, -1);  
     var splitExp = splitExpression(insideofSqrt, command);
-    var text = "탄젠트시작 ";
+    var text = "탄젠트 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "탄젠트끝 ";
 
     return text;
 }
@@ -303,13 +299,13 @@ export function readSuperScript(formula){
 export function readIn(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "원소 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -322,13 +318,13 @@ export function readIn(formulaList) {
 export function readNi(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "에 원소 ";
+    text += "에 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -342,13 +338,13 @@ export function readNi(formulaList) {
 export function readNotIn(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "원소 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -362,13 +358,13 @@ export function readNotIn(formulaList) {
 export function readNotNi(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 원소 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -383,13 +379,13 @@ export function readNotNi(formulaList) {
 export function readSubset(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -403,13 +399,13 @@ export function readSubset(formulaList) {
 export function readSupset(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -423,13 +419,13 @@ export function readSupset(formulaList) {
 export function readSubseteq(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "의 모든 요소가 집합 ";
+    text += "의 모든 요소가 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -443,13 +439,13 @@ export function readSubseteq(formulaList) {
 export function readSupseteq(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -463,13 +459,13 @@ export function readSupseteq(formulaList) {
 export function readNotSubset(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "의 모든 요소가 집합 ";
+    text += "의 모든 요소가 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -483,13 +479,13 @@ export function readNotSubset(formulaList) {
 export function readNotSupset(formulaList) {
     var frontCommand = []
     var backCommand = []
-    let text = "집합 ";
+    let text = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# 집합 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -512,13 +508,12 @@ export function readRightArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# ";
     
+    text += " 필요 조건 ";
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 필요 조건 ";
 
     return text;
 }
@@ -533,13 +528,12 @@ export function readLeftArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# ";
+    text += " 충분 조건 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 충분 조건 ";
 
     return text;
 }
@@ -554,13 +548,12 @@ export function readLeftRightArrow(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "# ";
+    text += " 필요충분 조건 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 필요충분 조건 ";
 
     return text;
 }
