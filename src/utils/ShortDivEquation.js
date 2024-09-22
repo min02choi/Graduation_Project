@@ -7,7 +7,7 @@
 import { Data } from "./Data";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
 import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./ShortRead";
-import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./Utils";
+import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2, replaceAsterisks3} from "./Utils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
 
@@ -183,9 +183,10 @@ export function ShortDivEquation(expression){
     })
     const convertedTEXT = replaceAsterisks(tempConvTEXT);
     const convertedTEXT2 = replaceAsterisks2(convertedTEXT);
-    console.log("결과: ", convertedTEXT2);
+    const convertedTEXT3 = replaceAsterisks2(convertedTEXT2);
+    console.log("결과: ", convertedTEXT3);
 
-    return convertedTEXT2;
+    return convertedTEXT3;
 }
 
 

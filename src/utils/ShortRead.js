@@ -411,7 +411,7 @@ export function readSupset(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "를 포함한다. ";
+    text += "& 포함한다. ";
 
     return text;
 }
