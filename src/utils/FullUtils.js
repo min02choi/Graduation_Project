@@ -78,7 +78,7 @@ export function isZeroPriorityOnce(expression) {
         }
     });
     
-    console.log("isZeroPriorityOnce elements: ", elements);
+    console.log("isZero{riorityOnce elements: ", elements);
     for (var i = 0; i < elements.length; i++) {
         // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
         if (isInDic(elements[i], "zeroPriority")) {
