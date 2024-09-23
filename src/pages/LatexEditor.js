@@ -69,8 +69,8 @@ function LatexEditor() {
 
         var splitFullText = ft.split(" ");
         var splitShortText = st.split(" ");
-        var ft_SSML = "<speak>" + splitFullText.join(" <break time='100ms'/> ") + "</speak>";
-        var st_SSML = "<speak>" + splitShortText.join(" <break time='100ms'/> ") + "</speak>";
+        var ft_SSML = "<speak>" + splitFullText.join(" <break time='200ms'/> ") + "</speak>";
+        var st_SSML = "<speak>" + splitShortText.join(" <break time='200ms'/> ") + "</speak>";
 
         // 상태 업데이트
         setFullText_SSML(ft_SSML);
@@ -131,8 +131,8 @@ function LatexEditor() {
     // TTS API 호출 함수
     const polly = new AWS.Polly({
         region: 'ap-northeast-2',
-        accessKeyId: 'key',
-        secretAccessKey: 'key'
+        accessKeyId: 'AKIA2ZIOMY34JXAFQL5M',
+        secretAccessKey: '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'
     });
 
     const speak = (text, rate = 1.0) => {
@@ -141,7 +141,8 @@ function LatexEditor() {
           Text: text,
           VoiceId: 'Seoyeon', // 원하는 한국어 음성
           LanguageCode: 'ko-KR',
-          TextType: 'ssml'
+          TextType: 'ssml',
+          Engine: 'neural'
         };
       
         polly.synthesizeSpeech(params, (err, data) => {

@@ -149,7 +149,9 @@ export function matchText(char){
     // if (isNumber(char)) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
     // num-to-korean API 0 처리를 못하네...?
     if (isNumber(char) && parseInt(char) !== 0) return numToKorean(parseInt(char), FormatOptions.LINGUAL) + " ";
-    else if (parseInt(char) === 0) return "영 ";
+    else if (parseInt(char) === 0) return "영 "; 
+    // if (isNumber(char) && parseInt(char) !== 0) return char + " ";
+    // else if (parseInt(char) === 0) return "영 ";
 }
 
 /* 조사 위치 찾아 은/는 삽입하는 함수 */

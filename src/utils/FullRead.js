@@ -518,7 +518,7 @@ export function readRightArrow(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 필요 조건 ";
+    text += "의 필요조건 ";
 
     return text;
 }
@@ -539,7 +539,7 @@ export function readLeftArrow(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 충분 조건 ";
+    text += "의 충분조건 ";
 
     return text;
 }
@@ -758,7 +758,7 @@ export function readMatrix(formula){
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    let text = row + "행" + col +"열 행렬시작 ";
+    let text = "행렬" + row + "행" + col +"열 시작 ";
     // let text = matchText(row) + "행 " + matchText(col) +"열 행렬시작 ";
 
     /* 원소 추출 후 convert */

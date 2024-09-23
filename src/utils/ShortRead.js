@@ -22,7 +22,7 @@ export function readFrac(formula){
         }
     } 
 
-    let text = "분수시작 ";
+    let text = "분수 ";
 
     let splitExp = splitExpression(denominator, command);
     splitExp.forEach(function(element){
@@ -92,7 +92,7 @@ export function readSqrt(formula){
         splitExp.forEach(function(element){
             text += convertElement(element, command);
         })
-        // text += "루트끝 ";
+        text += "루트끝 ";
     } 
 
     return text;
@@ -159,7 +159,7 @@ export function readUnder(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "부등식시작 ";
+    let text = "부등식 ";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -179,7 +179,7 @@ export function readAbove(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "부등식시작";
+    let text = "부등식";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -199,7 +199,7 @@ export function readLe(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "부등식시작";
+    let text = "부등식";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -220,7 +220,7 @@ export function readGe(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "부등식시작";
+    let text = "부등식";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -285,7 +285,7 @@ export function readSuperScript(formula){
     var command = [];
     var insideofSuperScript = formula.slice(3, -1);  
     var splitExp = splitExpression(insideofSuperScript, command);
-    var text = "위첨자시작 ";
+    var text = "위첨자 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
@@ -749,7 +749,7 @@ export function readMatrix(formula){
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    let text = row + "행" + col +"열 행렬시작 ";
+    let text = "행렬" + row + "행" + col +"열 행렬 ";
 
     /* 원소 추출 후 convert */
     let elements = insideofScript.split(/&|\\\\/);
@@ -760,7 +760,7 @@ export function readMatrix(formula){
     let rowCnt = 1;
     for(const element of elements){
         if(cnt++ % col == 0) {
-            text += (rowCnt + "행시작 ");
+            text += (rowCnt + "행 ");
             rowCnt++;
         }
 
