@@ -220,7 +220,8 @@ const readFuncNames = {
 //#endregion
 
 //#region EQUATIONS
-// var equation = "\\left(x>1\\right)"        // 이거 안됨 -> 부등호의 자르는 이슈떄문에 그런듯
+// var equation = "\\left(x>1>0\\right)"        // [가능] 부등호가 하나일 때 자연스러운 독음 포기, 부등호의 자르는 이슈떄문에 그런듯
+// var equation = "\\left(\\left(x>0\\right)\\right)"
 // let equation = "x=\\frac{-b \\pm \\sqrt{b^2 -14ac}}{2a}" // -> [가능] 이 수식에서 b^2 부분을 b^{2}로 변형하면 됨(LaTex 형태 문제)
 
 // var equation = "\\frac{b}{a} + \\sqrt{2}";
@@ -269,7 +270,7 @@ const readFuncNames = {
 // var equation = "\\begin{matrix}\\n a_{11}& \\sqrt{5}+2& \\sim p\\\\ x_{12}^{y+1}& 1\\div x+22 & \\frac{k}{x-2} \\\\ \\end{matrix}";
 // var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 // var equation = "\\begin{pmatrix}1 & 2\\\\3 & 4 \\\\\\end{pmatrix}";
-var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
+// var equation = "\\begin{bmatrix} a& 2& 3\\\\ xy&  x+22 & 0 \\\\ \\end{bmatrix}"; // \\begin{bmatrix}\n a& 2& 3\\\\ \n xy&  x+22 & 0 \\\\ \n \\end{bmatrix} ** \n 이 있어야됨
 //////////////////////////////////////////////
 //////////////////////////////////////////////
 //#endregion
@@ -341,7 +342,8 @@ function isZeroPriorityOnce(expression) {
     console.log("isZeroPriorityOnce", expression);
     
     splitSpace.forEach(function(el) {
-        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        // var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]/g);
         // console.log("isZeroPriority ele: ", el);
         if (tempEx !== null) {
             tempEx.forEach(function(i) {
