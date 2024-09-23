@@ -1,6 +1,5 @@
 import { splitExpression, convertElement } from "./FullDivEquation";
 import { Data } from "./FullData";
-import { matchText } from "./FullUtils";
 
 //#region READ_FUNCS
 /** 분수 **/
@@ -181,7 +180,7 @@ export function readAbove(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "";
+    let text = "부등식시작";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -201,7 +200,7 @@ export function readLe(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "";
+    let text = "부등식시작";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -222,7 +221,7 @@ export function readGe(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "";
+    let text = "부등식시작";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);

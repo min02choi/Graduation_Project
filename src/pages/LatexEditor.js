@@ -131,8 +131,8 @@ function LatexEditor() {
     // TTS API 호출 함수
     const polly = new AWS.Polly({
         region: 'ap-northeast-2',
-        accessKeyId: 'AKIA2ZIOMY34JXAFQL5M',
-        secretAccessKey: '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'
+        accessKeyId: 'key',
+        secretAccessKey: 'key'
     });
 
     const speak = (text, rate = 1.0) => {
