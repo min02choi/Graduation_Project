@@ -749,7 +749,7 @@ export function readMatrix(formula){
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    let text = row + "행 " + col +"열 행렬 ";
+    let text = row + "행" + col +"열 행렬시작 ";
 
     /* 원소 추출 후 convert */
     let elements = insideofScript.split(/&|\\\\/);
@@ -760,7 +760,7 @@ export function readMatrix(formula){
     let rowCnt = 1;
     for(const element of elements){
         if(cnt++ % col == 0) {
-            text += (rowCnt + "행 시작 ");
+            text += (rowCnt + "행시작 ");
             rowCnt++;
         }
 
@@ -771,7 +771,7 @@ export function readMatrix(formula){
         })
     }
     
-    text += "행렬 끝 ";
+    text += "행렬끝 ";
 
     return text;
 }
