@@ -115,8 +115,8 @@ function SetAndProp({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\nLeftarrow'} 
-                    imgUrl={'\\nLeftarrow'}
+                    inputOp={'\\Leftarrow'} 
+                    imgUrl={'\\Leftarrow'}
                     curPos={11}
                 />
                 <FormulaButton

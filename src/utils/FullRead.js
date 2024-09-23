@@ -1,5 +1,6 @@
 import { splitExpression, convertElement } from "./FullDivEquation";
 import { Data } from "./FullData";
+import { matchText } from "./FullUtils";
 
 //#region READ_FUNCS
 /** 분수 **/
@@ -29,7 +30,7 @@ export function readFrac(formula){
         text += convertElement(element, command);
     })
 
-    text += "분모 끝 분의 분자 시작 ";
+    text += "분모끝 분자시작 ";
     splitExp = splitExpression(numerator, command);
     splitExp.forEach(function(element){
         text += convertElement(element, command);
@@ -160,7 +161,7 @@ export function readUnder(formulaList) {
     var frontCommand = []
     var backCommand = []
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    let text = "부등식 시작 ";
+    let text = "부등식시작 ";
     
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
@@ -211,7 +212,7 @@ export function readLe(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "# 크거나 같다. ";
+    text += "# 크거나같다. ";
 
 
     return text;
@@ -232,7 +233,7 @@ export function readGe(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "# 작거나 같다. ";
+    text += "# 작거나같다. ";
 
     return text;
 }
@@ -429,13 +430,13 @@ export function readSubseteq(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "의 모든 요소가 집합 ";
+    text += "의 모든요소가 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "에 포함되거나 같다. ";
+    text += "에 포함되거나같다. ";
 
     return text;
 }
@@ -455,7 +456,7 @@ export function readSupseteq(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 모든 요소를 포함하거나 같다. ";
+    text += "의 모든요소를 포함하거나같다. ";
 
     return text;
 }
@@ -469,7 +470,7 @@ export function readNotSubset(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "의 모든 요소가 집합 ";
+    text += "의 모든요소가 집합 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -495,7 +496,7 @@ export function readNotSupset(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 모든 원소를 포함하지 않는다. ";
+    text += "의 모든원소를 포함하지 않는다. ";
 
     return text;
 }
@@ -583,13 +584,13 @@ export function readOverline(formula){
         }
     } 
 
-    let text = "선분 시작 ";
+    let text = "선분시작 ";
     console.log("선분 안: ", insideofOverline);
     let splitExp = splitExpression(insideofOverline, command);
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += " 선분 끝";
+    text += "선분끝 ";
 
     return text; 
 }
@@ -598,7 +599,7 @@ export function readOverline(formula){
 export function readOverRightArrow(formula){
     console.log("read 반직선: ", formula); 
     var command = []; 
-    let text = "반직선 시작 ";
+    let text = "반직선시작 ";
     let stack = []; 
     let inside;
 
@@ -620,7 +621,7 @@ export function readOverRightArrow(formula){
         text += convertElement(element, command);
         
     });
-    text += " 반직선 끝";
+    text += "반직선끝 ";
  
 
     return text; 
@@ -630,7 +631,7 @@ export function readOverRightArrow(formula){
 export function overLeftRightArrow(formula){
     console.log("read 직선: ", formula); 
     var command = []; 
-    let text = "직선 시작 ";
+    let text = "직선시작 ";
     let stack = []; 
     let inside;
 
@@ -652,7 +653,7 @@ export function overLeftRightArrow(formula){
         text += convertElement(element, command);
         
     });
-    text += " 직선 끝";
+    text += "직선끝 ";
  
 
     return text; 
@@ -720,12 +721,12 @@ export function readSuperscript(formula) {
     var command = [];
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
-    var text = "의 제곱 시작 ";
+    var text = "의 제곱시작 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "제곱 끝 ";
+    text += "제곱끝 ";
 
     return text;
 }
@@ -734,12 +735,12 @@ export function readSubscript(formula) {
     var command = [];
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
-    var text = "의 아래첨자 시작 ";
+    var text = "의 아래첨자시작 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "아래첨자 끝 ";
+    text += "아래첨자끝 ";
 
     return text;
 }
@@ -758,7 +759,8 @@ export function readMatrix(formula){
     const row = insideofScript.split('\\\\').length -1;
     const col = ((insideofScript.split('&').length - 1) + row) / row;
 
-    let text = row + "행 " + col +"열 행렬 ";
+    let text = row + "행" + col +"열 행렬시작 ";
+    // let text = matchText(row) + "행 " + matchText(col) +"열 행렬시작 ";
 
     /* 원소 추출 후 convert */
     let elements = insideofScript.split(/&|\\\\/);
@@ -769,7 +771,7 @@ export function readMatrix(formula){
     let rowCnt = 1;
     for(const element of elements){
         if(cnt++ % col == 0) {
-            text += (rowCnt + "행 시작 ");
+            text += (rowCnt + "행시작 ");
             rowCnt++;
         }
 
@@ -780,7 +782,7 @@ export function readMatrix(formula){
         })
     }
     
-    text += "행렬 끝 ";
+    text += "행렬끝 ";
 
     return text;
 }

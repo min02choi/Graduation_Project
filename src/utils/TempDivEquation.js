@@ -253,7 +253,7 @@ const readFuncNames = {
 
 /////////////////////////
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
-// var equation = "A\\Longleftrightarrow B";
+var equation = "A\\Longleftrightarrow B";
 // var equation = "A\\le B";
 ////05.23 보고용 예시////
 // var equation = "1\\div x+22 + \\overline{341}"
@@ -342,8 +342,8 @@ function isZeroPriorityOnce(expression) {
     console.log("isZeroPriorityOnce", expression);
     
     splitSpace.forEach(function(el) {
-        // var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
-        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]/g);
+        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        // var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+\\[a-zA-Z]+|\\[a-zA-Z]/g);
         // console.log("isZeroPriority ele: ", el);
         if (tempEx !== null) {
             tempEx.forEach(function(i) {

@@ -15,6 +15,8 @@ function LatexEditor() {
     const [convertedShortText, setConvertedShortText] = useState([]);
     const [isInputChanged, setIsInputChanged] = useState(false);
     const [speed, setSpeed] = useState(1);
+    const [fullText_SSML, setFullText_SSML] = useState("");
+    const [shortText_SSML, setShortText_SSML] = useState("");
     // 커서 위치 조정 -> hope: 입력해야되는 첫 번째 부분에 커서 놓기
     const inputRef = useRef(null); // input 요소에 대한 ref
     const [cursor, setCursor] = useState(0);
@@ -59,16 +61,36 @@ function LatexEditor() {
         const expression = input; // 변환할 수식을 여기에 입력하세요
         console.log('LatexEditor expression', expression);
         // SSML 구조로 바꾸기 -> 띄어쓰기 기준으로 읽어주는 속도를 조절하여 더 잘 들리기 위함.
-        setConvertedFullText([FullDivEquation(expression)]);
-        setConvertedShortText([ShortDivEquation(expression)]);
-        // var splitFullText = FullDivEquation(expression).split(" ");
-        // var ft_SSML = "<speak>" + splitFullText.join(" <break time='300ms'/> ") + "</speak>";
-        // setConvertedFullText(FullDivEquation(expression));
-        // setFullText_SSML(ft_SSML);
-        // console.log("react상 변환 후: ", fullText_SSML);
+        const ft = FullDivEquation(expression);
+        const st = ShortDivEquation(expression);
+
+        setConvertedFullText([ft]);
+        setConvertedShortText([st]);
+
+        var splitFullText = ft.split(" ");
+        var splitShortText = st.split(" ");
+        var ft_SSML = "<speak>" + splitFullText.join(" <break time='100ms'/> ") + "</speak>";
+        var st_SSML = "<speak>" + splitShortText.join(" <break time='100ms'/> ") + "</speak>";
+
+        // 상태 업데이트
+        setFullText_SSML(ft_SSML);
+        setShortText_SSML(st_SSML);
+        
+        // ft_SSML을 직접 로그에 출력
+        console.log("react상 변환 후: ", ft_SSML);
         setIsInputChanged(false);
 
     };
+
+    // fullText_SSML이 변경되었을 때 실행될 후속 작업
+    useEffect(() => {
+        
+    }, [fullText_SSML]); // fullText_SSML이 변경될 때마다 실행됨
+
+    // shortText_SSML이 변경되었을 때 실행될 후속 작업
+    useEffect(() => {
+        
+    }, [shortText_SSML]); // shortText_SSML이 변경될 때마다 실행됨
 
     // input이 변경되었을 때 호출되는 함수 -> input이 변경되면 한글 변환부분을 없애기 위함
     const handleInputChange = (e) => {
@@ -109,8 +131,8 @@ function LatexEditor() {
     // TTS API 호출 함수
     const polly = new AWS.Polly({
         region: 'ap-northeast-2',
-        accessKeyId: 'key',
-        secretAccessKey: 'key'
+        accessKeyId: 'AKIA2ZIOMY34JXAFQL5M',
+        secretAccessKey: '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'
     });
 
     const speak = (text, rate = 1.0) => {
@@ -190,7 +212,7 @@ function LatexEditor() {
                         <div className="speak-button-container">
                             <span key={index}>{text}</span>
                             {/* <span >{convertedFullText}</span> */}
-                            <button className="speak-button" onClick={() => speak(text, speed)}>
+                            <button className="speak-button" onClick={() => speak(fullText_SSML, speed)}>
                                 <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
                             </button>
                             <label htmlFor="speedSlider">배속: {speed}x</label>
@@ -215,7 +237,7 @@ function LatexEditor() {
                     {convertedShortText.map((text, index) => (
                         <div className="speak-button-container">
                             <span key={index}>{text}</span>
-                            <button className="speak-button" onClick={() => speak(text, speed)}>
+                            <button className="speak-button" onClick={() => speak(shortText_SSML, speed)}>
                                 <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
                             </button>
                             <label htmlFor="speedSlider">배속: {speed}x</label>
