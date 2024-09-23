@@ -58,11 +58,16 @@ function LatexEditor() {
     const handleConvertBtn = () => {
         const expression = input; // 변환할 수식을 여기에 입력하세요
         console.log('LatexEditor expression', expression);
+        // SSML 구조로 바꾸기 -> 띄어쓰기 기준으로 읽어주는 속도를 조절하여 더 잘 들리기 위함.
         setConvertedFullText([FullDivEquation(expression)]);
         setConvertedShortText([ShortDivEquation(expression)]);
+        // var splitFullText = FullDivEquation(expression).split(" ");
+        // var ft_SSML = "<speak>" + splitFullText.join(" <break time='300ms'/> ") + "</speak>";
+        // setConvertedFullText(FullDivEquation(expression));
+        // setFullText_SSML(ft_SSML);
+        // console.log("react상 변환 후: ", fullText_SSML);
         setIsInputChanged(false);
 
-        console.log(convertedFullText);
     };
 
     // input이 변경되었을 때 호출되는 함수 -> input이 변경되면 한글 변환부분을 없애기 위함
@@ -103,7 +108,7 @@ function LatexEditor() {
 
     // TTS API 호출 함수
     const polly = new AWS.Polly({
-        region: 'us-west-2',
+        region: 'ap-northeast-2',
         accessKeyId: 'key',
         secretAccessKey: 'key'
     });
@@ -114,7 +119,7 @@ function LatexEditor() {
           Text: text,
           VoiceId: 'Seoyeon', // 원하는 한국어 음성
           LanguageCode: 'ko-KR',
-          TextType: 'text',
+          TextType: 'ssml'
         };
       
         polly.synthesizeSpeech(params, (err, data) => {
@@ -184,6 +189,7 @@ function LatexEditor() {
                     {convertedFullText.map((text, index) => (
                         <div className="speak-button-container">
                             <span key={index}>{text}</span>
+                            {/* <span >{convertedFullText}</span> */}
                             <button className="speak-button" onClick={() => speak(text, speed)}>
                                 <img alt="a" src="https://banner2.cleanpng.com/20180702/sop/kisspng-sound-icon-acoustic-wave-5b3a33b2e1d025.2913981015305409789249.jpg" width="40" height="30"/>
                             </button>
