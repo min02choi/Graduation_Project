@@ -254,7 +254,7 @@ const readFuncNames = {
 /////////////////////////
 // var equation = "\\left\\{x\\times\\left\\{ y-1\\right\\} \\right\\} + \\left [ 123 - 4 \\right ]";
 // var equation = "A\\Longleftrightarrow B";
-var equation = "f\left(x \right) < 2";
+var equation = "f\\left(x \\right) \\ge 2";
 // var equation = "A\\le B";
 ////05.23 보고용 예시////
 // var equation = "1\\div x+22 + \\overline{341}"
@@ -354,15 +354,26 @@ function isZeroPriorityOnce(expression) {
     });
     
     console.log("isZero{riorityOnce elements: ", elements);
+    var getCur = 0
     for (var i = 0; i < elements.length; i++) {
         // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
+        // if (isInDic(elements[i], "zeroPriority")) {
+        //     zeroPriorityCnt += 1;
+        //     singleStartIdx = expression.indexOf(elements[i]);
+        //     singleEndIdx = singleStartIdx + elements[i].length;
+        //     console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
+        // }
+        ///////////////////////////////
+        getCur += elements[i].length;
+        console.log("getCur: ", getCur);
         if (isInDic(elements[i], "zeroPriority")) {
             zeroPriorityCnt += 1;
-            singleStartIdx = expression.indexOf(elements[i]);
+            singleStartIdx = getCur - elements[i].length;
             singleEndIdx = singleStartIdx + elements[i].length;
             console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
         }
     }
+
     const returnDic = {
         "zeroPriorityCnt": zeroPriorityCnt,
         "singleStartIdx": singleStartIdx,
@@ -967,6 +978,7 @@ function readLe(formulaList) {
 
     return text;
 }
+
 // <=
 function readGe(formulaList) {
     var frontCommand = []
@@ -1591,12 +1603,12 @@ function convert2Text(expression){
         // 부등호, 집합 기호 등 우선순위 0순위 연산자가 있는 경우
         console.log("0순위 연산기호로 쪼개기")
         
-        var frontZeroPriority = expression.slice(0, returnDic["singleStartIdx"]);
-        var backZeroPriority = expression.slice(returnDic["singleEndIdx"]);
+        var frontZeroPriority = newEquation.slice(0, returnDic["singleStartIdx"]);
+        var backZeroPriority = newEquation.slice(returnDic["singleEndIdx"]);
         console.log("frontZeroPriority: ", frontZeroPriority);
         console.log("backZeroPriority: ", backZeroPriority);
         initExp.push(frontZeroPriority);
-        commandArr.push(expression.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
+        commandArr.push(newEquation.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
         initExp.push(backZeroPriority);
         res.push(convertElement(initExp, commandArr)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }

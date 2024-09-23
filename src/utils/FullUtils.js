@@ -79,11 +79,14 @@ export function isZeroPriorityOnce(expression) {
     });
     
     console.log("isZero{riorityOnce elements: ", elements);
+    var getCur = 0
     for (var i = 0; i < elements.length; i++) {
-        // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i]));
+        // console.log(elements[i], " isInDic(elements[i] ", isInDic(elements[i], "zeroPriority"));
+        getCur += elements[i].length;
+        console.log("getCur: ", getCur);
         if (isInDic(elements[i], "zeroPriority")) {
             zeroPriorityCnt += 1;
-            singleStartIdx = expression.indexOf(elements[i]);
+            singleStartIdx = getCur - elements[i].length;
             singleEndIdx = singleStartIdx + elements[i].length;
             console.log(`Value: ${elements[i]}, Index: ${singleStartIdx}, expression[index]: ${expression.slice(singleStartIdx,singleEndIdx)}`);
         }

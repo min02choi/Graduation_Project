@@ -149,12 +149,12 @@ export function FullDivEquation(expression){
         // 부등호, 집합 기호 등 우선순위 0순위 연산자가 있는 경우
         console.log("0순위 연산기호로 쪼개기")
         
-        var frontZeroPriority = expression.slice(0, returnDic["singleStartIdx"]);
-        var backZeroPriority = expression.slice(returnDic["singleEndIdx"]);
+        var frontZeroPriority = newEquation.slice(0, returnDic["singleStartIdx"]);
+        var backZeroPriority = newEquation.slice(returnDic["singleEndIdx"]);
         console.log("frontZeroPriority: ", frontZeroPriority);
         console.log("backZeroPriority: ", backZeroPriority);
         initExp.push(frontZeroPriority);
-        commandArr.push(expression.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
+        commandArr.push(newEquation.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
         initExp.push(backZeroPriority);
         res.push(convertElement(initExp, commandArr)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }
