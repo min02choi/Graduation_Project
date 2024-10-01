@@ -712,13 +712,26 @@ export function readSuperscript(formula) {
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
-
+    var txt_element = "";
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        txt_element += convertElement(element, command);
     })
-    text += "제곱끝 ";
+    text += txt_element + "제곱끝 ";
+    
+    if(isUnary(splitExp)){
+        text = "의 " +  txt_element + "제곱 ";
+    }
+
 
     return text;
+}
+
+function isUnary(expression) { 
+    expression.forEach(function(element){
+        if(!(element in Data.word) || !(element in Data.number)) return false;
+    })
+    
+    return true;
 }
 
 export function readSubscript(formula) {
