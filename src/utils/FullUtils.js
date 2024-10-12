@@ -134,12 +134,28 @@ export function isAtom(char){
     return false;
 }
 
+/* 단인수단항 확인 */
+export function isUnion(char) {
+    // 첫 번째 경우: 입력이 숫자인 경우 -> 여러 자릿수도 허용
+    if (isNumber(char)) {
+        return true;
+    }
+
+    // 두 번째 경우: 단일 문자가 Data에 있는 경우
+    if (char.length === 1 && (char in Data.word)) {
+        return true;
+    }
+
+    // 그 외의 경우: 두 문자 이상이거나 여러 문자 조합 -> false
+    return false;
+}
+
 /* 숫자로만 이루어져있는지 판단 */
 function isNumber(char) {
     for (var i = 0; i < char.length; i++) {
-        if (char[i] < '0' || char[i] > '9') return 0
+        if (char[i] < '0' || char[i] > '9') return false;
     }
-    return 1
+    return true;
 }
 
 /* 텍스트 매치 함수 */

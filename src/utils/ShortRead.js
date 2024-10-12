@@ -1,5 +1,6 @@
 import { splitExpression, convertElement } from "./ShortDivEquation";
 import { Data } from "./ShortData";
+import {isUnion} from "./ShortUtils";
 
 //#region READ_FUNCS
 /** 분수 **/
@@ -713,12 +714,18 @@ export function readSuperscript(formula) {
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
     var txt_element = "";
+    var isUnionVar = true;
     splitExp.forEach(function(element){
         txt_element += convertElement(element, command);
+        // 단 한개라도 union에 해당 안되면(여기에 넣는 이유는 연산자가 포함되지 않아도 ac, 3ac는 단인수단항이 아니기 때문에 또, splitExp[0]으로 판단하기에는 a+c와 같은 경우도 있기 때문에
+        // 하나하나 판단을 해야됨
+        if (!isUnion(element)) {
+            isUnionVar = false;
+        }
     })
     text += txt_element + "제곱끝 ";
     
-    if(isUnary(splitExp)){
+    if(isUnionVar){
         text = "의 " +  txt_element + "제곱 ";
     }
 
