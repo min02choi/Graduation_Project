@@ -136,7 +136,7 @@ var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 export function FullDivEquation(expression){
     let res = [];
     var commandArr = [];
-    var isSingleFactorExp = false;
+    var isSingleFactorExp = isSingleFactor(expression);
 
     // 괄호, 공백 전처리
     let newEquation = expression.replace(/\s/g, "");
@@ -160,7 +160,6 @@ export function FullDivEquation(expression){
         res.push(convertElement(initExp, commandArr, isSingleFactorExp)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }
     else {
-        isSingleFactorExp = isSingleFactor(expression);
         console.log("FullDivEquation isSingleFac:", isSingleFactorExp);
         initExp = splitExpression(newEquation, commandArr);
         console.log("DivEquation initExp: ", initExp);
@@ -301,7 +300,7 @@ export function convertElement(element, command, isSingleFactorExp){
         var res = "";
 
         str.forEach(function(char){
-            res += convertElement(char, isSingleFactorExp);
+            res += convertElement(char);
         })
 
         return res;
