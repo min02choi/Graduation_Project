@@ -1,12 +1,15 @@
 import { splitExpression, convertElement } from "./FullDivEquation";
 import { Data } from "./FullData";
-import { isAtom, isUnion } from "./FullUtils";
+import { isAtom, isUnary } from "./FullUtils";
 
 //#region READ_FUNCS
 /** 분수 **/
-export function readFrac(formula){
+export function readFrac(formula, isSingleFactorExp){
     var command = [];
-    console.log(formula);
+    var denomText = ""; // 분모
+    var numerText = ""; // 분자
+    var isUnaryVar = false;
+    console.log("readFrac, isSingleFactorExp", isSingleFactorExp);
 
     // 분모, 분자 찾기
     let stack = []; 
@@ -27,16 +30,28 @@ export function readFrac(formula){
 
     let splitExp = splitExpression(denominator, command);
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        denomText = convertElement(element, command, isSingleFactorExp);
+        // 단항 파악하기
+        if (!isUnary(element)) {
+            isUnaryVar = false;
+        }
+        
     })
-
+    text += denomText;
     text += "분모끝 분자시작 ";
     splitExp = splitExpression(numerator, command);
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        numerText = convertElement(element, command, isSingleFactorExp);
+        // 단항 파악하기
+        if (!isUnary(element)) {
+            isUnaryVar = false;
+        }
     })
-
+    text += numerText;
     text += "분수끝 ";
+    if (isSingleFactorExp && isUnaryVar) {
+        text = denomText + " 분의 " + numerText;
+    }
 
     return text;
 
@@ -723,21 +738,21 @@ export function readSuperscript(formula) {
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
     var txt_element = "";
-    var isUnionVar = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
+    var isUnaryVar = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
     console.log("splitExp: ", splitExp);
 
     splitExp.forEach(function(element){
         txt_element += convertElement(element, command);
         // 단 한개라도 union에 해당 안되면(여기에 넣는 이유는 연산자가 포함되지 않아도 ac, 3ac는 단인수단항이 아니기 때문에 또, splitExp[0]으로 판단하기에는 a+c와 같은 경우도 있기 때문에
         // 하나하나 판단을 해야됨
-        if (!isUnion(element)) {
-            isUnionVar = false;
+        if (!isUnary(element)) {
+            isUnaryVar = false;
         }
     })
     text += txt_element + "제곱끝 ";
-    console.log("isUnion(splitExp): ", isUnion(splitExp));
+    console.log("isUnary(splitExp): ", isUnary(splitExp));
 
-    if(isUnionVar){
+    if(isUnaryVar){
         text = "의 " +  txt_element + "제곱 ";
     }
 

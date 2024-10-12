@@ -63,7 +63,7 @@ function LatexEditor() {
         // SSML 구조로 바꾸기 -> 띄어쓰기 기준으로 읽어주는 속도를 조절하여 더 잘 들리기 위함.
         const ft = FullDivEquation(expression);
         const st = ShortDivEquation(expression);
-
+        console.log(ft);
         setConvertedFullText([ft]);
         setConvertedShortText([st]);
 
@@ -131,8 +131,8 @@ function LatexEditor() {
     // TTS API 호출 함수
     const polly = new AWS.Polly({
         region: 'ap-northeast-2',
-        accessKeyId: 'AKIA2ZIOMY34JXAFQL5M',
-        secretAccessKey: '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'
+        accessKeyId: '',
+        secretAccessKey: ''
     });
 
     const speak = (text, rate = 1.0) => {

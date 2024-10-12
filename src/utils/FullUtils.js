@@ -100,6 +100,55 @@ export function isZeroPriorityOnce(expression) {
     return returnDic;
 }
 
+// 단인수 판단하기
+export function isSingleFactor(expression) {
+    const splitSpace = expression.split(" ");
+    var returnTF = true;
+    
+    splitSpace.forEach(function(el) {
+        var tempEx = el.match(/[a-zA-Z]+|[0-9]+|\\[a-zA-Z]+_{|\\[a-zA-Z]+\{|\\[a-zA-Z]+|\^\{|\\_{|[^\sA-Za-z0-9]/g);
+        console.log(tempEx);
+        
+        if (tempEx !== null) {
+            for (let i = 0; i < tempEx.length; i++) {
+                var element = tempEx[i];
+                console.log("element: ", element);
+                // { }, (), [], ||를 포함한 연산자의 경우
+                if (element === "{" || element === "(" || element === "[" || element === "|" || element.endsWith('{')) {
+                    let innerBracesCount = 1; // '{'의 개수를 세기 위한 변수
+
+                    while (innerBracesCount > 0 && i < tempEx.length) {
+                        i++; // 다음 요소로 이동
+                        if (i >= tempEx.length) break; // 배열 범위를 넘어가는 것을 방지
+                        element = tempEx[i]; // 다음 요소 가져오기
+                        console.log("element: ", element);
+                        
+                        if (element === "{" || element === "(" || element === "[" || element === "|") {
+                            innerBracesCount++; // '{'를 발견하면 증가
+                        } else if (element === "}" || element === ")" || element === "]" || element === "|") {
+                            innerBracesCount--; // '}'를 발견하면 감소
+                        }
+                    }
+                    
+                    // 이 부분에서는 i를 조정하지 않으므로 outer loop에서 잘 작동함
+                    continue; // 현재 반복을 종료하고 다음 요소로 넘어갑니다.
+                } 
+                if (element in Data.firstPriority) {
+                    returnTF = false;
+                }
+            }
+        }
+    });
+    console.log("returnTF: ", returnTF);
+    if (returnTF) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}
+
 /* 순수 문자열 분해 함수 */
 // 여기를 고쳐야 함 - 숫자가 붙어있는 경우는 숫자 한꺼번에 자르기
 // ex) 2ac, xy
@@ -135,7 +184,7 @@ export function isAtom(char){
 }
 
 /* 단인수단항 확인 */
-export function isUnion(char) {
+export function isUnary(char) {
     // 첫 번째 경우: 입력이 숫자인 경우 -> 여러 자릿수도 허용
     if (isNumber(char)) {
         return true;

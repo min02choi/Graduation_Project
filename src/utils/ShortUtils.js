@@ -135,7 +135,7 @@ export function isAtom(char){
 }
 
 /* 단인수단항 확인 */
-export function isUnion(char) {
+export function isUnary(char) {
     // 첫 번째 경우: 입력이 숫자인 경우 -> 여러 자릿수도 허용
     if (isNumber(char)) {
         return true;

@@ -7,7 +7,7 @@
 import { Data } from "./FullData";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
 import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
-import {checkOperation, isInDic, isZeroPriorityOnce, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./FullUtils";
+import {checkOperation, isInDic, isZeroPriorityOnce, isSingleFactor, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./FullUtils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
 
@@ -136,6 +136,7 @@ var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 export function FullDivEquation(expression){
     let res = [];
     var commandArr = [];
+    var isSingleFactorExp = false;
 
     // 괄호, 공백 전처리
     let newEquation = expression.replace(/\s/g, "");
@@ -156,9 +157,11 @@ export function FullDivEquation(expression){
         initExp.push(frontZeroPriority);
         commandArr.push(newEquation.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
         initExp.push(backZeroPriority);
-        res.push(convertElement(initExp, commandArr)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
+        res.push(convertElement(initExp, commandArr, isSingleFactorExp)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }
     else {
+        isSingleFactorExp = isSingleFactor(expression);
+        console.log("FullDivEquation isSingleFac:", isSingleFactorExp);
         initExp = splitExpression(newEquation, commandArr);
         console.log("DivEquation initExp: ", initExp);
         console.log("수식: ", expression);
@@ -168,7 +171,7 @@ export function FullDivEquation(expression){
     
         // 텍스트로 변환
         initExp.forEach(function(element){
-            res.push(convertElement(element, commandArr));
+            res.push(convertElement(element, commandArr, isSingleFactorExp));
         })
     
         console.log("수식: ", expression);
@@ -261,7 +264,7 @@ export function splitExpression(expression, command) {
 
 /* Element 텍스트 변환 함수 */
 // 이쪽은 숫자가 붙어서 들어와야 함
-export function convertElement(element, command){
+export function convertElement(element, command, isSingleFactorExp){
     // 더이상 분해 안되는 원소인 경우
     // 0순위 우선순위 명령어인 경우 -> 이미 쪼개져서 들어옴
     if (typeof command !== 'undefined' && isInDic(command[0], "zeroPriority")) {
@@ -271,7 +274,7 @@ export function convertElement(element, command){
     
         if(command[0] in readFuncNames) {
             command.shift();
-            return readFuncName(element);
+            return readFuncName(element, isSingleFactorExp);
         }
         else return "No Function Exists.";
     }
@@ -287,7 +290,7 @@ export function convertElement(element, command){
 
         if(command[0] in readFuncNames) {
             command.shift();
-            return readFuncName(element);
+            return readFuncName(element, isSingleFactorExp);
         }
         else return "No Function Exists.";
     }
@@ -298,7 +301,7 @@ export function convertElement(element, command){
         var res = "";
 
         str.forEach(function(char){
-            res += convertElement(char);
+            res += convertElement(char, isSingleFactorExp);
         })
 
         return res;
