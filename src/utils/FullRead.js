@@ -8,8 +8,7 @@ export function readFrac(formula, isSingleFactorExp){
     var command = [];
     var denomText = ""; // 분모
     var numerText = ""; // 분자
-    var isUnaryVar = false;
-    console.log("readFrac, isSingleFactorExp", isSingleFactorExp);
+    var isUnaryVar = true; // 단항 체크
 
     // 분모, 분자 찾기
     let stack = []; 
@@ -20,7 +19,7 @@ export function readFrac(formula, isSingleFactorExp){
             stack.pop();
             if(stack.length == 0) {
                 numerator = formula.slice(6, i);          //분자
-                denominator = formula.slice(i+1, -1);     //분모
+                denominator = formula.slice(i+2, -1);     //분모
                 break;
             }
         }
@@ -30,18 +29,19 @@ export function readFrac(formula, isSingleFactorExp){
 
     let splitExp = splitExpression(denominator, command);
     splitExp.forEach(function(element){
-        denomText = convertElement(element, command, isSingleFactorExp);
+        denomText += convertElement(element, command, isSingleFactorExp);
         // 단항 파악하기
+        console.log("isUnary(element): ", isUnary(element), element);
         if (!isUnary(element)) {
             isUnaryVar = false;
         }
         
     })
     text += denomText;
-    text += "분모끝 분자시작 ";
+    text += " 분모끝 분자시작 ";
     splitExp = splitExpression(numerator, command);
     splitExp.forEach(function(element){
-        numerText = convertElement(element, command, isSingleFactorExp);
+        numerText += convertElement(element, command, isSingleFactorExp);
         // 단항 파악하기
         if (!isUnary(element)) {
             isUnaryVar = false;
@@ -49,6 +49,7 @@ export function readFrac(formula, isSingleFactorExp){
     })
     text += numerText;
     text += "분수끝 ";
+    console.log("readFrac, isSingleFactorExp, isUnaryVar", isSingleFactorExp, isUnaryVar);
     if (isSingleFactorExp && isUnaryVar) {
         text = denomText + " 분의 " + numerText;
     }
@@ -64,13 +65,16 @@ export function readFrac(formula, isSingleFactorExp){
 }
 
 /** 루트 **/
-export function readSqrt(formula){   
+export function readSqrt(formula, isSingleFactorExp){   
     console.log("readSqrt: ", formula); 
     var command = [];
     var text = "루트시작 ";
+    var innerText1 = ""; // 각괄호 안에 값
+    var innerText2 = ""; // 중괄호 안에 값
     var stack = [];
     let exponent = 0;
     let idx = 0;
+    var isUnaryVar = true;
 
     if(formula[5] == '['){
         for(let i =5; i<formula.length; i++){
@@ -84,20 +88,30 @@ export function readSqrt(formula){
         let inside = formula.slice(idx+2, -1);
         var splitExp = splitExpression(inside, command);
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText1 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
-
+        text += innerText1;
         text += "의 ";
         
        // console.log("지수", exponent);
         var splitExp = splitExpression(exponent, command);
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText2 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
         
-       // console.log("제곱근 ", inside);
+        text += innerText2;
         text += "제곱근 ";
         text += "루트끝 ";
+
+        if (isSingleFactorExp && isUnaryVar) {
+            text = innerText1 + " 제곱근 " + innerText2;
+        }
 
     }
 
@@ -107,10 +121,20 @@ export function readSqrt(formula){
         var text = "루트시작 ";
 
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText2 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
+        text += innerText2;
         text += "루트끝 ";
+
+        if (isSingleFactorExp && isUnaryVar) {
+            text = "루트 " + innerText2;
+        }
     } 
+
+    
 
     return text;
 }
@@ -732,7 +756,7 @@ export function readLeft(formula){
     return text;
 }
 
-export function readSuperscript(formula) {
+export function readSuperscript(formula, isSingleFactorExp) {
     var command = [];
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
@@ -760,17 +784,26 @@ export function readSuperscript(formula) {
 }
 
 
-export function readSubscript(formula) {
+export function readSubscript(formula, isSingleFactorExp) {
     var command = [];
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 아래첨자시작 ";
+    var isUnaryVar = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
+    var innerText = "";
 
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        innerText += convertElement(element, command);
+        if (!isUnary(element)) {
+            isUnaryVar = false;
+        }
     })
+    text += innerText;
     text += "아래첨자끝 ";
 
+    if (isSingleFactorExp && isUnaryVar) {
+        text = " 아래첨자 " + innerText;
+    }
     return text;
 }
 

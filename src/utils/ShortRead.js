@@ -4,9 +4,11 @@ import {isUnary} from "./ShortUtils";
 
 //#region READ_FUNCS
 /** 분수 **/
-export function readFrac(formula){
+export function readFrac(formula, isSingleFactorExp){
     var command = [];
-    console.log(formula);
+    var denomText = ""; // 분모
+    var numerText = ""; // 분자
+    var isUnaryVar = true; // 단항 체크
 
     // 분모, 분자 찾기
     let stack = []; 
@@ -17,7 +19,7 @@ export function readFrac(formula){
             stack.pop();
             if(stack.length == 0) {
                 numerator = formula.slice(6, i);          //분자
-                denominator = formula.slice(i+1, -1);     //분모
+                denominator = formula.slice(i+2, -1);     //분모
                 break;
             }
         }
@@ -27,16 +29,30 @@ export function readFrac(formula){
 
     let splitExp = splitExpression(denominator, command);
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        denomText += convertElement(element, command, isSingleFactorExp);
+        // 단항 파악하기
+        console.log("isUnary(element): ", isUnary(element), element);
+        if (!isUnary(element)) {
+            isUnaryVar = false;
+        }
+        
     })
-
-    text += "분의 ";
+    text += denomText;
+    text += " 분의 ";
     splitExp = splitExpression(numerator, command);
     splitExp.forEach(function(element){
-        text += convertElement(element, command);
+        numerText += convertElement(element, command, isSingleFactorExp);
+        // 단항 파악하기
+        if (!isUnary(element)) {
+            isUnaryVar = false;
+        }
     })
-
+    text += numerText;
     text += "분수끝 ";
+    console.log("readFrac, isSingleFactorExp, isUnaryVar", isSingleFactorExp, isUnaryVar);
+    if (isSingleFactorExp && isUnaryVar) {
+        text = denomText + " 분의 " + numerText;
+    }
 
     return text;
 
@@ -49,13 +65,16 @@ export function readFrac(formula){
 }
 
 /** 루트 **/
-export function readSqrt(formula){   
+export function readSqrt(formula, isSingleFactorExp){   
     console.log("readSqrt: ", formula); 
     var command = [];
-    var text = "루트 ";
+    var text = "루트시작 ";
+    var innerText1 = ""; // 각괄호 안에 값
+    var innerText2 = ""; // 중괄호 안에 값
     var stack = [];
     let exponent = 0;
     let idx = 0;
+    var isUnaryVar = true;
 
     if(formula[5] == '['){
         for(let i =5; i<formula.length; i++){
@@ -69,32 +88,53 @@ export function readSqrt(formula){
         let inside = formula.slice(idx+2, -1);
         var splitExp = splitExpression(inside, command);
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText1 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
-
+        text += innerText1;
         text += "의 ";
         
        // console.log("지수", exponent);
         var splitExp = splitExpression(exponent, command);
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText2 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
         
-       // console.log("제곱근 ", inside);
+        text += innerText2;
         text += "제곱근 ";
+        text += "루트끝 ";
+
+        if (isSingleFactorExp && isUnaryVar) {
+            text = innerText1 + " 제곱근 " + innerText2;
+        }
 
     }
 
     else{
         var insideofSqrt = formula.slice(6, -1); // 루트 안의 값
         var splitExp = splitExpression(insideofSqrt, command);
-        var text = "루트 ";
+        var text = "루트시작 ";
 
         splitExp.forEach(function(element){
-            text += convertElement(element, command);
+            innerText2 += convertElement(element, command);
+            if (!isUnary(element)) {
+                isUnaryVar = false;
+            }
         })
+        text += innerText2;
         text += "루트끝 ";
+
+        if (isSingleFactorExp && isUnaryVar) {
+            text = "루트 " + innerText2;
+        }
     } 
+
+    
 
     return text;
 }
