@@ -87,16 +87,16 @@ export function readSqrt(formula, isSingleFactorExp){
         } 
         let inside = formula.slice(idx+2, -1);
         var splitExp = splitExpression(inside, command);
+
+        // 중괄호 안의 수식 변환
         splitExp.forEach(function(element){
             innerText1 += convertElement(element, command);
             if (!isUnary(element)) {
                 isUnaryVar = false;
             }
         })
-        text += innerText1;
-        text += "의 ";
         
-       // console.log("지수", exponent);
+        // 대괄호 안의 수식 변환
         var splitExp = splitExpression(exponent, command);
         splitExp.forEach(function(element){
             innerText2 += convertElement(element, command);
@@ -107,10 +107,11 @@ export function readSqrt(formula, isSingleFactorExp){
         
         text += innerText2;
         text += "제곱근 ";
-        text += "루트끝 ";
+        text += innerText1;
+        text += "제곱근끝 ";
 
         if (isSingleFactorExp && isUnaryVar) {
-            text = innerText1 + " 제곱근 " + innerText2;
+            text = innerText2 + " 제곱근 " + innerText1;
         }
 
     }
@@ -118,7 +119,7 @@ export function readSqrt(formula, isSingleFactorExp){
     else{
         var insideofSqrt = formula.slice(6, -1); // 루트 안의 값
         var splitExp = splitExpression(insideofSqrt, command);
-        var text = "루트시작 ";
+        var text = "루트 ";
 
         splitExp.forEach(function(element){
             innerText2 += convertElement(element, command);
@@ -352,7 +353,7 @@ export function readIn(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "에 포함된다. ";
+    text += "에 속한다. ";
 
     return text;
 }
@@ -360,18 +361,22 @@ export function readNi(formulaList) {
     var frontCommand = []
     var backCommand = []
     let text = "";
+    var ele = ""
+    var set = ""
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
+        ele += convertElement(element, frontCommand);
     })
-    text += "에 ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "# 포함된다. ";
+    text += ele;
+    text += "# 집합 ";
+    text += set;
+    text += "에 속한다. ";
 
     return text;
 }
@@ -391,7 +396,7 @@ export function readNotIn(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "에 포함되지 않는다. ";
+    text += "에 속하지 않는다. ";
 
     return text;
 }
@@ -400,18 +405,22 @@ export function readNotNi(formulaList) {
     var frontCommand = []
     var backCommand = []
     let text = "";
+    var ele = "";
+    var set = ""
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
+        set += convertElement(element, frontCommand);
     })
-    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
-        text += convertElement(element, backCommand);
+        ele += convertElement(element, backCommand);
     })
-    text += "에 포함되지 않는다. ";
+    text += ele;
+    text += "# ";
+    text += set;
+    text += "에 속하지 않는다. ";
 
     return text;
 }
@@ -466,7 +475,7 @@ export function readNotSubset(formulaList) {
     frontSplitExp.forEach(function(element){
         text += convertElement(element, frontCommand);
     })
-    text += "의 모든요소가 ";
+    text += "# ";
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
@@ -492,7 +501,7 @@ export function readNotSupset(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "의 모든원소를 포함하지 않는다. ";
+    text += "의 포함하지 않는다. ";
 
     return text;
 }
@@ -588,11 +597,42 @@ export function readOverline(formula){
     return text; 
 }
 
-/** 반직선 **/
+/** 오른쪽 반직선 **/
 export function readOverRightArrow(formula){
     console.log("read 반직선: ", formula); 
     var command = []; 
-    let text = "반직선 ";
+    let text = "오른쪽 반직선 ";
+    let stack = []; 
+    let inside;
+
+    for (var i=formula.indexOf("{"); i < formula.length; i++) {
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                inside = formula.slice(formula.indexOf("{")+1, i);           
+                break;
+            }
+        }
+    } 
+ 
+    console.log("반직선 안: ", inside);
+
+    let splitExp = splitExpression(inside, command);
+    splitExp.forEach(function(element){ 
+        text += convertElement(element, command);
+        
+    })
+ 
+
+    return text; 
+}
+
+/** 왼쪽 반직선 **/
+export function readOverLeftArrow(formula){
+    console.log("read 반직선: ", formula); 
+    var command = []; 
+    let text = "왼쪽 반직선 ";
     let stack = []; 
     let inside;
 
@@ -698,12 +738,12 @@ export function readLeft(formula){
     // var pairName = Data.math_expression_pair[formula[5]][0];
     // console.log(pairName);
 
-    var text = pairName + "시작 ";
+    var text = pairName + " ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += pairName + "끝 ";
+    text += pairName + "닫고 ";
 
     return text;
 }
@@ -714,18 +754,18 @@ export function readSuperscript(formula) {
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
     var txt_element = "";
-    var isUnaryVar = true;
+    var isUnaryExp = true;
     splitExp.forEach(function(element){
         txt_element += convertElement(element, command);
         // 단 한개라도 union에 해당 안되면(여기에 넣는 이유는 연산자가 포함되지 않아도 ac, 3ac는 단인수단항이 아니기 때문에 또, splitExp[0]으로 판단하기에는 a+c와 같은 경우도 있기 때문에
         // 하나하나 판단을 해야됨
         if (!isUnary(element)) {
-            isUnaryVar = false;
+            isUnaryExp = false;
         }
     })
     text += txt_element + "제곱끝 ";
     
-    if(isUnaryVar){
+    if(isUnaryExp){
         text = "의 " +  txt_element + "제곱 ";
     }
 
@@ -733,16 +773,15 @@ export function readSuperscript(formula) {
     return text;
 }
 
-export function readSubscript(formula) {
+export function readSubscript(formula, isUnaryExp) {
     var command = [];
     var insideofScript = formula.slice(2, -1);
     var splitExp = splitExpression(insideofScript, command);
-    var text = "의 아래첨자시작 ";
+    var text = "아래첨자 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += "아래첨자끝 ";
 
     return text;
 }

@@ -364,12 +364,12 @@ export function readNi(formulaList) {
     var frontCommand = []
     var backCommand = []
     let text = "원소 ";
-    var element = "";
+    var ele = "";
     var set = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
-        element += convertElement(element, frontCommand);
+        ele += convertElement(element, frontCommand);
     })
     
     
@@ -377,7 +377,7 @@ export function readNi(formulaList) {
     backSplitExp.forEach(function(element) {
         set += convertElement(element, backCommand);
     })
-    text += element;
+    text += ele;
     text += "# 집합 ";
     text += set;
     text += "에 속한다. ";
@@ -410,7 +410,7 @@ export function readNotNi(formulaList) {
     var backCommand = []
     let text = "원소 ";
     var set = "";
-    var element = "";
+    var ele = "";
     var frontSplitExp = splitExpression(formulaList[0], frontCommand);
     
     frontSplitExp.forEach(function(element){
@@ -420,9 +420,9 @@ export function readNotNi(formulaList) {
     
     var backSplitExp = splitExpression(formulaList[1], backCommand); 
     backSplitExp.forEach(function(element) {
-        element += convertElement(element, backCommand);
+        ele += convertElement(element, backCommand);
     })
-    text += element;
+    text += ele;
     text += "# 집합 ";
     text += set;
     text += "에 속하지 않는다. ";
@@ -749,12 +749,12 @@ export function readLeft(formula){
     // var pairName = Data.math_expression_pair[formula[5]][0];
     // console.log(pairName);
 
-    var text = pairName + "시작 ";
+    var text = pairName + "열고 ";
 
     splitExp.forEach(function(element){
         text += convertElement(element, command);
     })
-    text += pairName + "끝 ";
+    text += pairName + "닫고 ";
 
     return text;
 }
@@ -765,7 +765,7 @@ export function readSuperscript(formula, isUnaryExp) {
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
     var txt_element = "";
-    var isSingleFactorVar = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
+    var isUnaryExp = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
     console.log("splitExp: ", splitExp);
 
     splitExp.forEach(function(element){
@@ -773,13 +773,13 @@ export function readSuperscript(formula, isUnaryExp) {
         // 단 한개라도 union에 해당 안되면(여기에 넣는 이유는 연산자가 포함되지 않아도 ac, 3ac는 단인수단항이 아니기 때문에 또, splitExp[0]으로 판단하기에는 a+c와 같은 경우도 있기 때문에
         // 하나하나 판단을 해야됨
         if (!isSingleFactor(element)) {
-            isSingleFactorVar = false;
+            isUnaryExp = false;
         }
     })
     text += txt_element + "제곱끝 ";
     console.log("isUnary(splitExp): ", isSingleFactor(splitExp));
 
-    if(isSingleFactorVar){
+    if(isUnaryExp){
         text = "의 " +  txt_element + "제곱 ";
     }
 

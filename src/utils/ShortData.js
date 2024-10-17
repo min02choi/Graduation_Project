@@ -147,7 +147,8 @@ export const Data = {
         "\\cos": ["코싸인", "sct", 2],
         "\\tan": ["탄젠트", "sct", 2],
         "\\overline": ["선분", "overline", 1], 
-        "\\overrightarrow": ["반직선", "overline", 1],
+        "\\overrightarrow": ["오른쪽 반직선", "overline", 1],
+        "\\overleftarrow": ["왼쪽 반직선", "overline", 1],
         "\\overleftrightarrow": ["직선", "overleftrightarrow", 1],
         "\\dot": ["무한소수", "dot", 2],
 
