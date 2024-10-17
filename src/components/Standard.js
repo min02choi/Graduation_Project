@@ -237,13 +237,13 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\overleftrightarrow{AB}'}
                     curPos={20}
                 />
-                <FormulaButton
+                {/* <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\overleftarrow{}'} 
                     imgUrl={'\\overleftarrow{AB}'}
                     curPos={16}
-                />
+                /> */}
             </span>
             
         </div>
