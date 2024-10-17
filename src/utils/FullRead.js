@@ -425,7 +425,7 @@ export function readNotNi(formulaList) {
     text += element;
     text += "# 집합 ";
     text += set;
-    text += "에 포함되지 않는다. ";
+    text += "에 속하지 않는다. ";
 
     return text;
 }
@@ -466,7 +466,7 @@ export function readSupset(formulaList) {
     backSplitExp.forEach(function(element) {
         text += convertElement(element, backCommand);
     })
-    text += "에 포함된다. ";
+    text += "& 포함한다 ";
 
     return text;
 }
@@ -513,7 +513,7 @@ export function readNotSupset(formulaList) {
 
 
 
-/** 필요 조건 **/
+/** 충분 조건 **/
 export function readRightArrow(formulaList) {
     var frontCommand = []
     var backCommand = []
@@ -534,7 +534,7 @@ export function readRightArrow(formulaList) {
     return text;
 }
 
-/** 충분 조건 **/
+/** 필요 조건 **/
 export function readLeftArrow(formulaList) {
     var frontCommand = []
     var backCommand = []
@@ -605,7 +605,7 @@ export function readOverline(formula){
     return text; 
 }
 
-/** 반직선 **/
+/** 오른쪽 반직선 **/
 export function readOverRightArrow(formula){
     console.log("read 반직선: ", formula); 
     var command = []; 
@@ -631,7 +631,39 @@ export function readOverRightArrow(formula){
         text += convertElement(element, command);
         
     });
-    text += "반직선끝 ";
+    // text += "반직선끝 ";
+ 
+
+    return text; 
+}
+
+/** 왼쪽 반직선 **/
+export function readOverLeftArrow(formula){
+    console.log("read 반직선: ", formula); 
+    var command = []; 
+    let text = "왼쪽 반직선시작 ";
+    let stack = []; 
+    let inside;
+
+    for (var i=formula.indexOf("{"); i < formula.length; i++) {
+        if(formula[i] == "{") stack.push("{");
+        else if(formula[i] == "}") {
+            stack.pop();
+            if(stack.length == 0) {
+                inside = formula.slice(formula.indexOf("{")+1, i);           
+                break;
+            }
+        }
+    } 
+ 
+    console.log("반직선 안: ", inside);
+
+    let splitExp = splitExpression(inside, command);
+    splitExp.forEach(function(element){ 
+        text += convertElement(element, command);
+        
+    });
+    // text += "반직선끝 ";
  
 
     return text; 

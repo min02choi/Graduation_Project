@@ -68,7 +68,7 @@ export function readFrac(formula, isSingleFactorExp){
 export function readSqrt(formula, isSingleFactorExp){   
     console.log("readSqrt: ", formula); 
     var command = [];
-    var text = "루트시작 ";
+    var text = "";
     var innerText1 = ""; // 각괄호 안에 값
     var innerText2 = ""; // 중괄호 안에 값
     var stack = [];
