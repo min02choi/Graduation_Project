@@ -17,7 +17,7 @@
 }
 .formula-buttons-container {
   padding: 0.5rem 1rem;
-  width: 100px;
+  width: 95px;
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2열로 배치 */
   /* grid-template-rows: repeat(3, auto); 3행으로 배치 */
@@ -25,7 +25,7 @@
 }
 .formula-buttons-container-one-col {
   padding: 0.5rem 1rem;
-  width: 100px;
+  width: 40px;
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* 2열로 배치 */
   /* grid-template-rows: repeat(3, auto); 3행으로 배치 */

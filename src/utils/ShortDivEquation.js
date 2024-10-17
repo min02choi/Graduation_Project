@@ -6,7 +6,7 @@
 // const Data = require("./Data.js")
 import { Data } from "./ShortData";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
-import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./ShortRead";
+import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./ShortRead";
 import {checkOperation, isInDic, isZeroPriorityOnce, isSingleFactor, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2, replaceAsterisks3} from "./ShortUtils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
@@ -53,8 +53,6 @@ const readFuncNames = {
     "\\not\\ni": readNotNi,
     "\\subset": readSubset,
     "\\supset": readSupset,
-    "\\subseteq": readSubseteq,
-    "\\supseteq": readSupseteq,
     "\\not\\subset": readNotSubset,
     "\\not\\supset": readNotSupset,
     "\\Rightarrow": readRightArrow,

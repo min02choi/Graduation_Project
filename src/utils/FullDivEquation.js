@@ -6,8 +6,8 @@
 // const Data = require("./Data.js")
 import { Data } from "./FullData";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
-import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readSubseteq, readSupseteq, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
-import {checkOperation, isInDic, isZeroPriorityOnce, isSingleFactor, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2} from "./FullUtils";
+import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
+import {checkOperation, isInDic, isZeroPriorityOnce, isUnary, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2, replaceAsterisks3} from "./FullUtils";
 // import { numToKorean, FormatOptions} from 'num-to-korean';
 const { numToKorean, FormatOptions } = require('num-to-korean');
 
@@ -53,8 +53,6 @@ const readFuncNames = {
     "\\not\\ni": readNotNi,
     "\\subset": readSubset,
     "\\supset": readSupset,
-    "\\subseteq": readSubseteq,
-    "\\supseteq": readSupseteq,
     "\\not\\subset": readNotSubset,
     "\\not\\supset": readNotSupset,
     "\\Rightarrow": readRightArrow,
@@ -136,7 +134,7 @@ var equation = "\\begin{pmatrix}\\n1 & 2\\\\\\n3 & 4 \\\\\\n\\end{pmatrix}";
 export function FullDivEquation(expression){
     let res = [];
     var commandArr = [];
-    var isSingleFactorExp = false;
+    var isUnaryExp = false;
 
     // 괄호, 공백 전처리
     let newEquation = expression.replace(/\s/g, "");
@@ -157,11 +155,11 @@ export function FullDivEquation(expression){
         initExp.push(frontZeroPriority);
         commandArr.push(newEquation.slice(returnDic["singleStartIdx"], returnDic["singleEndIdx"]));
         initExp.push(backZeroPriority);
-        res.push(convertElement(initExp, commandArr, isSingleFactorExp)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
+        res.push(convertElement(initExp, commandArr, isUnaryExp)); // * 0순위 initExp는 쪼개고 시작 -> read 함수에서 컨트롤
     }
     else {
-        isSingleFactorExp = isSingleFactor(expression);
-        console.log("FullDivEquation isSingleFac:", isSingleFactorExp);
+        isUnaryExp = isUnary(expression);
+        console.log("FullDivEquation isUnaryExp:", isUnaryExp);
         initExp = splitExpression(newEquation, commandArr);
         console.log("DivEquation initExp: ", initExp);
         console.log("수식: ", expression);
@@ -171,7 +169,7 @@ export function FullDivEquation(expression){
     
         // 텍스트로 변환
         initExp.forEach(function(element){
-            res.push(convertElement(element, commandArr, isSingleFactorExp));
+            res.push(convertElement(element, commandArr, isUnaryExp));
         })
     
         console.log("수식: ", expression);
@@ -186,9 +184,10 @@ export function FullDivEquation(expression){
     })
     const convertedTEXT = replaceAsterisks(tempConvTEXT);
     const convertedTEXT2 = replaceAsterisks2(convertedTEXT);
-    console.log("결과: ", convertedTEXT2);
+    const convertedTEXT3 = replaceAsterisks3(convertedTEXT2);
+    console.log("결과: ", convertedTEXT3);
 
-    return convertedTEXT2;
+    return convertedTEXT3;
 }
 
 
@@ -264,7 +263,7 @@ export function splitExpression(expression, command) {
 
 /* Element 텍스트 변환 함수 */
 // 이쪽은 숫자가 붙어서 들어와야 함
-export function convertElement(element, command, isSingleFactorExp){
+export function convertElement(element, command, isUnaryExp){
     // 더이상 분해 안되는 원소인 경우
     // 0순위 우선순위 명령어인 경우 -> 이미 쪼개져서 들어옴
     if (typeof command !== 'undefined' && isInDic(command[0], "zeroPriority")) {
@@ -274,7 +273,7 @@ export function convertElement(element, command, isSingleFactorExp){
     
         if(command[0] in readFuncNames) {
             command.shift();
-            return readFuncName(element, isSingleFactorExp);
+            return readFuncName(element, isUnaryExp);
         }
         else return "No Function Exists.";
     }
@@ -290,7 +289,7 @@ export function convertElement(element, command, isSingleFactorExp){
 
         if(command[0] in readFuncNames) {
             command.shift();
-            return readFuncName(element, isSingleFactorExp);
+            return readFuncName(element, isUnaryExp);
         }
         else return "No Function Exists.";
     }

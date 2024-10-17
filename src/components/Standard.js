@@ -153,6 +153,7 @@ function Standard({input, handleInputUpdate}) {
                     imgUrl={'\\Box'}
                     curPos={4}
                 />
+                
             </span>
             <span className="formula-buttons-container">
                 <FormulaButton
@@ -191,27 +192,13 @@ function Standard({input, handleInputUpdate}) {
                     curPos={6}
                 />
             </span>
-            <span className="formula-buttons-container">
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\overline{}'} 
-                    imgUrl={'\\overline{AB}'}
-                    curPos={10}
-                />
+            <span className="formula-buttons-container-one-col">
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\sin()'} 
                     imgUrl={'\\sin'}
                     curPos={5}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\overrightarrow{}'} 
-                    imgUrl={'\\overrightarrow{AB}'}
-                    curPos={16}
                 />
                 <FormulaButton
                     input={input}
@@ -223,6 +210,29 @@ function Standard({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\tan()'} 
+                    imgUrl={'\\tan'}
+                    curPos={5}
+                />
+            </span>
+            <span className="formula-buttons-container">
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\overline{}'} 
+                    imgUrl={'\\overline{AB}'}
+                    curPos={10}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
+                    inputOp={'\\overrightarrow{}'} 
+                    imgUrl={'\\overrightarrow{AB}'}
+                    curPos={16}
+                />
+                <FormulaButton
+                    input={input}
+                    handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\overleftrightarrow{}'} 
                     imgUrl={'\\overleftrightarrow{AB}'}
                     curPos={20}
@@ -230,11 +240,12 @@ function Standard({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\tan()'} 
-                    imgUrl={'\\tan'}
-                    curPos={5}
+                    inputOp={'\\overleftarrow{}'} 
+                    imgUrl={'\\overleftarrow{AB}'}
+                    curPos={16}
                 />
             </span>
+            
         </div>
     );
 }

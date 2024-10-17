@@ -53,22 +53,6 @@ function SetAndProp({input, handleInputUpdate}) {
                 <FormulaButton
                     input={input}
                     handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\subseteq'} 
-                    imgUrl={'\\subseteq'}
-                    curPos={9}
-                />
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
-                    inputOp={'\\supseteq'} 
-                    imgUrl={'\\supseteq'}
-                    curPos={9}
-                />
-            </span>
-            <span className="formula-buttons-container">
-                <FormulaButton
-                    input={input}
-                    handleInputUpdate={handleInputUpdate} 
                     inputOp={'\\not\\subset'} 
                     imgUrl={'\\not\\subset'}
                     curPos={11}
@@ -80,6 +64,7 @@ function SetAndProp({input, handleInputUpdate}) {
                     imgUrl={'\\not\\supset'}
                     curPos={11}
                 />
+                
             </span>
             <span className="formula-buttons-container">
                 <FormulaButton

@@ -457,46 +457,6 @@ export function readSupset(formulaList) {
     return text;
 }
 
-export function readSubseteq(formulaList) {
-    var frontCommand = []
-    var backCommand = []
-    let text = "";
-    var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    
-    frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
-    })
-    text += "의 모든요소가 ";
-    
-    var backSplitExp = splitExpression(formulaList[1], backCommand); 
-    backSplitExp.forEach(function(element) {
-        text += convertElement(element, backCommand);
-    })
-    text += "에 포함되거나같다. ";
-
-    return text;
-}
-
-export function readSupseteq(formulaList) {
-    var frontCommand = []
-    var backCommand = []
-    let text = "";
-    var frontSplitExp = splitExpression(formulaList[0], frontCommand);
-    
-    frontSplitExp.forEach(function(element){
-        text += convertElement(element, frontCommand);
-    })
-    text += "# ";
-    
-    var backSplitExp = splitExpression(formulaList[1], backCommand); 
-    backSplitExp.forEach(function(element) {
-        text += convertElement(element, backCommand);
-    })
-    text += "의 모든요소를 포함하거나같다. ";
-
-    return text;
-}
-
 export function readNotSubset(formulaList) {
     var frontCommand = []
     var backCommand = []
