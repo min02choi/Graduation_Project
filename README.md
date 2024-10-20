@@ -1,1 +1,1 @@
-## overleftarrow read 함수부터 만들면 됨
+## 시각장애인을 위한 LaTeX 수식 음성 변환 기능 구현
