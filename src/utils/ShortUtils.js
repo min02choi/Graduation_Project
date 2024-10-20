@@ -100,8 +100,8 @@ export function isZeroPriorityOnce(expression) {
     return returnDic;
 }
 
-// 단인수 판단하기
-export function isSingleFactor(expression) {
+// 단항 판단하기
+export function isUnary(expression) {
     const splitSpace = expression.split(" ");
     var returnTF = true;
     let stack = []; // 스택으로 여는 괄호를 추적
@@ -186,7 +186,7 @@ export function isAtom(char){
 }
 
 /* 단인수단항 확인 */
-export function isUnary(char) {
+export function isSingleFactor(char) {
     // 첫 번째 경우: 입력이 숫자인 경우 -> 여러 자릿수도 허용
     if (isNumber(char)) {
         return true;

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import {FormulaButton} from "./FormulaButton";
 import React from 'react';
 
 function MatrixPopUpButton({handleInputUpdate, inputOpType, isPopupOpen, setPopupOpen, onTogglePopUp, curPos}) {
-    const imgUrl = `\\begin{${inputOpType}}\\cdots \\\\ \\cdots\\\end{${inputOpType}}`
+    const imgUrl = `\\begin{${inputOpType}}\\cdots \\\\ \\cdots\\end{${inputOpType}}`
     const imgSrc = `https://latex.codecogs.com/png.latex?${imgUrl}`;
     // const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [rows, setRows] = useState(0);

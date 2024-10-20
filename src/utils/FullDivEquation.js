@@ -4,7 +4,6 @@
 //#region IMPORT_DATA
 // const Data = require("./TempData.js")
 // const Data = require("./Data.js")
-import { Data } from "./FullData";
 import {getFracEndIndex, getSqrtEndIndex, getLeftEndIndex, getLimEndIndex, getSctEndIndex, getOverlineEndIndex, getDotEndIndex, getSuperscriptEndIndex, getSubscriptEndIndex, getMatrixEndIndex} from "./GetEndIndex";
 import {readFrac, readSqrt, readLeft, readLim, readUnder, readAbove, readLe, readGe, readSin, readCos, readTan, readOverline, readDot, readIn, readNi, readNotIn, readNotNi, readSubset, readSupset, readNotSubset, readNotSupset, readRightArrow, readLeftArrow, readLeftRightArrow, readOverRightArrow, readOverLeftArrow, overLeftRightArrow, readSuperscript, readSubscript, readMatrix} from "./FullRead";
 import {checkOperation, isInDic, isZeroPriorityOnce, isUnary, splitString, isAtom, isNumber, matchText, hasLastConsonantLetter, replaceAsterisks, replaceAsterisks2, replaceAsterisks3} from "./FullUtils";

@@ -14,10 +14,10 @@ export function readFrac(formula, isUnaryExp){
     let stack = []; 
     let denominator, numerator;
     for (var i=5; i < formula.length; i++) {
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
+        if(formula[i] === "{") stack.push("{");
+        else if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0) {
+            if(stack.length === 0) {
                 numerator = formula.slice(6, i);          //분자
                 denominator = formula.slice(i+2, -1);     //분모
                 break;
@@ -77,12 +77,12 @@ export function readSqrt(formula, isUnaryExp){
     let idx = 0;
     var isSingleFactorVar = true;
   
-    if(formula[5] == '[') {
+    if(formula[5] === '[') {
         text = "제곱근시작 ";
         for(let i =5; i<formula.length; i++){
-            if(formula[i] == "[") stack.push(formula[i]);
-            if(formula[i] == "]") stack.pop();
-            if(stack.length == 0){
+            if(formula[i] === "[") stack.push(formula[i]);
+            if(formula[i] === "]") stack.pop();
+            if(stack.length === 0){
                 exponent = formula.slice(6, i); idx = i;
                 break;
             }
@@ -175,14 +175,14 @@ export function readDot(formula){
     let startIdx = 4;
 
     for(let i=4; i<formula.length;i++){ 
-        if(formula[i] == "{") {
+        if(formula[i] === "{") {
             stack.push(formula[i]);
             startIdx = i;
         }
 
-        if(formula[i] == "}") {
+        if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0){
+            if(stack.length === 0){
                 let split = formula.slice(startIdx, i); 
                 text += convertElement(split, command);
         } 
@@ -584,10 +584,10 @@ export function readOverline(formula){
     let stack = []; 
     let insideofOverline;
     for (var i=9; i < formula.length; i++) {
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
+        if(formula[i] === "{") stack.push("{");
+        else if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0) {
+            if(stack.length === 0) {
                 insideofOverline = formula.slice(10, i);           
                 break;
             }
@@ -614,10 +614,10 @@ export function readOverRightArrow(formula){
     let inside;
 
     for (var i=formula.indexOf("{"); i < formula.length; i++) {
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
+        if(formula[i] === "{") stack.push("{");
+        else if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0) {
+            if(stack.length === 0) {
                 inside = formula.slice(formula.indexOf("{")+1, i);           
                 break;
             }
@@ -646,10 +646,10 @@ export function readOverLeftArrow(formula){
     let inside;
 
     for (var i=formula.indexOf("{"); i < formula.length; i++) {
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
+        if(formula[i] === "{") stack.push("{");
+        else if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0) {
+            if(stack.length === 0) {
                 inside = formula.slice(formula.indexOf("{")+1, i);           
                 break;
             }
@@ -678,10 +678,10 @@ export function overLeftRightArrow(formula){
     let inside;
 
     for (var i=formula.indexOf("{"); i < formula.length; i++) {
-        if(formula[i] == "{") stack.push("{");
-        else if(formula[i] == "}") {
+        if(formula[i] === "{") stack.push("{");
+        else if(formula[i] === "}") {
             stack.pop();
-            if(stack.length == 0) {
+            if(stack.length === 0) {
                 inside = formula.slice(formula.indexOf("{")+1, i);           
                 break;
             }
@@ -765,7 +765,7 @@ export function readSuperscript(formula, isUnaryExp) {
     var splitExp = splitExpression(insideofScript, command);
     var text = "의 제곱시작 ";
     var txt_element = "";
-    var isUnaryExp = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
+    var isSingleFactorVar = true; // 단인수단항인가? -> splitExp로 판단해버리면 3ac 이런게 list로 들어가서 길이가 1로 나옴
     console.log("splitExp: ", splitExp);
 
     splitExp.forEach(function(element){
@@ -773,14 +773,21 @@ export function readSuperscript(formula, isUnaryExp) {
         // 단 한개라도 union에 해당 안되면(여기에 넣는 이유는 연산자가 포함되지 않아도 ac, 3ac는 단인수단항이 아니기 때문에 또, splitExp[0]으로 판단하기에는 a+c와 같은 경우도 있기 때문에
         // 하나하나 판단을 해야됨
         if (!isSingleFactor(element)) {
-            isUnaryExp = false;
+            isSingleFactorVar = false;
         }
     })
     text += txt_element + "제곱끝 ";
     console.log("isUnary(splitExp): ", isSingleFactor(splitExp));
 
-    if(isUnaryExp){
-        text = "의 " +  txt_element + "제곱 ";
+    if(isSingleFactorVar){
+        text = "의 ";
+        // 이 제곱은 그냥 제곱으로 표현하기 위함
+        if (txt_element === '이 ') {
+            text += "제곱 ";
+        }
+        else {
+            text += txt_element + "제곱 ";
+        }
     }
 
     return text;
@@ -835,7 +842,7 @@ export function readMatrix(formula){
     let cnt = 0;
     let rowCnt = 1;
     for(const element of elements){
-        if(cnt++ % col == 0) {
+        if(cnt++ % col === 0) {
             text += (rowCnt + "행시작 ");
             rowCnt++;
         }
