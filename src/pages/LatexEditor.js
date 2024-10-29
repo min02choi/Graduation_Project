@@ -164,7 +164,7 @@ function LatexEditor() {
 
     return (
         <div className="latex-editor">
-            <h1>시각장애인을 위한 수식 리더기</h1>
+            <h1>시각장애인을 위한 LaTeX 수식 음성 변환 기능 구현</h1>
             <div className="cate-container">
                 {/* 카테고리 버튼 */}
                 {/* 카테고리 추가 시 수정 필요 */}
